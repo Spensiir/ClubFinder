@@ -1,0 +1,42 @@
+.App-header {
+    border-bottom: 2px solid black;
+}
+
+.management {
+    margin-right: 5%;
+    margin-top: 1%;
+}
+.management button {
+    display: inline-block;
+    position: relative;
+    float: right;
+    margin-right: 2%;
+    margin-left: 2%;
+    padding: 1%;
+    width: 7%;
+
+    font-size: large;
+    font-weight: bold;
+
+    background-color: black;
+    color: white;
+    border: thin solid white;
+    border-radius: 6px;
+}
+.management button:hover {
+    display: inline-block;
+    position: relative;
+    float: right;
+    margin-right: 2%;
+    margin-left: 2%;
+    padding: 1%;
+
+    font-size: large;
+    font-weight: bold;
+
+    background-color: white;
+    color: black;
+    border: thin solid black;
+    border-radius: 6px;
+}
+
