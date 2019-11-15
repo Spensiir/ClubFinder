@@ -29,20 +29,7 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <div>
-      <script type="text/javascript">
-          window.zenlocatorInit = function(widget, type) {
-              if (type === 'map') {
-                  widget.on('SEARCH_LOCATIONS', (data) => {
-                      var locations = widget.getLocations();
-                      console.log(`there's ${locations.length} locations in "${data.query}"`);
-                  });
-              }
-          };
-      </script>
 
-      <div id="zenlocator-map-cdunv87v"></div>
-      <script type="text/javascript" src="https://js.zenlocator.com/8hd24v5k.min.js?callback=zenlocatorInit" async></script>            </div>
 
     <!--
       This HTML file is a template.

@@ -12,22 +12,27 @@ class Header extends React.Component {
     }
 
     signIn = (name) => {
-        this.setState({
-            logButton : (<div className="sign-in">
-                <p>Hi, </p>
-                <button onClick={this.signOut}>LOG OUT</button>
-            </div>),
-            name: name
-        });
+        if (!window.formOpen) {
+            this.setState({
+                logButton: (<div className="sign-in">
+                    <p>Hi, </p>
+                    <button onClick={this.signOut}>LOG OUT</button>
+                </div>),
+                name: name
+            });
+        }
     }
 
     signOut = () => {
-        this.setState({ logButton : (<div className="sign-in">
-                <p>Looking to add new clubs?</p>
-                <button onClick={this.signIn}>LOG IN</button>
-            </div>),
-           name: null
-        });
+        if (!window.formOpen) {
+            this.setState({
+                logButton: (<div className="sign-in">
+                    <p>Looking to add new clubs?</p>
+                    <button onClick={this.signIn}>LOG IN</button>
+                </div>),
+                name: null
+            });
+        }
     }
     render () {
         return (
