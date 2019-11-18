@@ -1,12 +1,13 @@
 import React from 'react';
 import '../css/addform.css';
-import formOpen from '../App.js';
+//import axios from 'axios';
+import { getCoords } from '../tools/coords.js';
 
 class AddForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {club_name: "", address: "", city : "", state : "", zip: "", country: "", website: "", phone:"", description:"", weapons: ""};
-
+        this.submitForm = this.submitForm.bind(this);
     }
     setClubName(event) {
         this.setState({club_name: event.target.value});
@@ -23,29 +24,50 @@ class AddForm extends React.Component {
     setZip(event) {
         this.setState({zip: event.target.value});
     }
-    submitForm() {
+    submitForm(event) {
+        event.preventDefault();
+        var loc = {address: this.state.address,
+            city : this.state.city,
+            state : this.state.state,
+            zip : this.state.zip
+        };
+        var coords = getCoords(loc);
+
+        if (coords.lat !== null && coords.lng !== null) {
+            this.props.updateMarkers({name: this.state.club_name,
+                address: this.state.address,
+                city : this.state.city,
+                state : this.state.state,
+                zip : this.state.zip,
+                lat: coords.lat,
+                lng: coords.long,
+                color: "red"});
+        } else {
+            console.log("Bad location...");
+        }
+
         closeAddForm();
     }
 
     render () {
         return (
-            <div className="addForm" id="AddForm">
-                <form onSubmit={this.submitForm}>
+            <div className="addForm" id="AddFormDiv">
+                <form id="addFormDiv" onSubmit={this.submitForm}>
                     <h1> Add a New Club </h1>
                     <label><b>Club Name</b></label>
-                    <input type="text" value={this.state.club_name} name="club_name" onChange={e =>this.setClubName(e)} required/>
+                    <input type="text"  name="club_name" onChange={e =>this.setClubName(e)} required/>
 
                     <label><b>Address</b></label>
-                    <input type="text" value={this.state.address} name="address" onChange={e => this.setAddress(e)} required/>
+                    <input type="text" name="address" onChange={e => this.setAddress(e)} required/>
 
                     <label><b>City</b></label>
-                    <input type="text" value={this.state.city} style={{width:200}} className="city" name="city" onChange={e => this.setCity(e)} required/>
+                    <input type="text" style={{width:200}} className="city" name="city" onChange={e => this.setCity(e)} required/>
 
                     <label><b>State</b></label>
-                    <input type="text" value={this.state.state} style={{width:30}} className="state" name="state" onChange={e => this.setSt(e)} required/>
+                    <input type="text" style={{width:30}} className="state" name="state" onChange={e => this.setSt(e)} required/>
 
                     <label><b>Zip</b></label>
-                    <input type="text" value={this.state.zip} style={{width:90}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
+                    <input type="text" style={{width:90}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
 
                     <br/>
                     <button type="submit" className="submit">Submit</button>
@@ -57,8 +79,9 @@ class AddForm extends React.Component {
 }
 
 function closeAddForm() {
-    document.getElementById("AddForm").style.display = "none";
+    document.getElementById("AddFormDiv").style.display = "none";
     document.getElementById("shadow").style.display = "none";
+    document.getElementById("addFormDiv").reset();
     window.formOpen = false;
 }
 

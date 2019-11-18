@@ -5,6 +5,7 @@
 .management {
     margin-right: 5%;
     margin-top: 1%;
+    height: 20%;
 }
 .management button {
     display: inline-block;
@@ -22,7 +23,7 @@
     color: white;
     border: thin solid white;
     border-radius: 6px;
-    z-index: -1;
+    z-index: 1;
 }
 .management button:hover {
     display: inline-block;

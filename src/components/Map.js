@@ -1,10 +1,120 @@
 import React from 'react';
-import "../css/map.css"
+import "../css/map.css";
+import GoogleMapReact from 'google-map-react';
 
-class Map extends React.Component {
+const Marker = (props) => {
+    const { color } = props;
+    return (
+        <div className="marker"
+             style={{ backgroundColor: color, cursor: 'pointer'}}
+        />
+    );
+};
+
+class SimpleMap extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            center: {lat: 33.7490, lng: -84.3880},
+            zoom: 11,
+            markers: this.props.currMarkers,
+            selected: this.props.initialSelect,
+        };
+
+        if ("geolocation" in navigator) {
+            // check if geolocation is supported/enabled on current browser
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    this.setState({
+                        center: {lat: position.coords.latitude, lng: position.coords.longitude},
+                        zoom: 11,
+                        markers: this.props.currMarkers,
+                        selected: this.props.initialSelect
+                    });
+                })
+        }
+
+        this.onChildClick = this.onChildClick.bind(this);
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.initialSelected !== state.selected) {
+            return {
+                selected : props.initialSelect,
+            };
+        }
+        return null;
+    }
+
+    onChildClick = (key, childProps) => {
+        var markers = this.state.markers;
+        if (key !== 0) {
+            for (var i = 0; i < this.state.markers.length; i++) {
+                if (key === markers[i].name) {
+                    this.props.updateSelected(markers[i]);
+                    this.setState({selected: this.props.initialSelect});
+                }
+            }
+        } else {
+            this.setState({selected: this.props.initialSelect});
+        }
+    }
+
+    onClick = (props) => {
+        this.setState({selected: this.props.initialSelect});
+    }
+
+
     render() {
-        return (<div></div>);
+        var details;
+        if (this.state.selected !== null) {
+            details = (<div className="locDetails">
+                    <h2>{this.state.selected.name}</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Address :</th>
+                            <th>{this.state.selected.address + ', '
+                                + this.state.selected.city + ', '
+                                + this.state.selected.state + ' '
+                                + this.state.selected.zip }</th>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                )
+        } else {
+            details = <div className="locDetails" style={{display: "none"}}></div>
+        }
+        return (
+            // Important! Always set the container height explicitly
+            <div className='Map' style={{ height: '80vh', width: '90%'}}>
+                <GoogleMapReact
+                    bootstrapURLKeys={{ key: 'AIzaSyB7tjqlWlXsVtxrk3q7thYuqaXWP8bP8HI'}}
+                    defaultCenter={this.state.center}
+                    defaultZoom={this.state.zoom}
+                    onChildClick={this.onChildClick}
+                    onClick = {this.onClick}
+                >
+                    <Marker
+                        lat={this.state.center.lat}
+                        lng={this.state.center.lng}
+                        color="blue"
+                    />
+
+                    { //Add a list of Markers to Your Map
+                        this.state.markers && this.state.markers.map( (each) =>
+                            <Marker key={each.name}
+                                lat = {each.lat}
+                                lng = {each.lng}
+                                color = {each.color}
+                            />)
+                    }
+                </GoogleMapReact>
+                {details}
+            </div>
+        );
     }
 }
 
-export default Map;
+export default SimpleMap;
