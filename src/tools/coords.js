@@ -5,6 +5,13 @@ const locations = [{
     zip: '30332',
     lat: 33.7773,
     long: -84.3962
+}, {
+    address: "800 West Peachtree NW",
+    city: "Atlanta",
+    state: "GA",
+    zip: "30308",
+    lat: 33.7763,
+    long: -84.3878
 }];
 
 export function getCoords(loc) {

@@ -33,7 +33,6 @@ class App extends React.Component {
     };
 
     selectedCallback = (markerFromMap) => {
-        console.log(markerFromMap);
         this.setState({selected : markerFromMap});
     };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import "../css/map.css";
 import GoogleMapReact from 'google-map-react';
+import config from '../tools/config.js';
 
 const Marker = (props) => {
     const { color } = props;
@@ -27,7 +28,7 @@ class SimpleMap extends React.Component {
                 position => {
                     this.setState({
                         center: {lat: position.coords.latitude, lng: position.coords.longitude},
-                        zoom: 11,
+                        zoom: 14,
                         markers: this.props.currMarkers,
                         selected: this.props.initialSelect
                     });
@@ -61,6 +62,7 @@ class SimpleMap extends React.Component {
     }
 
     onClick = (props) => {
+        this.props.updateSelected(null);
         this.setState({selected: this.props.initialSelect});
     }
 
@@ -90,7 +92,7 @@ class SimpleMap extends React.Component {
             // Important! Always set the container height explicitly
             <div className='Map' style={{ height: '80vh', width: '90%'}}>
                 <GoogleMapReact
-                    bootstrapURLKeys={{ key: 'AIzaSyB7tjqlWlXsVtxrk3q7thYuqaXWP8bP8HI'}}
+                    bootstrapURLKeys={{ key: config.API_KEY}}
                     defaultCenter={this.state.center}
                     defaultZoom={this.state.zoom}
                     onChildClick={this.onChildClick}
