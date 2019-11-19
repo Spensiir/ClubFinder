@@ -1,0 +1,54 @@
+.addForm {
+    display: none;
+    position: absolute;
+    left: 17%;
+    top: 20%;
+    fill: white;
+    border: 3px solid #f1f1f1;
+    background-color: white;
+    z-index: 9;
+    border-radius: 10px;
+}
+
+.addForm form {
+}
+
+.addForm h1 {
+    margin-left: 3%;
+}
+
+.addForm input[type=text] {
+    width: 90%;
+    padding: 15px;
+    margin: 5px 3% 22px 3%;
+    border: none;
+    background: #f1f1f1;
+    font-size: large;
+}
+.addForm label {
+    margin-left: 3%;
+}
+
+.addForm button {
+    margin: 3%;
+    font-size: x-large;
+    font-weight: bold;
+
+    background-color: black;
+    color: white;
+    border: thin solid white;
+    border-radius: 6px;
+
+    position:relative;
+    float: right;
+}
+
+.addForm button:hover {
+    background-color: white;
+    color: black;
+    border: thin solid black;
+    border-radius: 6px;
+}
+
+
+

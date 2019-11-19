@@ -1,5 +1,11 @@
 .App-header {
     border-bottom: 2px solid black;
+    display: inline-block;
+    width: 100%;
+}
+.App-header h1 {
+    padding-left: 1%;
+    width: 50%;
 }
 
 .management {
@@ -40,3 +46,54 @@
     border-radius: 6px;
 }
 
+.shadow {
+    position: fixed;
+    z-index: 8;
+    width: 100%;
+    height: 120%;
+    background-color: black;
+    opacity: 0.4;
+    display: none;
+    clear:both;
+}
+
+.sign-in {
+    position: relative;
+    float: right;
+    text-align: center;
+    padding-top: 3%;
+    margin-right: 5%;
+    margin-bottom: 1%;
+    width: 15%;
+}
+
+.sign-in button {
+    border: thin solid black;
+    border-radius: 5%;
+
+    padding: 3%;
+    margin-bottom: 2%;
+
+    font-size: x-large;
+    font-weight: bold;
+}
+.sign-in button:hover {
+    border: thin solid black;
+    border-radius: 5%;
+
+    padding: 3%;
+    margin-bottom: 2%;
+
+    font-size: x-large;
+    font-weight: bold;
+
+    background: black;
+    color: white;
+}
+
+.title {
+    position: relative;
+    float: left;
+    text-align: center;
+    margin-left: 5%;
+}
