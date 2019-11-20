@@ -31,7 +31,6 @@ class App extends React.Component {
 
   onClickSubmit = () => {
     openSignin();
-    console.log("appusername:", this.state.username);
     this.setState(
       {logButton: 
       <div className="sign-in">
@@ -41,16 +40,17 @@ class App extends React.Component {
   }
 
   onClickSignOut = () => {
+    console.log("here");
     this.setState(
       {logButton: 
         <div className="sign-in">
           <label>Sign in to add new club listing</label>
           <button onClick={this.onClickSubmit}>Sign In</button>
-        </div>});
+        </div>,
+        username: "user"});
   }
 
   usernameCallback = (usernameData) => {
-    console.log("usernamedata:", usernameData)
     this.setState({username: usernameData}, () => this.setState(
       {logButton: 
       <div className="sign-in">
@@ -96,24 +96,30 @@ removeMarker() {
 
   render() {
     var editDisabled = false;
-        if (this.state.selected !== null) {
-            editDisabled = true;
-        }
+    if (this.state.selected !== null) {
+        editDisabled = true;
+    }
+    
+    var signedIn = "none";
+    if (this.state.username !== "user") {
+      signedIn = "block";
+    }
+
     return (
       <div className="App">   
         <div className="shadow" id="shadow"/>
           <header className="App-header">
             <div className="title">
-              <h1>HEMAA CLub Finder</h1>
+              <h1>HEMAA Club Finder</h1>
             </div>
             {this.state.logButton}
           </header>   
-          <div className="management">
+          <div className="management" style={{display : signedIn}}>
             <button disabled={window.formOpen} onClick={openAddForm}>Add</button>
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button disabled={window.formOpen} onClick={this.removeMarker}>Remove</button>
           </div>
-          <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit}/>
+          <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />

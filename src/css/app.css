@@ -5,7 +5,7 @@
 }
 .App-header h1 {
     padding-left: 1%;
-    width: 50%;
+    width: 100%;
 }
 
 .management {
@@ -64,7 +64,7 @@
     position: relative;
     float: right;
     text-align: center;
-    padding-top: 3%;
+    padding-top: 1%;
     margin-right: 5%;
     margin-bottom: 1%;
     width: 15%;

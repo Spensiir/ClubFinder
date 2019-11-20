@@ -25,21 +25,25 @@ class Signin extends React.Component {
         event.preventDefault();
         closeSignin();
     }
+    closeSignin(event) {
+        this.props.onClickSignOut();
+        closeSignin();
+    }
 
     render () {
         return (
             <div className="signinForm" id="SigninForm">
-                <form onSubmit={e=>this.submitSignin(e)}>
+                <form id="signinform" onSubmit={e=>this.submitSignin(e)}>
                     <h1>Sign in</h1>
                     <label><b>Username</b></label>
-                    <input type="text" value={this.state.username} name="username" onChange={e=>this.setUsername(e)} required/>
+                    <input type="text" name="username" onChange={e=>this.setUsername(e)} required/>
 
                     <label><b>Password</b></label>
-                    <input type="password" value={this.state.password} name="password" onChange={e=>this.setPassword(e)} required/>
+                    <input type="password" name="password" onChange={e=>this.setPassword(e)} required/>
                     
                     <br/>
                     <button type="submit" className="submit">submit</button>
-                    <button type="text" className="submit" onClick={closeSignin}>close</button>
+                    <button type="text" className="submit" onClick={e=>this.closeSignin(e)}>close</button>
                 </form>
             </div>
         );
@@ -49,6 +53,7 @@ function closeSignin() {
 
     document.getElementById("SigninForm").style.display = "none";
     document.getElementById("shadow").style.display = "none";
+    document.getElementById("signinform").reset();
     window.formOpen = false;
 }
 
