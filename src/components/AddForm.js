@@ -24,14 +24,20 @@ class AddForm extends React.Component {
     setZip(event) {
         this.setState({zip: event.target.value});
     }
-    submitForm(event) {
+    async submitForm(event) {
         event.preventDefault();
         var loc = {address: this.state.address,
             city : this.state.city,
             state : this.state.state,
             zip : this.state.zip
         };
-        var coords = getCoords(loc);
+
+        let coords;
+        await getCoords(loc).then( res => {
+            console.log(res);
+            coords = res;
+        });
+        console.log(coords);
 
         if (coords.lat !== null && coords.lng !== null) {
             this.props.updateMarkers({name: this.state.club_name,
@@ -40,7 +46,7 @@ class AddForm extends React.Component {
                 state : this.state.state,
                 zip : this.state.zip,
                 lat: coords.lat,
-                lng: coords.long,
+                lng: coords.lng,
                 color: "red"});
         } else {
             console.log("Bad location...");

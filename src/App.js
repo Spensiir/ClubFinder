@@ -82,14 +82,19 @@ selectedCallback = (markerFromMap) => {
 removeMarker() {
     let oldMarkers = this.state.markers;
 
+    if (this.state.selected == null) {
+        return;
+    }
+
     for (var i = 0; i < oldMarkers.length; i++) {
         if (oldMarkers[i] === this.state.selected) {
             var temp = oldMarkers[oldMarkers.length - 1];
             oldMarkers[oldMarkers.length - 1] = oldMarkers[i];
             oldMarkers[i] = temp;
+            oldMarkers.pop();
         }
     }
-    oldMarkers.pop();
+
     this.setState({markers : oldMarkers, selected: null});
 
 };
@@ -115,9 +120,9 @@ removeMarker() {
             {this.state.logButton}
           </header>   
           <div className="management" style={{display : signedIn}}>
-            <button disabled={window.formOpen} onClick={openAddForm}>Add</button>
+            <button onClick={openAddForm}>Add</button>
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
-            <button disabled={window.formOpen} onClick={this.removeMarker}>Remove</button>
+            <button onClick={this.removeMarker}>Remove</button>
           </div>
           <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
@@ -127,23 +132,19 @@ removeMarker() {
     )};
 }
 
-
 function openSignin() {
   document.getElementById("SigninForm").style.display = "block";
   document.getElementById("shadow").style.display = "block";
-  window.formOpen = true;
 }
 
 function openAddForm() {
   document.getElementById("AddFormDiv").style.display = "block";
   document.getElementById("shadow").style.display = "block";
-  window.formOpen = true;
 }
 
 function openEditForm() {
   document.getElementById("EditFormDiv").style.display = "block";
   document.getElementById("shadow").style.display = "block";
-  window.formOpen = true;
 }
 
 export default App;

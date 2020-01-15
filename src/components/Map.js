@@ -15,33 +15,42 @@ const Marker = (props) => {
 class SimpleMap extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            center: {lat: 33.7490, lng: -84.3880},
-            zoom: 11,
-            markers: this.props.currMarkers,
-            selected: this.props.initialSelect,
-        };
+        if (this.props.currMarkers.length == 0) {
+            this.state = {
+                center: {lat: 33.7490, lng: -84.3880},
+                defaultCenter: {lat: 33.7490, lng: -84.3880},
+                zoom: 14,
+                markers: this.props.currMarkers,
+                selected: this.props.initialSelect,
+            };
 
-        if ("geolocation" in navigator) {
-            // check if geolocation is supported/enabled on current browser
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    this.setState({
-                        center: {lat: position.coords.latitude, lng: position.coords.longitude},
-                        zoom: 14,
-                        markers: this.props.currMarkers,
-                        selected: this.props.initialSelect
-                    });
-                })
+            if ("geolocation" in navigator) {
+                // check if geolocation is supported/enabled on current browser
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        this.setState({
+                            center: {lat: position.coords.latitude, lng: position.coords.longitude},
+                            defaultCenter: {lat: position.coords.latitude, lng: position.coords.longitude},
+                            zoom: 14,
+                            markers: this.props.currMarkers,
+                            selected: this.props.initialSelect
+                        });
+                    })
+            }
         }
-
         this.onChildClick = this.onChildClick.bind(this);
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.initialSelected !== state.selected) {
+        if (props.initialSelect !== state.selected && props.initialSelect !== null) {
             return {
                 selected : props.initialSelect,
+                center: { lat : props.initialSelect.lat, lng: props.initialSelect.lng }
+            };
+        } else if (props.initialSelect !== state.selected && props.initialSelect == null) {
+            console.log("here");
+            return {
+                selected : props.intialSelect
             };
         }
         return null;
@@ -69,7 +78,8 @@ class SimpleMap extends React.Component {
 
     render() {
         var details;
-        if (this.state.selected !== null) {
+        if (this.state.selected !== undefined && this.state.selected !== null) {
+            console.log("there is a location");
             details = (<div className="locDetails">
                     <h2>{this.state.selected.name}</h2>
                 <table>
@@ -86,6 +96,7 @@ class SimpleMap extends React.Component {
                 </div>
                 )
         } else {
+            console.log("not a location");
             details = <div className="locDetails" style={{display: "none"}}></div>
         }
         return (
@@ -93,14 +104,14 @@ class SimpleMap extends React.Component {
             <div className='Map' style={{ height: '80vh', width: '90%'}}>
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: config.API_KEY}}
-                    defaultCenter={this.state.center}
                     defaultZoom={this.state.zoom}
                     onChildClick={this.onChildClick}
                     onClick = {this.onClick}
+                    center = {this.state.center}
                 >
                     <Marker
-                        lat={this.state.center.lat}
-                        lng={this.state.center.lng}
+                        lat={this.state.defaultCenter.lat}
+                        lng={this.state.defaultCenter.lng}
                         color="blue"
                     />
 
