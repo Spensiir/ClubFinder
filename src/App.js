@@ -5,6 +5,7 @@ import AddForm from "./components/AddForm";
 import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
+import { addLocation } from './tools/marker.js';
 
 
 
@@ -60,15 +61,18 @@ class App extends React.Component {
     
   }
 
-  markerCallback = (markerFromForm) => {
+  markerCallback = async (markerFromForm) => {
     let newMarkers = this.state.markers;
+    console.log(addLocation);
+    await addLocation(markerFromForm).then( res => {
+      console.log(res);
+    });
     newMarkers.push(markerFromForm);
     this.setState({markers : newMarkers, selected: markerFromForm });
 };
 
 editMarkerCallback = (markerFromForm) => {
     this.removeMarker();
-
     let newMarkers = this.state.markers;
     newMarkers.push(markerFromForm);
     this.setState({markers : newMarkers, selected: markerFromForm});

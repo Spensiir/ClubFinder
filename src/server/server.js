@@ -4,6 +4,43 @@ const request = require('request');
 const app = express()
 const port = 3001
 var keys = require('./keys'); // get file with all api keys
+var firebase = require("firebase/app");
+var bodyParser = require('body-parser')
+
+// Add the Firebase products that you want to use
+require("firebase/auth");
+require("firebase/firestore");
+require('firebase/database');
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDTrW7v8-3KL-_ScJSGQ5Oo_8k1-OIYozk",
+    authDomain: "hemaa-club-finder.firebaseapp.com",
+    databaseURL: "https://hemaa-club-finder.firebaseio.com",
+    projectId: "hemaa-club-finder",
+    storageBucket: "hemaa-club-finder.appspot.com",
+    messagingSenderId: "801602412728",
+    appId: "1:801602412728:web:5819f173fa2064ae3cd44d",
+    measurementId: "G-HXKD4SJ6TX"
+  };
+
+firebase.initializeApp(firebaseConfig);
+
+app.use(bodyParser.json())
+
+app.post('/locations/addLocation', function (req, res) {
+    console.log(req.body);
+
+    firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).set(req.body)
+    .then(result => {
+    console.log(req.body)
+    res.sendStatus(200);
+    })
+    .catch(function (error) {
+    console.log(error);
+    res.sendStatus(400);
+    })
+})
 
 // configure our app to handle CORS requests
 app.use(function(req, res, next) {
