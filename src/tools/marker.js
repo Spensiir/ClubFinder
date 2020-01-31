@@ -11,4 +11,6 @@ export async function addLocation(marker) {
             console.log(error);
         })
         return null;
+        console.log("to change something");
 }
+
