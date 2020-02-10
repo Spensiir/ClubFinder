@@ -5,6 +5,7 @@ import AddForm from "./components/AddForm";
 import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
+import OrgRegistration from './components/OrgRegistration.js';
 import { addLocation } from './tools/marker.js';
 
 
@@ -18,12 +19,14 @@ class App extends React.Component {
         <div className="sign-in">
           <label>Sign in to add new club listing</label>
           <button onClick={openSignin}>Sign In</button>
+          <button onClick={openRegister}>Register</button>
         </div>,
         markers : [], 
         selected : null
       };
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
+    this.onClickRegister = this.onClickRegister.bind(this);
     this.markerCallback = this.markerCallback.bind(this);
     this.removeMarker = this.removeMarker.bind(this);
     this.selectedCallback = this.selectedCallback.bind(this);
@@ -32,6 +35,16 @@ class App extends React.Component {
 
   onClickSubmit = () => {
     openSignin();
+    this.setState(
+      {logButton: 
+      <div className="sign-in">
+        <label>Welcome, {this.state.username}</label>
+        <button onClick={this.onClickSignOut}>Sign out</button>
+      </div>});
+  }
+
+  onClickRegister = () => {
+    openRegister();
     this.setState(
       {logButton: 
       <div className="sign-in">
@@ -132,12 +145,18 @@ removeMarker() {
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
+          <OrgRegistration/>
       </div>
     )};
 }
 
 function openSignin() {
   document.getElementById("SigninForm").style.display = "block";
+  document.getElementById("shadow").style.display = "block";
+}
+
+function openRegister() {
+  document.getElementById("OrgForm").style.display = "block";
   document.getElementById("shadow").style.display = "block";
 }
 
