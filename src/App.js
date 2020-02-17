@@ -7,6 +7,7 @@ import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
 import { addLocation } from './tools/marker.js';
+import {addOrganization} from './tools/organization.js'
 
 
 
@@ -56,12 +57,14 @@ class App extends React.Component {
   onClickSignOut = () => {
     console.log("here");
     this.setState(
-      {logButton: 
+      {
+        username: "user",
+        logButton: 
         <div className="sign-in">
           <label>Sign in to add new club listing</label>
-          <button onClick={this.onClickSubmit}>Sign In</button>
-        </div>,
-        username: "user"});
+          <button onClick={openSignin}>Sign In</button>
+          <button onClick={openRegister}>Register</button>
+      </div>});
   }
 
   usernameCallback = (usernameData) => {
@@ -83,6 +86,14 @@ class App extends React.Component {
     newMarkers.push(markerFromForm);
     this.setState({markers : newMarkers, selected: markerFromForm });
 };
+
+  // organizationCallback = async (organization) => {
+  //   console.log("in callback");
+  //   console.log(addOrganization);
+  //   await addOrganization(organization).then( res => {
+  //     console.log(res);
+  //   });
+  // };
 
 editMarkerCallback = (markerFromForm) => {
     this.removeMarker();
@@ -145,7 +156,7 @@ removeMarker() {
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
-          <OrgRegistration/>
+          <OrgRegistration callbackFromApp={this.usernameCallback}/>
       </div>
     )};
 }

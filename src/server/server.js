@@ -42,6 +42,52 @@ app.post('/locations/addLocation', function (req, res) {
     })
 })
 
+app.post('/organizations/addOrganization', (req, res) => {
+    console.log(req.body);
+    var userid;
+    var user;
+
+    firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
+    .then(() => {
+        user = firebase.auth().currentUser.uid;
+        console.log('////////')
+        console.log(user);
+
+        firebase.database().ref('organizations/' + user).set(
+            {
+                name: req.body.name, 
+                email: req.body.email,
+                address: req.body.address, 
+                country: req.body.country,
+                city: req.body.city,
+                state: req.body.state,
+                zip: req.body.zip,
+                website: req.body.website,
+                phone: req.body.phone,
+                description: req.body.description,
+                username: req.body.username
+            }
+            )
+          .then(result => {
+          console.log(req.body)
+          res.sendStatus(200);
+          })
+          .catch(function (error) {
+          console.log(error);
+          res.sendStatus(400);
+          })
+
+    }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        res.send({error : error.code, message: error.message})
+        console.log(errorMessage);
+      });
+
+      //console.log(userid);
+})
+
 // configure our app to handle CORS requests
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');

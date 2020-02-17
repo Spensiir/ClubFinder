@@ -2,17 +2,21 @@ import React from "react"
 import "../css/orgForm.css"
 import formOpen from "../App.js"
 import Header from "../components/Header.js"
+import userManager from "../tools/UserManager.js"
 
 class OrgRegistration extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {org_name: "", address: "", city : "", st : "", zip: "", country: "", website: "", phone:"", description:"", username: "", password:"", password2:""};
+        this.state = {org_name: "", email: "", address: "", city : "", st : "", zip: "", country: "", website: "", phone:"", description:"", username: "", password:"", password2:""};
         this.submitForm = this.submitForm.bind(this);
     }
 
     setOrgName(event) {
         this.setState({org_name: event.target.value});
+    }
+    setEmail(event) {
+        this.setState({email : event.target.value});
     }
     setAddress(event) {
         this.setState({address: event.target.value});
@@ -48,16 +52,36 @@ class OrgRegistration extends React.Component {
         this.setState({password2: event.target.value});
     }
 
-    submitForm(event) {
-        //window.currUser = this.state.username;
-        //this.props.callbackFromApp(this.state.username);
-        //console.log("signinusername:", this.state.username);
-        this.props.onClickRegister();
+    async submitForm(event) {
         event.preventDefault();
-        closeOrgForm();
+        var org = 
+        {
+            name: this.state.org_name, 
+            email: this.state.email,
+            address: this.state.address, 
+            country: this.state.country,
+            city: this.state.city,
+            state: this.state.st,
+            zip: this.state.zip,
+            website: this.state.website,
+            phone: this.state.phone,
+            description: this.state.description,
+            username: this.state.username,
+            password: this.state.password
+        }
+        //this.props.addOrg(org);
+        var success = await userManager.fireCreateUser(org);
+        if (success[0]) {
+            this.props.callbackFromApp(org.username);
+            closeOrgForm();
+        }
+        else {
+            alert(success[1]);
+        }
     }
+
     closeOrgForm(event) {
-        this.props.onClickSignOut();
+        //this.props.onClickSignOut();
         closeOrgForm();
     }
     
@@ -79,8 +103,11 @@ class OrgRegistration extends React.Component {
                     <label><b>Address</b></label>
                     <input type="text" name="address" onChange={e => this.setAddress(e)} required/>
 
+                    <label><b>Email</b></label>
+                    <input type="text" name="email" onChange={e => this.setEmail(e)} required/>
+
                     <label><b>Country</b></label>
-                    <input type="text" style={{width:200}}  name="city" onChange={e => this.setCity(e)} required/>
+                    <input type="text" style={{width:200}}  name="country" onChange={e => this.setCity(e)} required/>
 
                     <label><b>City</b></label>
                     <input type="text" style={{width:200}}  name="city" onChange={e => this.setCity(e)} required/>
@@ -101,13 +128,14 @@ class OrgRegistration extends React.Component {
                     <input type="text" style={{width:200}} name="username" onChange={e => this.setUsername(e)} required/>
 
                     <label><b>Password</b></label>
-                    <input type="password" style={{width:200}} name="password" onChange={e => this.setUsername(e)} required/>
+                    <input type="password" style={{width:200}} name="password" onChange={e => this.setPassword(e)} required/>
 
                     <label><b>Confirm Password</b></label>
                     <input type="password" style={{width:200}} name="password2" onChange={e => this.setPassword2(e)} required/>
 
                     <br/>
                     <button type="submit" className="submit">Submit</button>
+                    <button type="text" className="submit" onClick={e=>this.closeOrgForm(e)}>Close</button>
                 </form>
             </div>
         );
@@ -115,7 +143,7 @@ class OrgRegistration extends React.Component {
 }
 
 function closeOrgForm() {
-    document.getElementById("OrgFormDiv").style.display = "none";
+    document.getElementById("OrgForm").style.display = "none";
     document.getElementById("shadow").style.display = "none";
     document.getElementById("orgFormDiv").reset();
     window.formOpen = false;

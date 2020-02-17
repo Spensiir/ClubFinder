@@ -25,6 +25,7 @@ class AddForm extends React.Component {
         this.setState({zip: event.target.value});
     }
     async submitForm(event) {
+        //console.log("submit form");
         event.preventDefault();
         var loc = {address: this.state.address,
             city : this.state.city,
