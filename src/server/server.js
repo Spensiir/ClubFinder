@@ -29,11 +29,11 @@ firebase.initializeApp(firebaseConfig);
 app.use(bodyParser.json())
 
 app.post('/locations/addLocation', function (req, res) {
-    console.log(req.body);
+    //console.log(req.body);
 
     firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).set(req.body)
     .then(result => {
-    console.log(req.body)
+    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
@@ -42,10 +42,16 @@ app.post('/locations/addLocation', function (req, res) {
     })
 })
 
+app.delete('/locations/removeLocation', function(req, res) {
+    console.log(req.body);
+    firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).remove();
+    res.sendStatus(400);
+})
+
 // configure our app to handle CORS requests
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, POST');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, POST, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Cache-Control, Origin, X-Requested-With,Content-Type, Accept, Authorization');
     res.setHeader('Access-Control-Allow-Credentials', true)
     if ('OPTIONS' == req.method) {
