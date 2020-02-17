@@ -6,7 +6,7 @@ import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import { addLocation } from './tools/marker.js';
-
+import userManager from "./tools/UserManager.js"
 
 
 class App extends React.Component {

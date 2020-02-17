@@ -2,6 +2,7 @@ import React from "react"
 import "../css/signin.css"
 import formOpen from "../App.js"
 import Header from "../components/Header.js"
+import userManager from "../tools/UserManager.js"
 
 class Signin extends React.Component {
     
@@ -17,13 +18,19 @@ class Signin extends React.Component {
     setPassword(event) {
         this.setState({password: event.target.value});
     }
-    submitSignin(event) {
-        window.currUser = this.state.username;
-        this.props.callbackFromApp(this.state.username);
-        console.log("signinusername:", this.state.username);
-        this.props.onClickSubmit();
+    async submitSignin(event) {
         event.preventDefault();
-        closeSignin();
+        var confirmed = await userManager.fireSignIn(this.state.username, this.state.password);
+        console.log(confirmed);
+        if (confirmed[0]) {
+            window.currUser = this.state.username;
+            this.props.callbackFromApp(this.state.username);
+            console.log("signinusername:", this.state.username);
+            this.props.onClickSubmit();
+            closeSignin();
+        } else {
+            alert(confirmed[1]);
+        }
     }
     closeSignin(event) {
         this.props.onClickSignOut();
