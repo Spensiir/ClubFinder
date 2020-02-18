@@ -8,6 +8,7 @@ import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
 import { addLocation } from './tools/marker.js';
 import {addOrganization} from './tools/organization.js'
+import userManager from "./tools/UserManager.js"
 
 
 

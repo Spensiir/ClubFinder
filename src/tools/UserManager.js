@@ -45,6 +45,23 @@ class UserManager {
         return confirmed;
     }
 
+    async fireSignIn(email, password) {
+        var confirmed;
+        var errorMessage;
+        await firebase.auth().signInWithEmailAndPassword(email, password).then(()=> {
+            this.user = firebase.auth().currentUser;
+            confirmed = true;
+        }
+            ).catch(function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            errorMessage = error.message;
+            console.log(errorMessage);
+            confirmed = false;
+            });
+        return [confirmed, errorMessage];
+    }
+
     async fireCreateUser(organization) {
         var user;
         var confirmed;
@@ -103,4 +120,4 @@ class UserManager {
 
 var userManager = new UserManager();
 
-export default userManager;
+export default userManager
