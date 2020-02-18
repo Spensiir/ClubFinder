@@ -5,7 +5,10 @@ import AddForm from "./components/AddForm";
 import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
-import { addLocation } from './tools/marker.js';
+import OrgRegistration from './components/OrgRegistration.js';
+import {addOrganization} from './tools/organization.js'
+import userManager from "./tools/UserManager.js"
+import { addLocation, editLocation, removeLocation } from './tools/marker.js';
 
 
 
@@ -18,12 +21,14 @@ class App extends React.Component {
         <div className="sign-in">
           <label>Sign in to add new club listing</label>
           <button onClick={openSignin}>Sign In</button>
+          <button onClick={openRegister}>Register</button>
         </div>,
         markers : [], 
         selected : null
       };
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
+    this.onClickRegister = this.onClickRegister.bind(this);
     this.markerCallback = this.markerCallback.bind(this);
     this.removeMarker = this.removeMarker.bind(this);
     this.selectedCallback = this.selectedCallback.bind(this);
@@ -40,15 +45,27 @@ class App extends React.Component {
       </div>});
   }
 
+  onClickRegister = () => {
+    openRegister();
+    this.setState(
+      {logButton: 
+      <div className="sign-in">
+        <label>Welcome, {this.state.username}</label>
+        <button onClick={this.onClickSignOut}>Sign out</button>
+      </div>});
+  }
+
   onClickSignOut = () => {
     console.log("here");
     this.setState(
-      {logButton: 
+      {
+        username: "user",
+        logButton: 
         <div className="sign-in">
           <label>Sign in to add new club listing</label>
-          <button onClick={this.onClickSubmit}>Sign In</button>
-        </div>,
-        username: "user"});
+          <button onClick={openSignin}>Sign In</button>
+          <button onClick={openRegister}>Register</button>
+      </div>});
   }
 
   usernameCallback = (usernameData) => {
@@ -71,12 +88,11 @@ class App extends React.Component {
     this.setState({markers : newMarkers, selected: markerFromForm });
 };
 
-editMarkerCallback = (markerFromForm) => {
-    this.removeMarker();
-    let newMarkers = this.state.markers;
-    newMarkers.push(markerFromForm);
-    this.setState({markers : newMarkers, selected: markerFromForm});
 
+editMarkerCallback = async (markerFromForm) => {
+    this.removeMarker();
+    await this.markerCallback(markerFromForm);
+    console.log([markerFromForm.lat, markerFromForm.lng]);
 };
 
 selectedCallback = (markerFromMap) => {
@@ -98,7 +114,7 @@ removeMarker() {
             oldMarkers.pop();
         }
     }
-
+    removeLocation(this.state.selected);
     this.setState({markers : oldMarkers, selected: null});
 
 };
@@ -132,12 +148,18 @@ removeMarker() {
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
+          <OrgRegistration callbackFromApp={this.usernameCallback}/>
       </div>
     )};
 }
 
 function openSignin() {
   document.getElementById("SigninForm").style.display = "block";
+  document.getElementById("shadow").style.display = "block";
+}
+
+function openRegister() {
+  document.getElementById("OrgForm").style.display = "block";
   document.getElementById("shadow").style.display = "block";
 }
 

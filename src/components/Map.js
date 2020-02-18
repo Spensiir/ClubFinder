@@ -15,7 +15,6 @@ const Marker = (props) => {
 class SimpleMap extends React.Component {
     constructor(props) {
         super(props);
-        if (this.props.currMarkers.length == 0) {
             this.state = {
                 center: {lat: 33.7490, lng: -84.3880},
                 defaultCenter: {lat: 33.7490, lng: -84.3880},
@@ -37,7 +36,7 @@ class SimpleMap extends React.Component {
                         });
                     })
             }
-        }
+
         this.onChildClick = this.onChildClick.bind(this);
     }
 
@@ -45,12 +44,12 @@ class SimpleMap extends React.Component {
         if (props.initialSelect !== state.selected && props.initialSelect !== null) {
             return {
                 selected : props.initialSelect,
-                center: { lat : props.initialSelect.lat, lng: props.initialSelect.lng }
+                center: { lat : props.initialSelect.lat, lng: props.initialSelect.lng },
             };
         } else if (props.initialSelect !== state.selected && props.initialSelect == null) {
             console.log("here");
             return {
-                selected : props.intialSelect
+                selected : props.intialSelect,
             };
         }
         return null;
