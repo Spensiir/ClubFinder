@@ -13,7 +13,6 @@ require("firebase/firestore");
 require('firebase/database');
 //Added by Ben
 var firebase = require('firebase');
-var firebaseui = require('firebaseui');
 
 const firebaseConfig = {
     apiKey: "AIzaSyDTrW7v8-3KL-_ScJSGQ5Oo_8k1-OIYozk",
@@ -29,17 +28,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 app.use(bodyParser.json())
-
-//initialize firebaseUI by Ben
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
-ui.start('#firebaseui-auth-container', {
-    signInOptions: [
-        {
-            provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            requireDisplayName: false
-        }
-    ]
-});
 
 app.post('/locations/addLocation', function (req, res) {
     //console.log(req.body);
