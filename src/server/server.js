@@ -55,10 +55,16 @@ app.edit('/locations/editLocation', function(req, res) {
     })
 })
 
+app.delete('/locations/removeLocation', function(req, res) {
+    console.log(req.body);
+    firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).remove();
+    res.sendStatus(400);
+})
+
 // configure our app to handle CORS requests
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, POST, EDIT');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, POST, EDIT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Cache-Control, Origin, X-Requested-With,Content-Type, Accept, Authorization');
     res.setHeader('Access-Control-Allow-Credentials', true)
     if ('OPTIONS' == req.method) {

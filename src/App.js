@@ -5,8 +5,7 @@ import AddForm from "./components/AddForm";
 import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
-import { addLocation, editLocation } from './tools/marker.js';
-
+import { addLocation, editLocation, removeLocation } from './tools/marker.js';
 
 
 class App extends React.Component {
@@ -99,7 +98,7 @@ removeMarker() {
             oldMarkers.pop();
         }
     }
-
+    removeLocation(this.state.selected);
     this.setState({markers : oldMarkers, selected: null});
 
 };

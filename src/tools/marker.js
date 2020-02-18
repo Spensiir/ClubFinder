@@ -11,7 +11,6 @@ export async function addLocation(marker) {
             console.log(error);
         })
         return null;
-        console.log("to change something");
 }
 
 export function editLocation(marker) {
@@ -27,3 +26,14 @@ export function editLocation(marker) {
     return null;
 }
 
+export function removeLocation(marker) {
+    var req = config.SERVER_URL + "/locations/removeLocation";
+    axios.delete(req, {data: marker})
+        .then( res => {
+            console.log("Successfully removed...");
+        })
+        .catch( function(error) {
+            console.log(error);
+        })
+    return null;
+}
