@@ -13,6 +13,19 @@ export async function addLocation(marker) {
         return null;
 }
 
+export function editLocation(marker) {
+    
+    let test = config.SERVER_URL + "/locations/editLocation";
+    axios.edit(test, {data: marker})
+        .then(test => { console.log("Edit Complete")
+        })
+        .catch(function(error) {
+            console.log("Ya done goofed -> " + error);
+        })
+        
+    return null;
+}
+
 export function removeLocation(marker) {
     var req = config.SERVER_URL + "/locations/removeLocation";
     axios.delete(req, {data: marker})
