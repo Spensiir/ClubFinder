@@ -6,9 +6,9 @@ import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
-import { addLocation } from './tools/marker.js';
 import {addOrganization} from './tools/organization.js'
 import userManager from "./tools/UserManager.js"
+import { addLocation, editLocation, removeLocation } from './tools/marker.js';
 
 
 
@@ -88,20 +88,11 @@ class App extends React.Component {
     this.setState({markers : newMarkers, selected: markerFromForm });
 };
 
-  // organizationCallback = async (organization) => {
-  //   console.log("in callback");
-  //   console.log(addOrganization);
-  //   await addOrganization(organization).then( res => {
-  //     console.log(res);
-  //   });
-  // };
 
-editMarkerCallback = (markerFromForm) => {
+editMarkerCallback = async (markerFromForm) => {
     this.removeMarker();
-    let newMarkers = this.state.markers;
-    newMarkers.push(markerFromForm);
-    this.setState({markers : newMarkers, selected: markerFromForm});
-
+    await this.markerCallback(markerFromForm);
+    console.log([markerFromForm.lat, markerFromForm.lng]);
 };
 
 selectedCallback = (markerFromMap) => {
@@ -123,7 +114,7 @@ removeMarker() {
             oldMarkers.pop();
         }
     }
-
+    removeLocation(this.state.selected);
     this.setState({markers : oldMarkers, selected: null});
 
 };
