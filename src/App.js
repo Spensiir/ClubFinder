@@ -5,7 +5,7 @@ import AddForm from "./components/AddForm";
 import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
-import { addLocation } from './tools/marker.js';
+import { addLocation, editLocation } from './tools/marker.js';
 
 
 
@@ -75,6 +75,7 @@ editMarkerCallback = (markerFromForm) => {
     this.removeMarker();
     let newMarkers = this.state.markers;
     newMarkers.push(markerFromForm);
+    editLocation(this.state.selected);
     this.setState({markers : newMarkers, selected: markerFromForm});
 
 };
