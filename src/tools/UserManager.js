@@ -30,23 +30,6 @@ class UserManager {
     
     async fireSignIn(email, password) {
         var confirmed;
-        await firebase.auth().signInWithEmailAndPassword(email, password).then(()=> {
-            this.user = firebase.auth().currentUser;
-            console.log("yerrrr");
-            confirmed = true;
-        }
-            ).catch(function (error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log(errorMessage);
-            confirmed = false;
-            });
-        return confirmed;
-    }
-
-    async fireSignIn(email, password) {
-        var confirmed;
         var errorMessage;
         await firebase.auth().signInWithEmailAndPassword(email, password).then(()=> {
             this.user = firebase.auth().currentUser;
