@@ -42,9 +42,9 @@ app.post('/locations/addLocation', function (req, res) {
     })
 })
 
-app.edit('/locations/editLocation', function(req, res) {
+app.post('/locations/editLocation', function(req, res) {
     console.log(req.body);
-    firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).update(req.body)
+    firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).set(req.body)
     .then(result => {
     console.log(req.body)
     res.sendStatus(200);

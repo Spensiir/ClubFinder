@@ -37,8 +37,7 @@ class EditForm extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.initialSelect !== null && props.initialSelect.name !== state.club_name && window.formOpen === false) {
-            console.log(props.initialSelect);
+        if (props.initialSelect !== null && state.club_name === "") {
             return {
                 club_name: props.initialSelect.name,
                 address: props.initialSelect.address,
@@ -70,14 +69,20 @@ class EditForm extends React.Component {
     setZip(event) {
         this.setState({zip: event.target.value});
     }
-    submitForm(event) {
+    async submitForm(event) {
         event.preventDefault();
         var loc = {address: this.state.address,
             city : this.state.city,
             state : this.state.state,
             zip : this.state.zip
         };
-        var coords = getCoords(loc);
+
+        let coords;
+        await getCoords(loc).then( res => {
+            console.log(res);
+            coords = res;
+        });
+        console.log(coords);
 
         if (coords.lat !== null && coords.lng !== null) {
             this.props.updateMarkers({name: this.state.club_name,
@@ -86,7 +91,7 @@ class EditForm extends React.Component {
                 state : this.state.state,
                 zip : this.state.zip,
                 lat: coords.lat,
-                lng: coords.long,
+                lng: coords.lng,
                 color: "red"});
         } else {
             console.log("Bad location...");
@@ -101,19 +106,19 @@ class EditForm extends React.Component {
                 <form id="editFormDiv" onSubmit={this.submitForm}>
                     <h1> Edit an Existing Club </h1>
                     <label><b>Club Name</b></label>
-                    <input type="text" value={this.state.club_name} name="club_name" onChange={e =>this.setClubName(e)} required/>
+                    <input type="text" defaultValue={this.state.club_name} name="club_name" onChange={e =>this.setClubName(e)} required/>
 
                     <label><b>Address</b></label>
-                    <input type="text" value={this.state.address} name="address" onChange={e => this.setAddress(e)} required/>
+                    <input type="text" defaultValue={this.state.address} name="address" onChange={e => this.setAddress(e)} required/>
 
                     <label><b>City</b></label>
-                    <input type="text" value={this.state.city} style={{width:200}} className="city" name="city" onChange={e => this.setCity(e)} required/>
+                    <input type="text" defaultValue={this.state.city} style={{width:200}} className="city" name="city" onChange={e => this.setCity(e)} required/>
 
                     <label><b>State</b></label>
-                    <input type="text" value={this.state.state} style={{width:30}} className="state" name="state" onChange={e => this.setSt(e)} required/>
+                    <input type="text" defaultValue={this.state.state} style={{width:30}} className="state" name="state" onChange={e => this.setSt(e)} required/>
 
                     <label><b>Zip</b></label>
-                    <input type="text" value={this.state.zip} style={{width:90}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
+                    <input type="text" defaultValue={this.state.zip} style={{width:90}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
 
                     <br/>
                     <button type="submit" className="submit">Submit</button>

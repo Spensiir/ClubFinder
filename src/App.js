@@ -70,13 +70,16 @@ class App extends React.Component {
     this.setState({markers : newMarkers, selected: markerFromForm });
 };
 
-editMarkerCallback = (markerFromForm) => {
+editMarkerCallback = async (markerFromForm) => {
+    // for (var i = 0; i < oldMarkers.length; i++) {
+    //     if (oldMarkers[i] === this.state.selected) {
+    //         oldMarkers[i] = markerFromForm;
+    //     }
+    // }
     this.removeMarker();
-    let newMarkers = this.state.markers;
-    newMarkers.push(markerFromForm);
-    editLocation(this.state.selected);
-    this.setState({markers : newMarkers, selected: markerFromForm});
-
+    await this.markerCallback(markerFromForm);
+    console.log([markerFromForm.lat, markerFromForm.lng]);
+    //this.setState({markers : oldMarkers, selected: markerFromForm});
 };
 
 selectedCallback = (markerFromMap) => {

@@ -13,16 +13,15 @@ export async function addLocation(marker) {
         return null;
 }
 
-export function editLocation(marker) {
-    
+export function editLocation(oldMarker, marker) {
     let test = config.SERVER_URL + "/locations/editLocation";
-    axios.edit(test, {data: marker})
+    removeLocation(oldMarker);
+    axios.post(test,  marker)
         .then(test => { console.log("Edit Complete")
         })
         .catch(function(error) {
             console.log("Ya done goofed -> " + error);
         })
-        
     return null;
 }
 
