@@ -1,7 +1,7 @@
 import React from 'react';
 import "../css/map.css";
 import GoogleMapReact from 'google-map-react';
-import config from '../tools/config.js';
+import {config} from '../tools/config.js';
 
 const Marker = (props) => {
     const { color } = props;
@@ -67,12 +67,12 @@ class SimpleMap extends React.Component {
         } else {
             this.setState({selected: this.props.initialSelect});
         }
-    }
+    };
 
     onClick = (props) => {
         this.props.updateSelected(null);
         this.setState({selected: this.props.initialSelect});
-    }
+    };
 
 
     render() {
@@ -96,7 +96,7 @@ class SimpleMap extends React.Component {
                 )
         } else {
             console.log("not a location");
-            details = <div className="locDetails" style={{display: "none"}}></div>
+            details = <div className="locDetails" style={{display: "none"}}/>
         }
         return (
             // Important! Always set the container height explicitly

@@ -1,8 +1,6 @@
 import React from "react"
 import "../css/signin.css"
-import formOpen from "../App.js"
-import Header from "../components/Header.js"
-import userManager from "../tools/UserManager.js"
+import {userManager} from "../managers/UserManager.js"
 
 class Signin extends React.Component {
     

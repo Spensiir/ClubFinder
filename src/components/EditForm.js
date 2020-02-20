@@ -45,10 +45,10 @@ class EditForm extends React.Component {
                 state: props.initialSelect.state,
                 zip: props.initialSelect.zip,
                 country: "",
-                website: "",
+                website: props.initialSelect.website,
                 phone: "",
                 description: "",
-                weapons: ""
+                weapons: props.initialSelect.weapons
             };
         }
         return null;
@@ -68,6 +68,12 @@ class EditForm extends React.Component {
     }
     setZip(event) {
         this.setState({zip: event.target.value});
+    }
+    setWebsite(event) {
+        this.setState({website: event.target.value});
+    }
+    setWeapons(event) {
+        this.setState({weapons: event.target.value});
     }
     async submitForm(event) {
         event.preventDefault();
@@ -90,6 +96,8 @@ class EditForm extends React.Component {
                 city : this.state.city,
                 state : this.state.state,
                 zip : this.state.zip,
+                website: this.state.website,
+                weapons: this.state.weapons,
                 lat: coords.lat,
                 lng: coords.lng,
                 color: "red"});
@@ -120,6 +128,12 @@ class EditForm extends React.Component {
                     <label><b>Zip</b></label>
                     <input type="text" defaultValue={this.state.zip} style={{width:90}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
 
+                    <label><b>Website</b></label>
+                    <input type="text" style={{width:200}} className="website" name="website" onChange={e => this.setWebsite(e)}/>
+                    <br/>
+
+                    <label><b>Weapons</b></label>
+                    <input type="text" className="website" name="website" onChange={e => this.setWeapons(e)}/>
                     <br/>
                     <button type="submit" className="submit">Submit</button>
                     <button type="button" className="submit" onClick={closeEditForm}>Close</button>

@@ -1,6 +1,5 @@
 import React from 'react';
 import '../css/addform.css';
-//import axios from 'axios';
 import { getCoords } from '../tools/coords.js';
 
 class AddForm extends React.Component {
@@ -24,6 +23,12 @@ class AddForm extends React.Component {
     setZip(event) {
         this.setState({zip: event.target.value});
     }
+    setWebsite(event) {
+        this.setState({website: event.target.value});
+    }
+    setWeapons(event) {
+        this.setState({weapons: event.target.value});
+    }
     async submitForm(event) {
         //console.log("submit form");
         event.preventDefault();
@@ -46,6 +51,8 @@ class AddForm extends React.Component {
                 city : this.state.city,
                 state : this.state.state,
                 zip : this.state.zip,
+                website: this.state.website,
+                weapons: this.state.weapons,
                 lat: coords.lat,
                 lng: coords.lng,
                 color: "red"});
@@ -76,6 +83,11 @@ class AddForm extends React.Component {
                     <label><b>Zip</b></label>
                     <input type="text" style={{width:90}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
 
+                    <label><b>Website</b></label>
+                    <input type="text" style={{width:200}} className="website" name="website" onChange={e => this.setWebsite(e)}/>
+                    <br/>
+                    <label><b>Weapons</b></label>
+                    <input type="text" className="website" name="website" onChange={e => this.setWeapons(e)}/>
                     <br/>
                     <button type="submit" className="submit">Submit</button>
                     <button type="button" className="submit" onClick={closeAddForm}>Close</button>

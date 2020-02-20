@@ -1,14 +1,11 @@
 import React from 'react';
-import Header from './components/Header.js';
 import "./css/app.css"
 import AddForm from "./components/AddForm";
 import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
-import {addOrganization} from './tools/organization.js'
-import userManager from "./tools/UserManager.js"
-import { addLocation, editLocation, removeLocation } from './tools/marker.js';
+import locationManager from "./managers/LocationManager.js"
 
 
 
@@ -23,7 +20,7 @@ class App extends React.Component {
           <button onClick={openSignin}>Sign In</button>
           <button onClick={openRegister}>Register</button>
         </div>,
-        markers : [], 
+        markers : locationManager.getLocations(),
         selected : null
       };
     this.usernameCallback = this.usernameCallback.bind(this);
@@ -43,7 +40,7 @@ class App extends React.Component {
         <label>Welcome, {this.state.username}</label>
         <button onClick={this.onClickSignOut}>Sign out</button>
       </div>});
-  }
+  };
 
   onClickRegister = () => {
     openRegister();
@@ -53,7 +50,7 @@ class App extends React.Component {
         <label>Welcome, {this.state.username}</label>
         <button onClick={this.onClickSignOut}>Sign out</button>
       </div>});
-  }
+  };
 
   onClickSignOut = () => {
     console.log("here");
@@ -66,7 +63,7 @@ class App extends React.Component {
           <button onClick={openSignin}>Sign In</button>
           <button onClick={openRegister}>Register</button>
       </div>});
-  }
+  };
 
   usernameCallback = (usernameData) => {
     this.setState({username: usernameData}, () => this.setState(
@@ -76,46 +73,26 @@ class App extends React.Component {
         <button onClick={this.onClickSignOut}>Sign out</button>
       </div>}));
     
-  }
+  };
 
   markerCallback = async (markerFromForm) => {
-    let newMarkers = this.state.markers;
-    console.log(addLocation);
-    await addLocation(markerFromForm).then( res => {
-      console.log(res);
-    });
-    newMarkers.push(markerFromForm);
-    this.setState({markers : newMarkers, selected: markerFromForm });
+    await locationManager.addLocation(markerFromForm);
+    this.setState({markers : locationManager.getLocations(), selected: markerFromForm });
 };
 
 
 editMarkerCallback = async (markerFromForm) => {
-    this.removeMarker();
-    await this.markerCallback(markerFromForm);
-    console.log([markerFromForm.lat, markerFromForm.lng]);
+    await locationManager.editLocation(this.state.selected, markerFromForm);
+    this.setState({markers : locationManager.getLocations(), selected: markerFromForm });
 };
 
 selectedCallback = (markerFromMap) => {
     this.setState({selected : markerFromMap});
 };
 
-removeMarker() {
-    let oldMarkers = this.state.markers;
-
-    if (this.state.selected == null) {
-        return;
-    }
-
-    for (var i = 0; i < oldMarkers.length; i++) {
-        if (oldMarkers[i] === this.state.selected) {
-            var temp = oldMarkers[oldMarkers.length - 1];
-            oldMarkers[oldMarkers.length - 1] = oldMarkers[i];
-            oldMarkers[i] = temp;
-            oldMarkers.pop();
-        }
-    }
-    removeLocation(this.state.selected);
-    this.setState({markers : oldMarkers, selected: null});
+async removeMarker() {
+    await locationManager.removeLocation(this.state.selected);
+    this.setState({markers : locationManager.getLocations(), selected: null});
 
 };
 
