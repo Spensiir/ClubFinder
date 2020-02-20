@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/addform.css';
 import { getCoords } from '../tools/coords.js';
+import { userManager } from '../managers/UserManager';
 
 class AddForm extends React.Component {
     constructor(props) {
@@ -55,7 +56,8 @@ class AddForm extends React.Component {
                 weapons: this.state.weapons,
                 lat: coords.lat,
                 lng: coords.lng,
-                color: "red"});
+                color: "red",
+                userid: userManager.getUser().uid});
         } else {
             console.log("Bad location...");
         }
