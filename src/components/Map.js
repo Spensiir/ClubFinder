@@ -1,7 +1,7 @@
 import React from 'react';
 import "../css/map.css";
 import GoogleMapReact from 'google-map-react';
-import {config} from '../tools/config.js';
+import { config } from '../tools/config.js';
 
 const Marker = (props) => {
     const { color } = props;
