@@ -57,7 +57,7 @@ class AddForm extends React.Component {
                 lat: coords.lat,
                 lng: coords.lng,
                 color: "red",
-                userid: userManager.getUser().uid});
+                orgEmail: userManager.getUser().email});
         } else {
             console.log("Bad location...");
         }
