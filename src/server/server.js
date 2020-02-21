@@ -32,7 +32,7 @@ app.use(bodyParser.json())
 app.post('/locations/addLocation', function (req, res) {
     //console.log(req.body);
 
-    firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).set(req.body)
+    firebase.database().ref('locations/' + req.body.lat.replace(".", '_') + "+" + req.body.lng.replace(".", '_')).set(req.body)
     .then(result => {
     //console.log(req.body)
     res.sendStatus(200);
