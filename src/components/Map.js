@@ -85,10 +85,7 @@ class SimpleMap extends React.Component {
                     <tbody>
                         <tr>
                             <th>Address :</th>
-                            <th>{this.state.selected.address + ', '
-                                + this.state.selected.city + ', '
-                                + this.state.selected.state + ' '
-                                + this.state.selected.zip }</th>
+                            <th>{this.state.selected.address}</th>
                         </tr>
                     </tbody>
                 </table>
