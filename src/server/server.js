@@ -26,8 +26,39 @@ const firebaseConfig = {
   };
 
 firebase.initializeApp(firebaseConfig);
+var database = firebase.database();
 
 app.use(bodyParser.json())
+
+app.get('/locations/getLocations', function (req, res) {
+    var ref = firebase.database().ref('locations')
+    ref.once('value').then(function(snapshot) {
+        console.log("bitch is here", snapshot.val());
+    })
+
+})
+
+app.get('/locations/getLocations/:email', function (req, res) {
+    var ref = firebase.database().ref('locations');
+    console.log("email be: ", req.params.email);
+    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(function(snapshot) {
+        // snapshot.forEach(function(childSnapshot) {
+        //     var key = childSnapshot.key;
+        //     var childData = childSnapshot.val();
+        //     console.log('key: ', key);
+        //     console.log('childData: ', childData);
+        // })
+        console.log(snapshot.val());
+    })
+    // var query = firebase.database().ref("locations");
+    // query.orderByChild("orgEmail").equalTo(req.params.email).once("value")
+    //     .then(function(snapshot) {
+    //         snapshot.forEach(function(childSnapshot) {
+    //             console.log(childSnapshot.val());
+    //     });
+    // });
+});
+
 
 app.post('/locations/addLocation', function (req, res) {
     //console.log(req.body);
@@ -43,21 +74,21 @@ app.post('/locations/addLocation', function (req, res) {
 })
 
 app.post('/locations/editLocation', function(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).set(req.body)
     .then(result => {
-    console.log(req.body)
+    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    console.log(error);
+    //console.log(error);
     res.sendStatus(400);
     })
 })
 
 
 app.delete('/locations/removeLocation', function(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).remove();
     res.sendStatus(400);
 })
@@ -69,7 +100,7 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'Cache-Control, Origin, X-Requested-With,Content-Type, Accept, Authorization');
     res.setHeader('Access-Control-Allow-Credentials', true)
     if ('OPTIONS' == req.method) {
-        res.send(200);
+        res.sendStatus(200);
     }
     else {
         next();
