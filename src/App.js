@@ -6,12 +6,11 @@ import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
 import locationManager from "./managers/LocationManager.js"
-
-
+import {userManager} from "./managers/UserManager";
 
 class App extends React.Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       username:"user",
       logButton: 
@@ -20,7 +19,7 @@ class App extends React.Component {
           <button onClick={openSignin}>Sign In</button>
           <button onClick={openRegister}>Register</button>
         </div>,
-        markers : locationManager.getLocations(),
+        markers : [],
         selected : null
       };
     this.usernameCallback = this.usernameCallback.bind(this);
@@ -32,14 +31,20 @@ class App extends React.Component {
     this.editMarkerCallback = this.editMarkerCallback.bind(this);
   }
 
-  onClickSubmit = () => {
+  async componentDidMount() {
+    this.setState({
+        markers: await locationManager.updateLocations()
+    });
+  }
+
+  onClickSubmit = async () => {
     openSignin();
     this.setState(
-      {logButton: 
-      <div className="sign-in">
-        <label>Welcome, {this.state.username}</label>
-        <button onClick={this.onClickSignOut}>Sign out</button>
-      </div>});
+        {logButton:
+              <div className="sign-in">
+                <label>Welcome, {this.state.username}</label>
+                <button onClick={this.onClickSignOut}>Sign out</button>
+              </div>});
   };
 
   onClickRegister = () => {
@@ -52,8 +57,12 @@ class App extends React.Component {
       </div>});
   };
 
-  onClickSignOut = () => {
-    console.log("here");
+  onClickSignOut = async () => {
+    await userManager.fireSignOut();
+    this.setState({
+        markers: await locationManager.updateLocations()
+    });
+
     this.setState(
       {
         username: "user",
@@ -65,25 +74,27 @@ class App extends React.Component {
       </div>});
   };
 
-  usernameCallback = (usernameData) => {
-    this.setState({username: usernameData}, () => this.setState(
-      {logButton: 
+  usernameCallback = async (usernameData) => {
+    this.setState({
+        markers: await locationManager.updateLocations()
+    });
+    this.setState({username: usernameData}, async () => this.setState(
+      { logButton:
       <div className="sign-in">
         <label>Welcome, {this.state.username}</label>
         <button onClick={this.onClickSignOut}>Sign out</button>
       </div>}));
-    
   };
 
   markerCallback = async (markerFromForm) => {
     await locationManager.addLocation(markerFromForm);
-    this.setState({markers : locationManager.getLocations(), selected: markerFromForm });
+    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
 };
 
 
 editMarkerCallback = async (markerFromForm) => {
     await locationManager.editLocation(this.state.selected, markerFromForm);
-    this.setState({markers : locationManager.getLocations(), selected: markerFromForm });
+    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
 };
 
 selectedCallback = (markerFromMap) => {
@@ -92,7 +103,7 @@ selectedCallback = (markerFromMap) => {
 
 async removeMarker() {
     await locationManager.removeLocation(this.state.selected);
-    this.setState({markers : locationManager.getLocations(), selected: null});
+    this.setState({markers : await locationManager.updateLocations(), selected: null});
 
 };
 

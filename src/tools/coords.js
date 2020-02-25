@@ -18,6 +18,5 @@ export async function getCoords(loc) {
             coords = {lat: null, lng: null};
         })
 
-    console.log(coords);
     return coords;
 }

@@ -6,29 +6,26 @@ class LocationManager {
     locations;
 
     constructor() {
-        this.locations = this.updateLocations();
+        this.locations = [];
     }
 
     async addLocation(marker) {
         var req = config.SERVER_URL + "/locations/addLocation";
         await axios.post(req, marker)
-            .then(res => {
-                console.log(res);
-            })
             .catch(function (error) {
                 console.log(error);
             });
-        this.updateLocations();
+        this.locations = await this.updateLocations();
         return null;
     }
 
     async editLocation(oldMarker, marker) {
-        this.removeLocation(oldMarker);
+        await this.removeLocation(oldMarker);
         await this.addLocation(marker);
         return null;
     }
 
-    removeLocation(marker) {
+    async removeLocation(marker) {
         var req = config.SERVER_URL + "/locations/removeLocation";
         axios.delete(req, {data: marker})
             .then(res => {
@@ -37,32 +34,37 @@ class LocationManager {
             .catch(function (error) {
                 console.log(error);
             });
-        this.updateLocations();
+        this.locations = await this.updateLocations();
         return null;
     }
 
-    getLocations() {
-        return this.locations;
+    async getLocations() {
+        console.log("location manger: line 45");
+        if (await this.locations) {
+            return this.locations;
+        } else {
+            return [];
+        }
     }
 
-    updateLocations() {
+    async updateLocations() {
         var req = config.SERVER_URL + "/locations/getLocations";
-        var newLocations;
+        let newLocations;
         var currUser = userManager.getUser();
 
         // if a user is signed in then append the user id to the request
         if (currUser) {
-            req += "/" + currUser.uid;
+            req += "/" + currUser.email;
         }
 
-        axios.get(req)
-            .then(function (res) {
-                newLocations = res;
+        await axios.get(req)
+            .then(res => {
+                newLocations = res.data;
             }).catch(function (error) {
                 newLocations = []; // if an error occurs the no locations will appear
                 console.log(error);
             });
-        this.locations = newLocations;
+        return newLocations;
     }
 }
 

@@ -45,12 +45,17 @@ class SimpleMap extends React.Component {
             return {
                 selected : props.initialSelect,
                 center: { lat : props.initialSelect.lat, lng: props.initialSelect.lng },
+                markers : props.currMarkers
             };
         } else if (props.initialSelect !== state.selected && props.initialSelect == null) {
-            console.log("here");
             return {
                 selected : props.intialSelect,
+                markers : props.currMarkers
             };
+        } else if (props.currMarkers.length !== state.markers.length) {
+            return {
+                markers : props.currMarkers
+            }
         }
         return null;
     }
@@ -92,7 +97,6 @@ class SimpleMap extends React.Component {
                 </div>
                 )
         } else {
-            console.log("not a location");
             details = <div className="locDetails" style={{display: "none"}}/>
         }
         return (

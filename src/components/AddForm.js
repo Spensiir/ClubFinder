@@ -44,7 +44,6 @@ class AddForm extends React.Component {
             console.log(res);
             coords = res;
         });
-        console.log(coords);
 
         if (coords.lat !== null && coords.lng !== null) {
             this.props.updateMarkers({name: this.state.club_name,

@@ -67,6 +67,18 @@ class UserManager {
         return [confirmed, err];
     }
 
+    async fireSignOut() {
+        var confirmed;
+        await firebase.auth().signOut().then(() => {
+            confirmed = true;
+            this.user = firebase.auth().currentUser;
+        }).catch((error) => {
+            console.log(error.errorMessage);
+            confirmed = false;
+        });
+        return confirmed;
+    }
+
     getUser() {
         return this.user;
     }
