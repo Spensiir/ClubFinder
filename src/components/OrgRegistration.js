@@ -1,8 +1,6 @@
 import React from "react"
 import "../css/orgForm.css"
-import formOpen from "../App.js"
-import Header from "../components/Header.js"
-import userManager from "../tools/UserManager.js"
+import {userManager} from "../managers/UserManager.js"
 
 class OrgRegistration extends React.Component {
 

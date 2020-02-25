@@ -1,7 +1,7 @@
 import React from 'react';
 import "../css/map.css";
 import GoogleMapReact from 'google-map-react';
-import config from '../tools/config.js';
+import { config } from '../tools/config.js';
 
 const Marker = (props) => {
     const { color } = props;
@@ -45,12 +45,17 @@ class SimpleMap extends React.Component {
             return {
                 selected : props.initialSelect,
                 center: { lat : props.initialSelect.lat, lng: props.initialSelect.lng },
+                markers : props.currMarkers
             };
         } else if (props.initialSelect !== state.selected && props.initialSelect == null) {
-            console.log("here");
             return {
                 selected : props.intialSelect,
+                markers : props.currMarkers
             };
+        } else if (props.currMarkers.length !== state.markers.length) {
+            return {
+                markers : props.currMarkers
+            }
         }
         return null;
     }
@@ -67,12 +72,12 @@ class SimpleMap extends React.Component {
         } else {
             this.setState({selected: this.props.initialSelect});
         }
-    }
+    };
 
     onClick = (props) => {
         this.props.updateSelected(null);
         this.setState({selected: this.props.initialSelect});
-    }
+    };
 
 
     render() {
@@ -85,18 +90,14 @@ class SimpleMap extends React.Component {
                     <tbody>
                         <tr>
                             <th>Address :</th>
-                            <th>{this.state.selected.address + ', '
-                                + this.state.selected.city + ', '
-                                + this.state.selected.state + ' '
-                                + this.state.selected.zip }</th>
+                            <th>{this.state.selected.address}</th>
                         </tr>
                     </tbody>
                 </table>
                 </div>
                 )
         } else {
-            console.log("not a location");
-            details = <div className="locDetails" style={{display: "none"}}></div>
+            details = <div className="locDetails" style={{display: "none"}}/>
         }
         return (
             // Important! Always set the container height explicitly

@@ -5,7 +5,7 @@ const app = express()
 const port = 3001
 var keys = require('./keys'); // get file with all api keys
 var firebase = require("firebase/app");
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
 // Add the Firebase products that you want to use
 require("firebase/auth");
@@ -26,13 +26,64 @@ const firebaseConfig = {
   };
 
 firebase.initializeApp(firebaseConfig);
+var database = firebase.database();
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+// configure our app to handle CORS requests
+app.use(function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, POST, EDIT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Cache-Control, Origin, X-Requested-With,Content-Type, Accept, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', true)
+    if ('OPTIONS' == req.method) {
+        res.sendStatus(200);
+    }
+    else {
+        next();
+    };
+});
+
+app.get('/locations/getLocations', function (req, res) {
+    var ref = firebase.database().ref('locations');
+    var locations = [];
+    ref.once('value').then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            locations.push({name: childSnapshot.val()["name"],
+                address: childSnapshot.val()["address"],
+                website: childSnapshot.val()["website"],
+                weapons: childSnapshot.val()["weapons"],
+                lat: childSnapshot.val()["lat"],
+                lng: childSnapshot.val()["lng"],
+                color: childSnapshot.val()["color"],
+                orgEmail: childSnapshot.val()["orgEmail"]});
+        });
+        res.send(locations);
+    });
+});
+
+app.get('/locations/getLocations/:email', function (req, res) {
+    var ref = firebase.database().ref('locations');
+    var locations = [];
+    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            locations.push({name: childSnapshot.val()["name"],
+                address: childSnapshot.val()["address"],
+                website: childSnapshot.val()["website"],
+                weapons: childSnapshot.val()["weapons"],
+                lat: childSnapshot.val()["lat"],
+                lng: childSnapshot.val()["lng"],
+                color: childSnapshot.val()["color"],
+                orgEmail: childSnapshot.val()["orgEmail"]});
+        });
+        res.send(locations);
+    })
+});
+
 
 app.post('/locations/addLocation', function (req, res) {
     //console.log(req.body);
-
-    firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).set(req.body)
+    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
     .then(result => {
     //console.log(req.body)
     res.sendStatus(200);
@@ -44,37 +95,27 @@ app.post('/locations/addLocation', function (req, res) {
 })
 
 app.post('/locations/editLocation', function(req, res) {
-    console.log(req.body);
-    firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).set(req.body)
+    //console.log(req.body);
+    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
     .then(result => {
-    console.log(req.body)
+    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    console.log(error);
+    //console.log(error);
     res.sendStatus(400);
     })
-})
+});
 
 
 app.delete('/locations/removeLocation', function(req, res) {
-    console.log(req.body);
-    firebase.database().ref('locations/' + req.body.city.replace(/\s/g, '_') + "~~" + req.body.name.replace(/\s/g, '_')).remove();
-    res.sendStatus(400);
-})
+    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).remove()
+        .then(() => {
+            res.sendStatus(200);
+        }).catch((error) => {
+            res.sendStatus(400);
+    });
 
-// configure our app to handle CORS requests
-app.use(function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, POST, EDIT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Cache-Control, Origin, X-Requested-With,Content-Type, Accept, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', true)
-    if ('OPTIONS' == req.method) {
-        res.send(200);
-    }
-    else {
-        next();
-    };
 });
 
 app.get('/', (req, res) => res.send('Hello World!'))
