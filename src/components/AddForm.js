@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/addform.css';
-//import axios from 'axios';
 import { getCoords } from '../tools/coords.js';
+import { userManager } from '../managers/UserManager';
 
 class AddForm extends React.Component {
     constructor(props) {
@@ -24,7 +24,14 @@ class AddForm extends React.Component {
     setZip(event) {
         this.setState({zip: event.target.value});
     }
+    setWebsite(event) {
+        this.setState({website: event.target.value});
+    }
+    setWeapons(event) {
+        this.setState({weapons: event.target.value});
+    }
     async submitForm(event) {
+        //console.log("submit form");
         event.preventDefault();
         var loc = {address: this.state.address,
             city : this.state.city,
@@ -37,17 +44,22 @@ class AddForm extends React.Component {
             console.log(res);
             coords = res;
         });
-        console.log(coords);
 
         if (coords.lat !== null && coords.lng !== null) {
             this.props.updateMarkers({name: this.state.club_name,
-                address: this.state.address,
-                city : this.state.city,
-                state : this.state.state,
-                zip : this.state.zip,
+                address: this.state.address + ", " 
+                + this.state.city + ", " 
+                + this.state.state + ", " 
+                + this.state.zip,
+                state: this.state.state,
+                city: this.state.city,
+                zip: this.state.zip,
+                website: this.state.website,
+                weapons: this.state.weapons,
                 lat: coords.lat,
                 lng: coords.lng,
-                color: "red"});
+                color: "red",
+                orgEmail: userManager.getUser().email});
         } else {
             console.log("Bad location...");
         }
@@ -75,6 +87,11 @@ class AddForm extends React.Component {
                     <label><b>Zip</b></label>
                     <input type="text" style={{width:90}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
 
+                    <label><b>Website</b></label>
+                    <input type="text" style={{width:200}} className="website" name="website" onChange={e => this.setWebsite(e)}/>
+                    <br/>
+                    <label><b>Weapons</b></label>
+                    <input type="text" className="website" name="website" onChange={e => this.setWeapons(e)}/>
                     <br/>
                     <button type="submit" className="submit">Submit</button>
                     <button type="button" className="submit" onClick={closeAddForm}>Close</button>

@@ -1,8 +1,6 @@
 import React from "react"
 import "../css/signin.css"
-import formOpen from "../App.js"
-import Header from "../components/Header.js"
-import userManager from "../tools/UserManager.js"
+import {userManager} from "../managers/UserManager.js"
 
 class Signin extends React.Component {
     
@@ -21,7 +19,6 @@ class Signin extends React.Component {
     async submitSignin(event) {
         event.preventDefault();
         var confirmed = await userManager.fireSignIn(this.state.username, this.state.password);
-        console.log(confirmed);
         if (confirmed[0]) {
             window.currUser = this.state.username;
             this.props.callbackFromApp(this.state.username);
@@ -42,7 +39,7 @@ class Signin extends React.Component {
             <div className="signinForm" id="SigninForm">
                 <form id="signinform" onSubmit={e=>this.submitSignin(e)}>
                     <h1>Sign in</h1>
-                    <label><b>Username</b></label>
+                    <label><b>Email</b></label>
                     <input type="text" name="username" onChange={e=>this.setUsername(e)} required/>
 
                     <label><b>Password</b></label>

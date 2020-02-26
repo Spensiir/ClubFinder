@@ -1,4 +1,4 @@
-import config from './config.js';
+import {config} from './config.js';
 import axios from 'axios';
 
 export async function getCoords(loc) {
@@ -18,6 +18,5 @@ export async function getCoords(loc) {
             coords = {lat: null, lng: null};
         })
 
-    console.log(coords);
     return coords;
 }
