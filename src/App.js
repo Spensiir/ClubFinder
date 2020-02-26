@@ -5,6 +5,7 @@ import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
+import AdminRegistration from './components/AdminRegistration.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 
@@ -128,6 +129,7 @@ async removeMarker() {
             {this.state.logButton}
           </header>   
           <div className="management" style={{display : signedIn}}>
+            <button onClick={openAdminRegistration}>Register Admin</button>
             <button onClick={openAddForm}>Add</button>
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
@@ -137,6 +139,7 @@ async removeMarker() {
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
+          <AdminRegistration callbackFromApp={this.usernameCallback}/>
       </div>
     )};
 }
@@ -148,6 +151,11 @@ function openSignin() {
 
 function openRegister() {
   document.getElementById("OrgForm").style.display = "block";
+  document.getElementById("shadow").style.display = "block";
+}
+
+function openAdminRegistration() {
+  document.getElementById("AdminForm").style.display = "block";
   document.getElementById("shadow").style.display = "block";
 }
 
