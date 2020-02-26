@@ -6,6 +6,7 @@ import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
 import AdminRegistration from './components/AdminRegistration.js';
+import SearchBar from './components/SearchBar.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 
@@ -140,6 +141,7 @@ async removeMarker() {
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
           <AdminRegistration callbackFromApp={this.usernameCallback}/>
+          <SearchBar/>
       </div>
     )};
 }
