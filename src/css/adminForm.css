@@ -1,8 +1,10 @@
 .adminForm {
     display: none;
-    position: absolute;
-    right: 5%;
-    top: 2%;
+    position: fixed;
+    width: 900px;
+    height: 330px;
+    left: calc(50% - 450px);
+    top: calc(40% - 165px);
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
@@ -50,7 +52,7 @@
     border-radius: 6px;
 
     position:relative;
-    float: left;
+    float: right;
 }
 
 .adminForm button:hover {

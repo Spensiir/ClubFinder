@@ -8,14 +8,15 @@
   }
 
   .topnav h1 {
-    text-align: center;
+    display: inline-block;
+    text-align: left;
     font-size: 16px;
+    padding-left: 230px;
   }
   
   /* Style the links inside the navigation bar */
   .topnav button {
-    float: left;
-    display: block;
+    display: inline-block;
     color: black;
     text-align: center;
     padding: 14px 16px;
@@ -43,7 +44,7 @@
   @media screen and (max-width: 600px) {
     .topnav button, .topnav input[type=text] {
       float: none;
-      display: block;
+      display: inline-block;
       text-align: left;
       width: 100%;
       margin: 0;

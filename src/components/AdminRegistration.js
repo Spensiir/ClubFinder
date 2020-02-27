@@ -57,7 +57,7 @@ class AdminRegistration extends React.Component {
 
                     <label><b>Username</b></label>
                     <input type="text" style={{width:200}} name="username" onChange={e => this.setUsername(e)} required/>
-
+                    <br/>
                     <label><b>Password</b></label>
                     <input type="password" style={{width:200}} name="password" onChange={e => this.setPassword(e)} required/>
 

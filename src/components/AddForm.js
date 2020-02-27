@@ -86,12 +86,12 @@ class AddForm extends React.Component {
 
                     <label><b>Zip</b></label>
                     <input type="text" style={{width:90}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
-
+                    <br/>
                     <label><b>Website</b></label>
                     <input type="text" style={{width:200}} className="website" name="website" onChange={e => this.setWebsite(e)}/>
-                    <br/>
+                    
                     <label><b>Weapons</b></label>
-                    <input type="text" className="website" name="website" onChange={e => this.setWeapons(e)}/>
+                    <input type="text" style={{width:300}} className="website" name="website" onChange={e => this.setWeapons(e)}/>
                     <br/>
                     <button type="submit" className="submit">Submit</button>
                     <button type="button" className="submit" onClick={closeAddForm}>Close</button>

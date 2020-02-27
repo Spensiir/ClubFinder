@@ -117,7 +117,7 @@ async removeMarker() {
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
             <h1>Welcome, {this.state.username}</h1>
-            <button onClick={this.onClickSignOut}>Sign Out</button>
+            <button style={{float:"right"}} onClick={this.onClickSignOut}>Sign Out</button>
           </div>
           <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>

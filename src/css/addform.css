@@ -1,8 +1,10 @@
 .addForm {
     display: none;
-    position: absolute;
-    left: 17%;
-    top: 20%;
+    position: fixed;
+    width: 900px;
+    height: 530px;
+    left: calc(50% - 450px);
+    top: calc(50% - 265px);
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
