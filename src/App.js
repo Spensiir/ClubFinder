@@ -14,13 +14,12 @@ class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      logButton:
+      <div className="topnav">
+      <button onClick={openSignin}>Sign In To Manage Your Clubs</button>
+      <button onClick={openRegister}>Register Your Organization</button>
+      </div>,
       username:"user",
-      logButton: 
-        <div className="sign-in">
-          <label>Sign in to add new club listing</label>
-          <button onClick={openSignin}>Sign In</button>
-          <button onClick={openRegister}>Register</button>
-        </div>,
         markers : [],
         selected : null
       };
@@ -41,22 +40,10 @@ class App extends React.Component {
 
   onClickSubmit = async () => {
     openSignin();
-    this.setState(
-        {logButton:
-              <div className="sign-in">
-                <label>Welcome, {this.state.username}</label>
-                <button onClick={this.onClickSignOut}>Sign out</button>
-              </div>});
   };
 
   onClickRegister = () => {
     openRegister();
-    this.setState(
-      {logButton: 
-      <div className="sign-in">
-        <label>Welcome, {this.state.username}</label>
-        <button onClick={this.onClickSignOut}>Sign out</button>
-      </div>});
   };
 
   onClickSignOut = async () => {
@@ -69,11 +56,10 @@ class App extends React.Component {
       {
         username: "user",
         logButton: 
-        <div className="sign-in">
-          <label>Sign in to add new club listing</label>
-          <button onClick={openSignin}>Sign In</button>
-          <button onClick={openRegister}>Register</button>
-      </div>});
+        <div className="topnav">
+          <button onClick={openSignin}>Sign In To Manage Your Clubs</button>
+          <button onClick={openRegister}>Register Your Organization</button>
+        </div>});
   };
 
   usernameCallback = async (usernameData) => {
@@ -81,11 +67,7 @@ class App extends React.Component {
         markers: await locationManager.updateLocations()
     });
     this.setState({username: usernameData}, async () => this.setState(
-      { logButton:
-      <div className="sign-in">
-        <label>Welcome, {this.state.username}</label>
-        <button onClick={this.onClickSignOut}>Sign out</button>
-      </div>}));
+      { logButton: null}));
   };
 
   markerCallback = async (markerFromForm) => {
@@ -127,13 +109,15 @@ async removeMarker() {
             <div className="title">
               <h1>HEMAA Club Finder</h1>
             </div>
-            {this.state.logButton}
           </header>   
-          <div className="management" style={{display : signedIn}}>
+          {this.state.logButton}
+          <div className="topnav" style={{display : signedIn}}>
             <button onClick={openAdminRegistration}>Register Admin</button>
             <button onClick={openAddForm}>Add</button>
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
+            <h1>Welcome, {this.state.username}</h1>
+            <button onClick={this.onClickSignOut}>Sign Out</button>
           </div>
           <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
@@ -141,9 +125,9 @@ async removeMarker() {
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
           <AdminRegistration callbackFromApp={this.usernameCallback}/>
-          <SearchBar/>
       </div>
-    )};
+    )
+  };
 }
 
 function openSignin() {

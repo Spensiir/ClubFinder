@@ -9,10 +9,10 @@ class SearchBar extends React.Component {
     }
     render() {
         return (
-            <div class="topnav">
-                <a class="active" href="#home">Home</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
+            <div className="topnav">
+                <button className="default" href="#home">Sign In To Manage Your Clubs!</button>
+                <button id="signin" href="#signin">Sign In</button>
+                <button id="register" href="#register">Register</button>
                 <input type="text" placeholder="Search.."></input>
             </div>
         )
