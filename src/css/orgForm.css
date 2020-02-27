@@ -1,8 +1,10 @@
 .orgForm {
     display: none;
-    position: absolute;
-    right: 5%;
-    top: 2%;
+    position: fixed;
+    width: 1000px;
+    height: 680px;
+    left: calc(50% - 500px);
+    top: calc(50% - 340px);
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
