@@ -67,6 +67,17 @@ class UserManager {
         return [confirmed, err];
     }
 
+    async fireAdminCreateUser(user) {
+        admin.auth().createUser({
+            email: user.email,
+            password: user.password
+        }) .then(function(createdUser){
+            return createdUser.uid;
+        }) .catch(function(error){
+            console.log("Error creating new user", error);
+        });
+    }
+
     async fireSignOut() {
         var confirmed;
         await firebase.auth().signOut().then(() => {
