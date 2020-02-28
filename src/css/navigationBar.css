@@ -1,27 +1,31 @@
 /* Add a black background color to the top navigation bar */
 .topnav {
     position: relative;
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-left: 2%;
+    margin-right: 6%;
+    margin-top: 1%;
     overflow: hidden;
-    background-color: #e9e9e9;
   }
 
   .topnav h1 {
     display: inline-block;
     text-align: right;
     font-size: 18px;
-    padding-right: 15px;
+    padding-right: 6px;
   }
   
   /* Style the links inside the navigation bar */
   .topnav button {
     display: inline-block;
-    color: black;
+    background-color:black;
+    color: white;
+    border-radius:10px;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
+    font-family: "Times New Roman", Times, serif;
+    margin-left:1%;
   }
   
   /* Change the color of links on hover */
@@ -30,27 +34,14 @@
     color: black;
   }
   
-  /* Style the search box inside the navigation bar */
-  .topnav input[type=text] {
-    float: right;
-    padding: 6px;
-    border: none;
-    margin-top: 8px;
-    margin-right: 16px;
-    font-size: 17px;
-  }
-  
   /* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
-  @media screen and (max-width: 600px) {
-    .topnav button, .topnav input[type=text] {
+  @media screen and (max-width: 950px) {
+    .topnav button {
       float: none;
       display: inline-block;
       text-align: left;
       width: 100%;
       margin: 0;
       padding: 14px;
-    }
-    .topnav input[type=text] {
-      border: 1px solid #ccc;
     }
   }

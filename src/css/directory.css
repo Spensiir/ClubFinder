@@ -1,0 +1,63 @@
+.directory {
+    position: relative;
+    float: left;
+    z-index: 2;
+    margin-left: 3%;
+    overflow: hidden;
+  }
+
+  .directory button {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 6px 45px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: "Times New Roman", Times, serif;
+    margin-top: 10px;
+  }
+
+  /* Style the "active" element to highlight the current page */
+  .directory button.active {
+    background-color:gray;
+    color: white;
+  }
+
+  .directory form {
+    box-sizing: border-box;
+  }
+      
+  /* Style the search field */
+  .directory input[type=text] {
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+    background: #f1f1f1;
+  }
+      
+  /* Style the submit button */
+  .directory button.btn1 {
+    position:relative;
+    float: left;
+    width: 13%;
+    padding: 9px;
+    background: #2196F3;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none;
+    cursor: pointer;
+    margin:0;
+  }
+      
+  .directory button.btn1:hover {
+    background: #0b7dda;
+  }
+
+  .directory button.btn1::after {
+    content: "";
+    clear: both;
+    display: table;
+  }

@@ -1,12 +1,13 @@
 import React from 'react';
 import "./css/app.css"
+import "./css/navigationBar.css";
 import AddForm from "./components/AddForm";
 import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
 import AdminRegistration from './components/AdminRegistration.js';
-import SearchBar from './components/SearchBar.js';
+import Directory from './components/Directory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 
@@ -106,20 +107,19 @@ async removeMarker() {
       <div className="App">   
         <div className="shadow" id="shadow"/>
           <header className="App-header">
-            <div className="title">
-              <h1>HEMAA Club Finder</h1>
-            </div>
-          </header>   
+            <h1>HEMAA Club Finder</h1>
+          </header>
           {this.state.logButton}
           <div className="topnav" style={{display : signedIn}}>
-            <button onClick={openAdminRegistration}>Register Admin</button>
             <button onClick={openAddForm}>Add</button>
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
+            <button onClick={openAdminRegistration}>Register Admin</button>
             <button style={{float:"right"}} onClick={this.onClickSignOut}>Sign Out</button>
             <h1 style={{float:"right"}}>Welcome, {this.state.username}</h1>
           </div>
           <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
+          <Directory/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />

@@ -83,13 +83,12 @@ class SimpleMap extends React.Component {
     render() {
         var details;
         if (this.state.selected !== undefined && this.state.selected !== null) {
-            console.log("there is a location");
             details = (<div className="locDetails">
                     <h2>{this.state.selected.name}</h2>
                 <table>
                     <tbody>
                         <tr>
-                            <th>Address :</th>
+                            <i class="fa fa-map-marker"></i>
                             <th>{this.state.selected.address}</th>
                         </tr>
                     </tbody>
@@ -101,7 +100,7 @@ class SimpleMap extends React.Component {
         }
         return (
             // Important! Always set the container height explicitly
-            <div className='Map' style={{ height: '80vh', width: '90%'}}>
+            <div className='Map' style={{ height: '90vh', width: '100%'}}>
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: config.API_KEY}}
                     defaultZoom={this.state.zoom}
