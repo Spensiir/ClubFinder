@@ -108,6 +108,7 @@ async removeMarker() {
         <div className="shadow" id="shadow"/>
           <header className="App-header">
             <h1>HEMAA Club Finder</h1>
+            <h2 style={{display : signedIn}}>Welcome, {this.state.username}</h2>
           </header>
           {this.state.logButton}
           <div className="topnav" style={{display : signedIn}}>
@@ -115,8 +116,7 @@ async removeMarker() {
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
             <button onClick={openAdminRegistration}>Register Admin</button>
-            <button style={{float:"right"}} onClick={this.onClickSignOut}>Sign Out</button>
-            <h1 style={{float:"right"}}>Welcome, {this.state.username}</h1>
+            <button class="signout" onClick={this.onClickSignOut}>Sign Out</button>
           </div>
           <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory/>

@@ -1,9 +1,11 @@
 .directory {
-    position: relative;
+    position: fixed;
     float: left;
     z-index: 2;
-    margin-left: 3%;
     overflow: hidden;
+    margin-top:66px;
+    margin-left:40px;
+    min-width:400px;
   }
 
   .directory button {
@@ -33,7 +35,7 @@
     font-size: 15px;
     border: 1px solid grey;
     float: left;
-    width: 80%;
+    width: 62%;
     background: #f1f1f1;
   }
       
