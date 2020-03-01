@@ -42,25 +42,25 @@
 }
 
 .signinForm button {
-    margin: 3%;
-    font-size: x-large;
-    font-weight: bold;
-
+    margin: 2%;
+    right:5px;
+    bottom:15px;
     background-color: black;
     color: white;
-    border: thin solid white;
-    border-radius: 6px;
-
+    border-radius:10px;
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 17px;
+    font-family: "Times New Roman", Times, serif;
     position:relative;
     float: right;
 }
 
 .signinForm button:hover {
-    background-color: white;
+    background-color: #ddd;
     color: black;
-    border: thin solid black;
-    border-radius: 6px;
 }
+
 
 
 

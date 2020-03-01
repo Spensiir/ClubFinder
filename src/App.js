@@ -116,7 +116,7 @@ async removeMarker() {
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
             <button onClick={openAdminRegistration}>Register Admin</button>
-            <button class="signout" onClick={this.onClickSignOut}>Sign Out</button>
+            <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
           </div>
           <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory/>

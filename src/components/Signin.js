@@ -46,8 +46,8 @@ class Signin extends React.Component {
                     <input type="password" name="password" onChange={e=>this.setPassword(e)} required/>
                     
                     <br/>
-                    <button type="submit" className="submit">submit</button>
-                    <button type="text" className="submit" onClick={e=>this.closeSignin(e)}>close</button>
+                    <button type="submit" className="submit">Submit</button>
+                    <button type="text" className="submit" onClick={e=>this.closeSignin(e)}>Close</button>
                 </form>
             </div>
         );

@@ -7,17 +7,31 @@ class Directory extends React.Component {
         super(props);
         this.state = {something: 'something'};
     }
+    
     render() {
         return (
-            <div className="directory">
-                <button class="active" id='clubs'>Clubs</button>
-                <button id='orgs'>Organizations</button>
+            <div id="Directory" className="directory">
+                <button className="btn1 active">Clubs</button>
+                <button className="btn1">Organizations</button>
                 <br/>
                 <input type="text" placeholder="Search.." name="search"></input>
-                <button class="btn1" type="submit"><i class="fa fa-search"></i></button>
+                <button className="btn2" type="submit"><i className="fa fa-search"></i></button>
             </div>
         )
     }
 }
+
+/*    function activeBtn() {
+        //Get the active button using a loop
+        var btnContainer = document.getElementById("Directory"); 
+        var btns = btnContainer.getElementsByClassName("btn1");
+        for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function() {
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+        });
+    }
+}*/
 
 export default Directory;

@@ -2,9 +2,9 @@
     display: none;
     position: fixed;
     width: 900px;
-    height: 330px;
+    height: 320px;
     left: calc(50% - 450px);
-    top: calc(40% - 165px);
+    top: calc(40% - 160px);
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
@@ -42,22 +42,21 @@
 }
 
 .adminForm button {
-    margin: 3%;
-    font-size: x-large;
-    font-weight: bold;
-
+    margin: 2%;
+    right:5px;
+    bottom:16px;
     background-color: black;
     color: white;
-    border: thin solid white;
-    border-radius: 6px;
-
+    border-radius:10px;
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 17px;
+    font-family: "Times New Roman", Times, serif;
     position:relative;
     float: right;
 }
 
 .adminForm button:hover {
-    background-color: white;
+    background-color: #ddd;
     color: black;
-    border: thin solid black;
-    border-radius: 6px;
 }

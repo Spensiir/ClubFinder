@@ -1,5 +1,6 @@
 import React from 'react';
 import "../css/map.css";
+import "../css/directory.css";
 import GoogleMapReact from 'google-map-react';
 import { config } from '../tools/config.js';
 
@@ -122,6 +123,7 @@ class SimpleMap extends React.Component {
                                 color = {each.color}
                             />)
                     }
+
                 </GoogleMapReact>
                 {details}
             </div>

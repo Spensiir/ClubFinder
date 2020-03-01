@@ -2,9 +2,9 @@
     display: none;
     position: fixed;
     width: 900px;
-    height: 530px;
+    height: 510px;
     left: calc(50% - 450px);
-    top: calc(50% - 265px);
+    top: calc(50% - 255px);
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
@@ -32,24 +32,23 @@
 }
 
 .addForm button {
-    margin: 3%;
-    font-size: x-large;
-    font-weight: bold;
-
+    margin: 2%;
+    right:5px;
+    bottom:20px;
     background-color: black;
     color: white;
-    border: thin solid white;
-    border-radius: 6px;
-
+    border-radius:10px;
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 17px;
+    font-family: "Times New Roman", Times, serif;
     position:relative;
     float: right;
 }
 
 .addForm button:hover {
-    background-color: white;
+    background-color: #ddd;
     color: black;
-    border: thin solid black;
-    border-radius: 6px;
 }
 
 
