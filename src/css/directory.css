@@ -1,0 +1,66 @@
+.directory {
+    position: fixed;
+    float: left;
+    z-index: 2;
+    overflow: hidden;
+    margin-top:66px;
+    margin-left:40px;
+    min-width:400px;
+  }
+
+  .directory button.btn1 {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 6px 45px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: "Times New Roman", Times, serif;
+    margin-top: 10px;
+  }
+
+  /* Style the "active" element to highlight the current page */
+  .directory button.btn1.active {
+    background-color:gray;
+    color: white;
+  }
+
+  .directory form {
+    box-sizing: border-box;
+  }
+      
+  /* Style the search field */
+  .directory input[type=text] {
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid grey;
+    float: left;
+    width: 65%;
+    background: #f1f1f1;
+  }
+      
+  /* Style the submit button */
+  .directory button.btn2 {
+    position:relative;
+    float: left;
+    width: 10%;
+    padding: 9px;
+    background: linear-gradient( #eeeeee 0%,#cccccc 100%);
+    color: gray;
+    font-size: 17px;
+    border: thin solid grey;
+    border-left: none;
+    cursor: pointer;
+    margin:0;
+  }
+      
+  .directory button.btn2:hover {
+    background: linear-gradient(#63b6db 0%,#309dcf 100%);
+    color:white;
+  }
+
+  .directory button.btn2::after {
+    content: "";
+    clear: both;
+    display: table;
+  }

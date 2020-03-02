@@ -1,10 +1,13 @@
 import React from 'react';
 import "./css/app.css"
+import "./css/navigationBar.css";
 import AddForm from "./components/AddForm";
 import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
+import AdminRegistration from './components/AdminRegistration.js';
+import Directory from './components/Directory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 
@@ -12,13 +15,12 @@ class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      logButton:
+      <div className="topnav">
+      <button onClick={openSignin}>Sign In To Manage Your Clubs</button>
+      <button onClick={openRegister}>Register Your Organization</button>
+      </div>,
       username:"user",
-      logButton: 
-        <div className="sign-in">
-          <label>Sign in to add new club listing</label>
-          <button onClick={openSignin}>Sign In</button>
-          <button onClick={openRegister}>Register</button>
-        </div>,
         markers : [],
         selected : null
       };
@@ -39,22 +41,10 @@ class App extends React.Component {
 
   onClickSubmit = async () => {
     openSignin();
-    this.setState(
-        {logButton:
-              <div className="sign-in">
-                <label>Welcome, {this.state.username}</label>
-                <button onClick={this.onClickSignOut}>Sign out</button>
-              </div>});
   };
 
   onClickRegister = () => {
     openRegister();
-    this.setState(
-      {logButton: 
-      <div className="sign-in">
-        <label>Welcome, {this.state.username}</label>
-        <button onClick={this.onClickSignOut}>Sign out</button>
-      </div>});
   };
 
   onClickSignOut = async () => {
@@ -67,11 +57,10 @@ class App extends React.Component {
       {
         username: "user",
         logButton: 
-        <div className="sign-in">
-          <label>Sign in to add new club listing</label>
-          <button onClick={openSignin}>Sign In</button>
-          <button onClick={openRegister}>Register</button>
-      </div>});
+        <div className="topnav">
+          <button onClick={openSignin}>Sign In To Manage Your Clubs</button>
+          <button onClick={openRegister}>Register Your Organization</button>
+        </div>});
   };
 
   usernameCallback = async (usernameData) => {
@@ -79,11 +68,7 @@ class App extends React.Component {
         markers: await locationManager.updateLocations()
     });
     this.setState({username: usernameData}, async () => this.setState(
-      { logButton:
-      <div className="sign-in">
-        <label>Welcome, {this.state.username}</label>
-        <button onClick={this.onClickSignOut}>Sign out</button>
-      </div>}));
+      { logButton: null}));
   };
 
   markerCallback = async (markerFromForm) => {
@@ -122,23 +107,27 @@ async removeMarker() {
       <div className="App">   
         <div className="shadow" id="shadow"/>
           <header className="App-header">
-            <div className="title">
-              <h1>HEMAA Club Finder</h1>
-            </div>
-            {this.state.logButton}
-          </header>   
-          <div className="management" style={{display : signedIn}}>
+            <h1>HEMAA Club Finder</h1>
+            <h2 style={{display : signedIn}}>Welcome, {this.state.username}</h2>
+          </header>
+          {this.state.logButton}
+          <div className="topnav" style={{display : signedIn}}>
             <button onClick={openAddForm}>Add</button>
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
+            <button onClick={openAdminRegistration}>Register Admin</button>
+            <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
           </div>
           <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
+          <Directory/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
+          <AdminRegistration callbackFromApp={this.usernameCallback}/>
       </div>
-    )};
+    )
+  };
 }
 
 function openSignin() {
@@ -148,6 +137,11 @@ function openSignin() {
 
 function openRegister() {
   document.getElementById("OrgForm").style.display = "block";
+  document.getElementById("shadow").style.display = "block";
+}
+
+function openAdminRegistration() {
+  document.getElementById("AdminForm").style.display = "block";
   document.getElementById("shadow").style.display = "block";
 }
 
