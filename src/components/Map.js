@@ -105,6 +105,7 @@ class SimpleMap extends React.Component {
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: config.API_KEY}}
                     defaultZoom={this.state.zoom}
+                    zoom={this.state.markers.selected}
                     onChildClick={this.onChildClick}
                     onClick = {this.onClick}
                     center = {this.state.center}

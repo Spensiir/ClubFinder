@@ -32,15 +32,15 @@
 }
 
 .locDetails {
-    position:relative;
+    position:fixed;
     padding-left: 1%;
-    padding-bottom:5px;
+    padding-bottom:14px;
     padding-right:8px;
     border-radius:10px;
     text-align:left;
-    top: -715px;
-    left: 370px;
-    width: 20%;
+    top:162px;
+    left:380px;
+    width:300px;
     z-index: 3;
     font-size: 14px;
     font-family: "Times New Roman", Times, serif;
