@@ -1,6 +1,8 @@
 import React from "react"
 import "../css/directory.css"
 
+const randomArr = ["potato", "tomato", "eggplant", "flamin' hot cheetos", "zucchini"];
+
 class Directory extends React.Component {
 
     constructor(props) {
@@ -9,6 +11,7 @@ class Directory extends React.Component {
     }
 
     render() {
+
         return (
             <div id="Directory" className="directory">
                 <button onClick={activeBtn()} className="btn1 active">Clubs</button>
@@ -16,6 +19,14 @@ class Directory extends React.Component {
                 <br/>
                 <input type="text" placeholder="Search.." name="search"></input>
                 <button className="btn2" type="submit"><i className="fa fa-search"></i></button>
+                <br/>
+                <ul>
+                { //Add a list of Markers to Your Map
+                    randomArr.map( (each) =>
+                        <li>{each}</li>
+                    )
+                }
+                </ul>
             </div>
         )
     }

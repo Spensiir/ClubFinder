@@ -64,3 +64,20 @@
     clear: both;
     display: table;
   }
+
+  ul {
+    position:relative;
+    top:2px;
+    left:-40px;
+  }
+
+  /* Style the list items */
+  ul li {
+    position: relative;
+    padding: 2px 2px 2px 4px;
+    width:317px;
+    background: #eee;
+    font-size: 18px;
+    list-style-type:none;
+    border-bottom:thin solid black;
+  }
