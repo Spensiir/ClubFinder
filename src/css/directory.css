@@ -44,7 +44,7 @@
     position:relative;
     float: left;
     width: 10%;
-    padding: 9px;
+    padding: 10px;
     background: linear-gradient( #eeeeee 0%,#cccccc 100%);
     color: gray;
     font-size: 17px;
@@ -65,14 +65,14 @@
     display: table;
   }
 
-  ul {
+  .directory ul {
     position:relative;
     top:2px;
     left:-40px;
   }
-
+ 
   /* Style the list items */
-  ul li {
+  .directory ul li {
     position: relative;
     padding: 2px 2px 2px 4px;
     width:317px;
