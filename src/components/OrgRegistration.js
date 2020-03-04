@@ -97,39 +97,39 @@ class OrgRegistration extends React.Component {
                     <h1> Register an Organization </h1>
                     <label><b>Organization Name</b></label>
                     <input type="text"  name="club_name" onChange={e =>this.setOrgName(e)} required/>
-
+                    
                     <label><b>Address</b></label>
                     <input type="text" name="address" onChange={e => this.setAddress(e)} required/>
 
-                    <label><b>Email</b></label>
-                    <input type="text" name="email" onChange={e => this.setEmail(e)} required/>
-
                     <label><b>Country</b></label>
-                    <input type="text" style={{width:200}}  name="country" onChange={e => this.setCity(e)} required/>
+                    <input type="text" style={{width:150}}  name="country" onChange={e => this.setCity(e)} required/>
 
                     <label><b>City</b></label>
-                    <input type="text" style={{width:200}}  name="city" onChange={e => this.setCity(e)} required/>
+                    <input type="text" style={{width:150}}  name="city" onChange={e => this.setCity(e)} required/>
 
                     <label><b>State</b></label>
                     <input type="text" style={{width:30}} name="state" onChange={e => this.setSt(e)} required/>
-
+                    <br/>
                     <label><b>Zip</b></label>
                     <input type="text" style={{width:90}} name="zip" onChange={e => this.setZip(e)} required/>
-
-                    <label><b>Website</b></label>
-                    <input type="text" style={{width:200}} name="website" onChange={e => this.setWebsite(e)} required/>
 
                     <label><b>Phone</b></label>
                     <input type="text" style={{width:200}} name="phone" onChange={e => this.setPhone(e)} required/>
 
-                    <label><b>Username</b></label>
-                    <input type="text" style={{width:200}} name="username" onChange={e => this.setUsername(e)} required/>
+                    <label><b>Website</b></label>
+                    <input type="text" style={{width:200}} name="website" onChange={e => this.setWebsite(e)} required/>
 
+                    <label><b>Email</b></label>
+                    <input type="text" name="email" style={{width:300}} onChange={e => this.setEmail(e)} required/>
+
+                    <label><b>Username</b></label>
+                    <input type="text" style={{width:325}} name="username" onChange={e => this.setUsername(e)} required/>
+                    <br/>
                     <label><b>Password</b></label>
-                    <input type="password" style={{width:200}} name="password" onChange={e => this.setPassword(e)} required/>
+                    <input type="password" style={{width:270}} name="password" onChange={e => this.setPassword(e)} required/>
 
                     <label><b>Confirm Password</b></label>
-                    <input type="password" style={{width:200}} name="password2" onChange={e => this.setPassword2(e)} required/>
+                    <input type="password" style={{width:263}} name="password2" onChange={e => this.setPassword2(e)} required/>
 
                     <br/>
                     <button type="submit" className="submit">Submit</button>

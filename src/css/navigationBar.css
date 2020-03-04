@@ -1,0 +1,35 @@
+/* Add a black background color to the top navigation bar */
+.topnav {
+    position: fixed;
+    display:inline-block;
+    margin-top: 12px;
+    margin-left:32px;
+    width:100%;
+    overflow: hidden;
+    pointer-events:none;
+    min-width:604px;
+  }
+
+  /* Style the links inside the navigation bar */
+  .topnav button {
+    background: linear-gradient( #45484d 0%,#000000 100%);
+    color: white;
+    border-radius:10px;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: "Times New Roman", Times, serif;
+    margin-left:8px;
+    pointer-events:auto;
+  }
+
+  .topnav button.signout {
+    float:right;
+    margin-right:100px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav button:hover {
+    padding: 16px 18px;
+  }
