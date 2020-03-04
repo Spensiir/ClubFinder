@@ -68,11 +68,8 @@ class SimpleMap extends React.Component {
                 if (key === markers[i].name) {
                     console.log(this.selected);
                     if (this.state.selected) {
-                        
                         this.state.selected.color = "red";
-                        console.log("onchildclickmakeoldselectedred: " + this.state.selected.color);
-                    }
-        
+                    }  
                     this.props.updateSelected(markers[i]);
                     this.setState({selected: this.props.currSelect});
                 }
@@ -84,8 +81,11 @@ class SimpleMap extends React.Component {
 
     onClick = (props) => {
         this.props.updateSelected(null);
-        console.log("maponclick");
-        this.state.selected.color = "red";
+        console.log("maponclick: " + this.state.selected);
+        if (this.state.selected) {
+            this.state.selected.color = "red";
+        }
+        
         this.setState({selected: this.props.currSelect});
     };
 

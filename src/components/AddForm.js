@@ -41,7 +41,7 @@ class AddForm extends React.Component {
 
         let coords;
         await getCoords(loc).then( res => {
-            console.log(res);
+            console.log("addform add loc:" + res);
             coords = res;
         });
 
