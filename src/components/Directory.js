@@ -46,7 +46,6 @@ function activeBtn() {
 
 function searchFunction() {
     // Declare variables
-    console.log("Here");
     var input, li, a, i, txtValue;
     input = document.getElementById("searchInput");
     li = document.getElementsByTagName("li");
