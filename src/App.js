@@ -83,6 +83,9 @@ editMarkerCallback = async (markerFromForm) => {
 };
 
 selectedCallback = (markerFromMap) => {
+    if (markerFromMap) {
+      markerFromMap.color = "yellow";
+    }  
     this.setState({selected : markerFromMap});
 };
 
@@ -120,7 +123,7 @@ async removeMarker() {
           </div>
           <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory/>
-          <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
+          <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
