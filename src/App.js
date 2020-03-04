@@ -20,7 +20,8 @@ class App extends React.Component {
           <button onClick={openRegister}>Register</button>
         </div>,
         markers : [],
-        selected : null
+        selected : null,
+        isAdmin : null
       };
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
@@ -29,6 +30,7 @@ class App extends React.Component {
     this.removeMarker = this.removeMarker.bind(this);
     this.selectedCallback = this.selectedCallback.bind(this);
     this.editMarkerCallback = this.editMarkerCallback.bind(this);
+    this.setAdmin = this.setAdmin.bind(this);
   }
 
   async componentDidMount() {
@@ -73,6 +75,12 @@ class App extends React.Component {
           <button onClick={openRegister}>Register</button>
       </div>});
   };
+
+  setAdmin = (isAdminStr) => {
+    this.setState({
+      isAdmin: isAdminStr
+    })
+  }
 
   usernameCallback = async (usernameData) => {
     this.setState({
@@ -132,7 +140,7 @@ async removeMarker() {
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
           </div>
-          <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
+          <Signin setAdmin={this.setAdmin} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} initialSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />

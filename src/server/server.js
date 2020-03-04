@@ -141,6 +141,13 @@ app.get('/organizations/getOrganizations', function (req, res) {
     });
 });
 
+app.get('/organizations/checkforAdmin/:uid', function (req, res) {
+    var ref = firebase.database().ref('organizations/' + req.params.uid);
+    ref.once('value').then(function(snapshot) {
+        res.send(snapshot.val()["admin"]);
+    })
+})
+
 app.post('/organizations/addOrganization', function (req, res) {
     //console.log(req.body);
     firebase.database().ref('organization/' + req.body.id).set(req.body)

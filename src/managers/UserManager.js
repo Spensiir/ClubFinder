@@ -1,6 +1,9 @@
 import {firebaseConfig} from '../tools/config.js';
+import {config} from '../tools/config.js';
+import axios from 'axios';
 
 var firebase = require("firebase/app");
+var admin = require('firebase-admin');
 require("firebase/auth");
 firebase.initializeApp(firebaseConfig);
 
@@ -12,9 +15,22 @@ class UserManager {
     async fireSignIn(email, password) {
         var confirmed;
         var errorMessage;
-        await firebase.auth().signInWithEmailAndPassword(email, password).then(()=> {
+        var adminStr;
+        await firebase.auth().signInWithEmailAndPassword(email, password).then(async ()=> {
             this.user = firebase.auth().currentUser;
             confirmed = true;
+            adminStr = "false";
+            var req = config.SERVER_URL + "/organizations/checkforAdmin";
+            if (this.user) {
+                req += "/" + this.user.uid;
+            }
+            await axios.get(req)
+            .then(res => {
+                adminStr = res.data;
+            }).catch(function (error) {
+                adminStr = "false"; // if an error occurs the no locations will appear
+                console.log(error);
+            });
         }
             ).catch(function (error) {
             // Handle Errors here.
@@ -22,7 +38,7 @@ class UserManager {
             console.log(errorMessage);
             confirmed = false;
             });
-        return [confirmed, errorMessage];
+        return [confirmed, errorMessage, adminStr];
     }
 
     async fireCreateUser(organization) {
@@ -45,7 +61,8 @@ class UserManager {
                     website: organization.website,
                     phone: organization.phone,
                     description: organization.description,
-                    username: organization.username
+                    username: organization.username,
+                    admin: "False"
                 }
                 )
             .then(result => {
@@ -64,7 +81,7 @@ class UserManager {
             confirmed = false;
             err = errorMessage;
         });
-        return [confirmed, err];
+        return [confirmed, err, "false"];
     }
 
     async fireAdminCreateUser(user) {
