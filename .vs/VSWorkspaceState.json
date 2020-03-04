@@ -4,9 +4,11 @@
     "\\src",
     "\\src\\components",
     "\\src\\css",
+    "\\src\\managers",
     "\\src\\server",
     "\\src\\tools"
   ],
-  "SelectedNode": "\\src\\tools\\UserManager.js",
+  "SelectedNode": "\\src\\server",
+
   "PreviewInSolutionExplorer": false
 }

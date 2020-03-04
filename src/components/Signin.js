@@ -23,6 +23,7 @@ class Signin extends React.Component {
             window.currUser = this.state.username;
             this.props.callbackFromApp(this.state.username);
             console.log("signinusername:", this.state.username);
+            this.props.setAdmin(confirmed[2]);
             this.props.onClickSubmit();
             closeSignin();
         } else {
