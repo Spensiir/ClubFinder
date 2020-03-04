@@ -21,7 +21,7 @@ class SimpleMap extends React.Component {
                 defaultCenter: {lat: 33.7490, lng: -84.3880},
                 zoom: 14,
                 markers: this.props.currMarkers,
-                selected: this.props.initialSelect,
+                selected: this.props.currSelect,
             };
 
             if ("geolocation" in navigator) {
@@ -33,7 +33,7 @@ class SimpleMap extends React.Component {
                             defaultCenter: {lat: position.coords.latitude, lng: position.coords.longitude},
                             zoom: 14,
                             markers: this.props.currMarkers,
-                            selected: this.props.initialSelect
+                            selected: this.props.currSelect
                         });
                     })
             }
@@ -42,13 +42,13 @@ class SimpleMap extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.initialSelect !== state.selected && props.initialSelect !== null) {
+        if (props.currSelect !== state.selected && props.currSelect !== null) {
             return {
-                selected : props.initialSelect,
-                center: { lat : props.initialSelect.lat, lng: props.initialSelect.lng },
+                selected : props.currSelect,
+                center: { lat : props.currSelect.lat, lng: props.currSelect.lng },
                 markers : props.currMarkers
             };
-        } else if (props.initialSelect !== state.selected && props.initialSelect == null) {
+        } else if (props.currSelect !== state.selected && props.currSelect == null) {
             return {
                 selected : props.intialSelect,
                 markers : props.currMarkers
@@ -66,18 +66,27 @@ class SimpleMap extends React.Component {
         if (key !== 0) {
             for (var i = 0; i < this.state.markers.length; i++) {
                 if (key === markers[i].name) {
+                    console.log(this.selected);
+                    if (this.state.selected) {
+                        
+                        this.state.selected.color = "red";
+                        console.log("onchildclickmakeoldselectedred: " + this.state.selected.color);
+                    }
+        
                     this.props.updateSelected(markers[i]);
-                    this.setState({selected: this.props.initialSelect});
+                    this.setState({selected: this.props.currSelect});
                 }
             }
         } else {
-            this.setState({selected: this.props.initialSelect});
+            this.setState({selected: this.props.currSelect});
         }
     };
 
     onClick = (props) => {
         this.props.updateSelected(null);
-        this.setState({selected: this.props.initialSelect});
+        console.log("maponclick");
+        this.state.selected.color = "red";
+        this.setState({selected: this.props.currSelect});
     };
 
 
@@ -104,7 +113,7 @@ class SimpleMap extends React.Component {
             <div className='Map' style={{ height: '90vh', width: '100%'}}>
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: config.API_KEY}}
-                    defaultZoom={this.state.zoom}
+                    defaultZoom= {5}
                     zoom={this.state.markers.selected}
                     onChildClick={this.onChildClick}
                     onClick = {this.onClick}
