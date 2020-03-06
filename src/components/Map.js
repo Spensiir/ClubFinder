@@ -81,7 +81,6 @@ class SimpleMap extends React.Component {
 
     onClick = (props) => {
         this.props.updateSelected(null);
-        console.log("maponclick: " + this.state.selected);
         if (this.state.selected) {
             this.state.selected.color = "red";
         }
@@ -98,7 +97,7 @@ class SimpleMap extends React.Component {
                 <table>
                     <tbody>
                         <tr>
-                            <i class="fa fa-map-marker"></i>
+                            <i className="fa fa-map-marker"></i>
                             <th>{this.state.selected.address}</th>
                         </tr>
                     </tbody>

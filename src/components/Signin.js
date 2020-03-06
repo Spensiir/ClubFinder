@@ -38,7 +38,7 @@ class Signin extends React.Component {
         return (
             <div className="signinForm" id="SigninForm">
                 <form id="signinform" onSubmit={e=>this.submitSignin(e)}>
-                    <h1>Sign in</h1>
+                    <h1>Sign In</h1>
                     <label><b>Email</b></label>
                     <input type="text" name="username" onChange={e=>this.setUsername(e)} required/>
 

@@ -1,18 +1,27 @@
 import React from "react"
 import "../css/directory.css"
 
-const randomArr = ["potato", "tomato", "eggplant", "flamin' hot cheetos", "zucchini"];
 var keyVal = 0;
 
 class Directory extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {something: 'something'};
+        this.state = 
+        {
+            markers: this.props.currMarkers,
+            allWords: ""
+        }
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.currMarkers.length !== state.markers.length) {
+            return {markers: props.currMarkers}
+        }
+        return null
     }
 
     render() {
-
         return (
             <div id="Directory" className="directory">
                 <button onClick={activeBtn()} className="btn1 active">Clubs</button>
@@ -23,8 +32,11 @@ class Directory extends React.Component {
                 <br/>
                 <ul>
                 { 
-                    randomArr.map( (each) =>
-                        <li key={keyVal++} id="listItem">{each}</li>
+                    this.state.markers.map( (each) =>
+                        <li type="button" onClick={displayDetails(each.name)} key={keyVal++} id="listItem">
+                            <h2>{each.name}</h2>
+                            <h3>{each.address}</h3>
+                        </li>
                     )
                 }
                 </ul>
@@ -52,13 +64,16 @@ function searchFunction() {
     for (i = 0; i < li.length; i++) {
       a = li[i];
       txtValue = a.textContent || a.innerText;
-      console.log("innerText = " + a.textContent)
       if (txtValue.toUpperCase().indexOf(input.value.toUpperCase()) > -1) {
         li[i].style.display = "";
       } else {
         li[i].style.display = "none";
       }
     }
+}
+
+function displayDetails(name) {
+    console.log(name);
 }
 
 export default Directory;

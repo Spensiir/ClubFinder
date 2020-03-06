@@ -4,8 +4,9 @@
     z-index: 2;
     overflow: hidden;
     margin-top:66px;
-    margin-left:40px;
+    margin-left:15px;
     min-width:400px;
+    pointer-events:none;
   }
 
   .directory button.btn1 {
@@ -17,6 +18,7 @@
     font-size: 17px;
     font-family: "Times New Roman", Times, serif;
     margin-top: 10px;
+    pointer-events:all;
   }
 
   /* Style the "active" element to highlight the current page */
@@ -28,7 +30,7 @@
   .directory form {
     box-sizing: border-box;
   }
-      
+
   /* Style the search field */
   .directory input[type=text] {
     padding: 10px;
@@ -37,14 +39,15 @@
     float: left;
     width: 65%;
     background: #f1f1f1;
+    pointer-events:all;
   }
-      
+
   /* Style the submit button */
   .directory button.btn2 {
     position:relative;
     float: left;
     width: 10%;
-    padding: 10px;
+    padding: 9px;
     background: linear-gradient( #eeeeee 0%,#cccccc 100%);
     color: gray;
     font-size: 17px;
@@ -52,6 +55,7 @@
     border-left: none;
     cursor: pointer;
     margin:0;
+    pointer-events:all;
   }
       
   .directory button.btn2:hover {
@@ -66,18 +70,61 @@
   }
 
   .directory ul {
-    position:relative;
-    top:2px;
-    left:-40px;
+    position:fixed;
+    top:220px;
+    margin-left:-40px;
+    height:590px;
+    width:322px;
+    overflow:hidden;
+    overflow-y: auto;
+    pointer-events:all;
   }
- 
+
   /* Style the list items */
   .directory ul li {
     position: relative;
     padding: 2px 2px 2px 4px;
-    width:317px;
-    background: #eee;
+    width:315px;
+    background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
     font-size: 18px;
     list-style-type:none;
-    border-bottom:thin solid black;
+    border-bottom:thin solid lightgray;
+    pointer-events:all;
+    cursor: pointer;
+  }
+
+  .directory ul li:hover {
+    background: linear-gradient(rgb(243, 243, 243) 0%,rgb(240, 239, 239) 47%,rgb(235, 233, 233) 100%);
+  }
+
+  .directory ul li h2 {
+    margin-top:7px;
+    margin-left:5px;
+    margin-right:5px;
+    font-size:16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight:400;
+  }
+
+  .directory ul li h3 {
+    margin-top:-8px;
+    margin-left:5px;
+    margin-right:5px;
+    font-size:12px;
+    width:92%;
+    font-family: 'Roboto', sans-serif;
+    font-weight:400;
+    color:gray;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
