@@ -118,6 +118,73 @@ app.delete('/locations/removeLocation', function(req, res) {
 
 });
 
+/////////////////////////////////////////////////////////
+app.get('/organizations/getOrganizations', function (req, res) {
+    var ref = firebase.database().ref('organizations');
+    var organizations = [];
+    ref.once('value').then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            organizations.push({
+                name: childSnapshot.val()["name"],
+                address: childSnapshot.val()["address"],
+                country: childSnapshot.val()["country"],
+                city: childSnapshot.val()["city"],
+                state: childSnapshot.val()["state"],
+                zip: childSnapshot.val()["zip"],
+                description: childSnapshot.val()["description"],
+                website: childSnapshot.val()["website"],
+                email: childSnapshot.val()["email"],
+                username: childSnapshot.val()["username"],
+            });
+        });
+        res.send(organizations);
+    });
+});
+
+app.get('/organizations/checkforAdmin/:uid', function (req, res) {
+    var ref = firebase.database().ref('organizations/' + req.params.uid);
+    ref.once('value').then(function(snapshot) {
+        res.send(snapshot.val()["admin"]);
+    })
+})
+
+app.post('/organizations/addOrganization', function (req, res) {
+    //console.log(req.body);
+    firebase.database().ref('organization/' + req.body.id).set(req.body)
+    .then(result => {
+    //console.log(req.body)
+    res.sendStatus(200);
+    })
+    .catch(function (error) {
+    //console.log(error);
+    res.sendStatus(400);
+    })
+})
+
+app.post('/locations/editLocation', function(req, res) {
+    //console.log(req.body);
+    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
+    .then(result => {
+    //console.log(req.body)
+    res.sendStatus(200);
+    })
+    .catch(function (error) {
+    //console.log(error);
+    res.sendStatus(400);
+    })
+});
+
+
+app.delete('/locations/removeLocation', function(req, res) {
+    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).remove()
+        .then(() => {
+            res.sendStatus(200);
+        }).catch((error) => {
+            res.sendStatus(400);
+    });
+
+});
+
 app.get('/', (req, res) => res.send('Hello World!'))
 
 /**

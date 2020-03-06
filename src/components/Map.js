@@ -66,7 +66,7 @@ class SimpleMap extends React.Component {
         if (key !== 0) {
             for (var i = 0; i < this.state.markers.length; i++) {
                 if (key === markers[i].name) {
-                    console.log(this.selected);
+                    console.log(this.state.selected);
                     if (this.state.selected) {
                         this.state.selected.color = "red";
                     }  
