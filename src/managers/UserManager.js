@@ -1,11 +1,6 @@
-import {firebaseConfig} from '../tools/config.js';
+import {firebase, admin} from '../tools/config.js';
 import {config} from '../tools/config.js';
 import axios from 'axios';
-
-var firebase = require("firebase/app");
-var admin = require('firebase-admin');
-require("firebase/auth");
-firebase.initializeApp(firebaseConfig);
 
 class UserManager {
     user;
@@ -88,9 +83,9 @@ class UserManager {
         admin.auth().createUser({
             email: user.email,
             password: user.password
-        }) .then(function(createdUser){
+        }).then(function(createdUser){
             return createdUser.uid;
-        }) .catch(function(error){
+        }).catch(function(error){
             console.log("Error creating new user", error);
         });
     }

@@ -144,7 +144,11 @@ app.get('/organizations/getOrganizations', function (req, res) {
 app.get('/organizations/checkforAdmin/:uid', function (req, res) {
     var ref = firebase.database().ref('organizations/' + req.params.uid);
     ref.once('value').then(function(snapshot) {
-        res.send(snapshot.val()["admin"]);
+        if (snapshot.val() == null) {
+            res.send("false");
+        } else {
+            res.send(snapshot.val()["admin"]);
+        }
     })
 })
 
