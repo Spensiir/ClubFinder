@@ -1,5 +1,6 @@
 import React from "react"
 import "../css/directory.css"
+import {editDistance} from "../tools/stringSearch";
 
 var keyVal = 0;
 
@@ -10,6 +11,7 @@ class Directory extends React.Component {
         this.state = 
         {
             markers: this.props.currMarkers,
+            filteredMarkers: this.props.currMarkers,
             allWords: ""
         }
     }
@@ -27,12 +29,12 @@ class Directory extends React.Component {
                 <button onClick={activeBtn()} className="btn1 active">Clubs</button>
                 <button onClick={activeBtn()} className="btn1">Organizations</button>
                 <br/>
-                <input onChange={e => searchFunction()} id="searchInput" type="text" placeholder="Search.." name="search"></input>
+                <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search.." name="search"></input>
                 <button className="btn2" type="submit"><i className="fa fa-search"></i></button>
                 <br/>
                 <ul>
                 { 
-                    this.state.markers.map( (each) =>
+                    this.state.filteredMarkers.map( (each) =>
                         <li type="button" onClick={displayDetails(each.name)} key={keyVal++} id="listItem">
                             <h2>{each.name}</h2>
                             <h3>{each.address}</h3>
@@ -43,6 +45,40 @@ class Directory extends React.Component {
             </div>
         )
     }
+
+    searchFunction() {
+        //var input, li, a, i, txtValue;
+        var input;
+        input = document.getElementById("searchInput").value;
+        //li = document.getElementsByTagName("li");
+        // Loop through all list items, and hide those who don't match the search query
+        var markers = this.state.markers;
+
+        for (var i = 0; i < markers.length; i++) {
+            var name = markers[i].name;
+            var address = markers[i].address;
+
+            markers[i].dist = editDistance(input.toUpperCase(), name.toUpperCase());
+            var addy_dist = editDistance(input.toUpperCase(), address.toUpperCase());
+            if (addy_dist < markers[i].dist) {
+                markers[i].dist = addy_dist;
+            }
+
+            if (name.toUpperCase().includes(input.toUpperCase()) || address.toUpperCase().includes(input.toUpperCase())) {
+                markers[i].dist = 0.0;
+            }
+            //console.log(markers[i].dist);
+        }
+
+        markers = markers.filter(function (a) { return a.dist < .75});
+        markers.sort(function (a, b) {
+            if (a.dist <= b.dist) {
+                return -1;
+            }
+            return 1});
+        this.setState({filteredMarkers : markers});
+    }
+
 }
 
 function activeBtn() {
@@ -56,24 +92,8 @@ function activeBtn() {
     });
 }}
 
-function searchFunction() {
-    var input, li, a, i, txtValue;
-    input = document.getElementById("searchInput");
-    li = document.getElementsByTagName("li");
-    // Loop through all list items, and hide those who don't match the search query
-    for (i = 0; i < li.length; i++) {
-      a = li[i];
-      txtValue = a.textContent || a.innerText;
-      if (txtValue.toUpperCase().indexOf(input.value.toUpperCase()) > -1) {
-        li[i].style.display = "";
-      } else {
-        li[i].style.display = "none";
-      }
-    }
-}
-
 function displayDetails(name) {
-    console.log(name);
+    // console.log(name);
 }
 
 export default Directory;
