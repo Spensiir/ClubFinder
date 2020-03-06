@@ -68,8 +68,8 @@ class App extends React.Component {
   setAdmin = (isAdminStr) => {
     this.setState({
       isAdmin: isAdminStr
-    })
-  }
+    });
+  };
 
   usernameCallback = async (usernameData) => {
     this.setState({
@@ -129,10 +129,9 @@ async removeMarker() {
             <button onClick={openAdminRegistration}>Register Admin</button>
             <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
           </div>
-          <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
+          <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory currMarkers={this.state.markers}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <Signin setAdmin={this.setAdmin} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
