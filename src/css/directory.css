@@ -35,10 +35,10 @@
   .directory input[type=text] {
     padding: 10px;
     font-size: 15px;
-    border: 1px solid grey;
+    border: thin solid grey;
     float: left;
-    width: 65%;
-    background: #f1f1f1;
+    width: 75%;
+    background: white;
     pointer-events:all;
   }
 
@@ -73,7 +73,7 @@
     position:fixed;
     top:220px;
     margin-left:-40px;
-    height:64%;
+    height:68%;
     width:322px;
     overflow:hidden;
     overflow-y: auto;

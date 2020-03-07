@@ -18,7 +18,9 @@ class Directory extends React.Component {
 
     static getDerivedStateFromProps(props, state) {
         if (props.currMarkers.length !== state.markers.length) {
-            return {markers: props.currMarkers}
+            return {markers: props.currMarkers,
+                    filteredMarkers: props.currMarkers
+            }
         }
         return null
     }
@@ -30,7 +32,6 @@ class Directory extends React.Component {
                 <button onClick={activeBtn()} className="btn1">Organizations</button>
                 <br/>
                 <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search.." name="search"></input>
-                <button className="btn2" type="submit"><i className="fa fa-search"></i></button>
                 <br/>
                 <ul>
                 { 
