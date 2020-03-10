@@ -66,10 +66,18 @@ class App extends React.Component {
   };
 
   setAdmin = (isAdminStr) => {
-    this.setState({
-      isAdmin: isAdminStr
-    });
+    console.log(isAdminStr);
+    if(isAdminStr === "False") {
+      this.setState({
+        isAdmin: false
+      });
+    } else if (isAdminStr === "True") {
+      this.setState({
+        isAdmin: true
+      });
+    }
   };
+
 
   usernameCallback = async (usernameData) => {
     this.setState({
@@ -110,9 +118,15 @@ async removeMarker() {
     }
     
     var signedIn = "none";
-    if (this.state.username !== "user") {
+    var adminSignedIn = "none";
+    if (this.state.username !== "user" && this.state.isAdmin) {
+      signedIn = "none";
+      adminSignedIn = "block"
+    } else if (this.state.username !== "user") {
       signedIn = "block";
+      adminSignedIn = "none";
     }
+
 
     return (
       <div className="App">   
@@ -130,9 +144,8 @@ async removeMarker() {
             <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
           </div>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory currMarkers={this.state.markers}/>
+          <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
