@@ -10,16 +10,61 @@ class Directory extends React.Component {
         this.state = 
         {
             markers: this.props.currMarkers,
+<<<<<<< Updated upstream
             allWords: ""
+=======
+            filteredMarkers: this.props.currMarkers,
+            allWords: "",
+            selected : this.props.currSelect
+>>>>>>> Stashed changes
         }
     }
 
     static getDerivedStateFromProps(props, state) {
+<<<<<<< Updated upstream
         if (props.currMarkers.length !== state.markers.length) {
             return {markers: props.currMarkers}
+=======
+        if (props.currSelect !== state.selected && props.currSelect !== null) {
+            return {
+                selected : props.currSelect,
+                center: { lat : props.currSelect.lat, lng: props.currSelect.lng },
+                markers : props.currMarkers,
+                filteredMarkers: props.currMarkers
+            };
+        } else if (props.currSelect !== state.selected && props.currSelect == null) {
+            return {
+                selected : props.intialSelect,
+                markers : props.currMarkers,
+                filteredMarkers: props.currMarkers
+            };
+        } else if (props.currMarkers.length !== state.markers.length) {
+            return {
+                markers : props.currMarkers,
+                filteredMarkers: props.currMarkers
+            }
+>>>>>>> Stashed changes
         }
-        return null
+        return null;
     }
+
+    onChildClick = (key) => {
+        var markers = this.state.markers;
+        if (key !== 0) {
+            for (var i = 0; i < this.state.markers.length; i++) {
+                if (key === markers[i].name) {
+                    //console.log(this.state.selected);
+                    if (this.state.selected) {
+                        this.state.selected.color = "red";
+                    }  
+                    this.props.updateSelected(markers[i]);
+                    this.setState({selected: this.props.currSelect});
+                }
+            }
+        } else {
+            this.setState({selected: this.props.currSelect});
+        }
+    };
 
     render() {
         return (
@@ -32,8 +77,13 @@ class Directory extends React.Component {
                 <br/>
                 <ul>
                 { 
+<<<<<<< Updated upstream
                     this.state.markers.map( (each) =>
                         <li type="button" onClick={displayDetails(each.name)} key={keyVal++} id="listItem">
+=======
+                    this.state.filteredMarkers.map( (each) =>
+                        <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
+>>>>>>> Stashed changes
                             <h2>{each.name}</h2>
                             <h3>{each.address}</h3>
                         </li>
@@ -56,6 +106,7 @@ function activeBtn() {
     });
 }}
 
+<<<<<<< Updated upstream
 function searchFunction() {
     var input, li, a, i, txtValue;
     input = document.getElementById("searchInput");
@@ -76,4 +127,6 @@ function displayDetails(name) {
     console.log(name);
 }
 
+=======
+>>>>>>> Stashed changes
 export default Directory;

@@ -50,7 +50,7 @@ class SimpleMap extends React.Component {
             };
         } else if (props.currSelect !== state.selected && props.currSelect == null) {
             return {
-                selected : props.intialSelect,
+                selected : props.currSelect,
                 markers : props.currMarkers
             };
         } else if (props.currMarkers.length !== state.markers.length) {

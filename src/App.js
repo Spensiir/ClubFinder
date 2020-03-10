@@ -23,7 +23,7 @@ class App extends React.Component {
       username:"user",
         markers : [],
         selected : null,
-        isAdmin : null
+        isAdmin : false
       };
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
@@ -66,10 +66,24 @@ class App extends React.Component {
   };
 
   setAdmin = (isAdminStr) => {
+<<<<<<< Updated upstream
     this.setState({
       isAdmin: isAdminStr
     })
   }
+=======
+    console.log(isAdminStr);
+    if(isAdminStr === "False") {
+      this.setState({
+        isAdmin: false
+      });
+    } else if (isAdminStr === "True") {
+      this.setState({
+        isAdmin: true
+      });
+    }
+  };
+>>>>>>> Stashed changes
 
   usernameCallback = async (usernameData) => {
     this.setState({
@@ -91,6 +105,7 @@ editMarkerCallback = async (markerFromForm) => {
 };
 
 selectedCallback = (markerFromMap) => {
+  console.log("here");
     if (markerFromMap) {
       markerFromMap.color = "yellow";
     }  
@@ -110,8 +125,13 @@ async removeMarker() {
     }
     
     var signedIn = "none";
-    if (this.state.username !== "user") {
+    var adminSignedIn = "none";
+    if (this.state.username !== "user" && this.state.isAdmin) {
+      signedIn = "none";
+      adminSignedIn = "block"
+    } else if (this.state.username !== "user") {
       signedIn = "block";
+      adminSignedIn = "none";
     }
 
     return (
@@ -129,11 +149,17 @@ async removeMarker() {
             <button onClick={openAdminRegistration}>Register Admin</button>
             <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
           </div>
+<<<<<<< Updated upstream
           <Signin callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory currMarkers={this.state.markers}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <Signin setAdmin={this.setAdmin} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           
+=======
+          <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
+          <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+>>>>>>> Stashed changes
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
