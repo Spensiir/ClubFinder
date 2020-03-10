@@ -10,21 +10,13 @@ class Directory extends React.Component {
         this.state = 
         {
             markers: this.props.currMarkers,
-<<<<<<< Updated upstream
-            allWords: ""
-=======
             filteredMarkers: this.props.currMarkers,
             allWords: "",
             selected : this.props.currSelect
->>>>>>> Stashed changes
         }
     }
 
     static getDerivedStateFromProps(props, state) {
-<<<<<<< Updated upstream
-        if (props.currMarkers.length !== state.markers.length) {
-            return {markers: props.currMarkers}
-=======
         if (props.currSelect !== state.selected && props.currSelect !== null) {
             return {
                 selected : props.currSelect,
@@ -43,7 +35,6 @@ class Directory extends React.Component {
                 markers : props.currMarkers,
                 filteredMarkers: props.currMarkers
             }
->>>>>>> Stashed changes
         }
         return null;
     }
@@ -77,13 +68,8 @@ class Directory extends React.Component {
                 <br/>
                 <ul>
                 { 
-<<<<<<< Updated upstream
-                    this.state.markers.map( (each) =>
-                        <li type="button" onClick={displayDetails(each.name)} key={keyVal++} id="listItem">
-=======
                     this.state.filteredMarkers.map( (each) =>
                         <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
->>>>>>> Stashed changes
                             <h2>{each.name}</h2>
                             <h3>{each.address}</h3>
                         </li>
@@ -106,27 +92,37 @@ function activeBtn() {
     });
 }}
 
-<<<<<<< Updated upstream
 function searchFunction() {
-    var input, li, a, i, txtValue;
-    input = document.getElementById("searchInput");
-    li = document.getElementsByTagName("li");
+    //var input, li, a, i, txtValue;
+    var input;
+    input = document.getElementById("searchInput").value;
+    //li = document.getElementsByTagName("li");
     // Loop through all list items, and hide those who don't match the search query
-    for (i = 0; i < li.length; i++) {
-      a = li[i];
-      txtValue = a.textContent || a.innerText;
-      if (txtValue.toUpperCase().indexOf(input.value.toUpperCase()) > -1) {
-        li[i].style.display = "";
-      } else {
-        li[i].style.display = "none";
-      }
+    var markers = this.state.markers;
+
+    for (var i = 0; i < markers.length; i++) {
+        var name = markers[i].name;
+        var address = markers[i].address;
+
+        markers[i].dist = editDistance(input.toUpperCase(), name.toUpperCase());
+        var addy_dist = editDistance(input.toUpperCase(), address.toUpperCase());
+        if (addy_dist < markers[i].dist) {
+            markers[i].dist = addy_dist;
+        }
+
+        if (name.toUpperCase().includes(input.toUpperCase()) || address.toUpperCase().includes(input.toUpperCase())) {
+            markers[i].dist = 0.0;
+        }
+        //console.log(markers[i].dist);
     }
+
+    markers = markers.filter(function (a) { return a.dist < .75});
+    markers.sort(function (a, b) {
+        if (a.dist <= b.dist) {
+            return -1;
+        }
+        return 1});
+    this.setState({filteredMarkers : markers});
 }
 
-function displayDetails(name) {
-    console.log(name);
-}
-
-=======
->>>>>>> Stashed changes
 export default Directory;
