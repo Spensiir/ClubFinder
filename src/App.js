@@ -6,7 +6,6 @@ import EditForm from "./components/EditForm";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
-import AdminRegistration from './components/AdminRegistration.js';
 import Directory from './components/Directory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
@@ -140,16 +139,22 @@ async removeMarker() {
             <button onClick={openAddForm}>Add</button>
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
-            <button onClick={openAdminRegistration}>Register Admin</button>
+            <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
+          </div>
+          <div className="topnav" style={{display : adminSignedIn}}>
+            <button onClick={openAddForm}>Add Club</button>
+            <button onClick={openRegister}>Add Organization</button>
+            <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
+            <button onClick={this.removeMarker}>Remove</button>
             <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
           </div>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
+          <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
-          <AdminRegistration callbackFromApp={this.usernameCallback}/>
       </div>
     )
   };

@@ -64,7 +64,7 @@ class Directory extends React.Component {
                 <button onClick={activeBtn()} className="btn1 active">Clubs</button>
                 <button onClick={activeBtn()} className="btn1">Organizations</button>
                 <br/>
-                <input onChange={e => searchFunction()} id="searchInput" type="text" placeholder="Search.." name="search"></input>
+                <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search.." name="search"></input>
                 <br/>
                 <ul>
                 { 
@@ -79,9 +79,9 @@ class Directory extends React.Component {
             </div>
         )
     }
-}
 
-    function searchFunction() {
+
+    searchFunction() {
         //var input, li, a, i, txtValue;
         var input;
         input = document.getElementById("searchInput").value;
@@ -112,7 +112,7 @@ class Directory extends React.Component {
             }
             return 1});
         this.setState({filteredMarkers : markers});
-    }
+    }}
 
 function activeBtn() {
     //Get the active button using a loop

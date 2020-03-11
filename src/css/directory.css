@@ -72,12 +72,12 @@
   .directory ul {
     position:fixed;
     top:220px;
-    margin-left:-40px;
     height:68%;
-    width:322px;
+    width:281px;
     overflow:hidden;
     overflow-y: auto;
     pointer-events:all;
+    background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
   }
 
   /* Style the list items */
@@ -85,6 +85,7 @@
     position: relative;
     padding: 2px 2px 2px 4px;
     width:315px;
+    margin-left:-40px;
     background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
     font-size: 18px;
     list-style-type:none;
@@ -115,16 +116,4 @@
     font-family: 'Roboto', sans-serif;
     font-weight:400;
     color:gray;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
   }
