@@ -80,7 +80,6 @@ class Directory extends React.Component {
         )
     }
 
-
     searchFunction() {
         //var input, li, a, i, txtValue;
         var input;
@@ -101,8 +100,8 @@ class Directory extends React.Component {
 
             if (name.toUpperCase().includes(input.toUpperCase()) || address.toUpperCase().includes(input.toUpperCase())) {
                 markers[i].dist = 0.0;
+                //console.log(markers[i].dist);
             }
-            //console.log(markers[i].dist);
         }
 
         markers = markers.filter(function (a) { return a.dist < .75});
@@ -111,6 +110,7 @@ class Directory extends React.Component {
                 return -1;
             }
             return 1});
+            console.log(markers.length);
         this.setState({filteredMarkers : markers});
     }}
 
