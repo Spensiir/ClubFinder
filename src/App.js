@@ -7,6 +7,7 @@ import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
 import Directory from './components/Directory.js';
+import OrgDirectory from './components/OrgDirectory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 
@@ -118,14 +119,16 @@ async removeMarker() {
     
     var signedIn = "none";
     var adminSignedIn = "none";
+    var notOrg = "block";
     if (this.state.username !== "user" && this.state.isAdmin) {
       signedIn = "none";
-      adminSignedIn = "block"
+      adminSignedIn = "block";
+      notOrg = "block";
     } else if (this.state.username !== "user") {
       signedIn = "block";
       adminSignedIn = "none";
+      notOrg = "none";
     }
-
 
     return (
       <div className="App">   
@@ -149,7 +152,8 @@ async removeMarker() {
             <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
           </div>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <div style = {{display : notOrg}}><Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/></div>
+          <div style = {{display : signedIn}}><OrgDirectory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/></div>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
@@ -166,11 +170,6 @@ function openSignin() {
 
 function openRegister() {
   document.getElementById("OrgForm").style.display = "block";
-  document.getElementById("shadow").style.display = "block";
-}
-
-function openAdminRegistration() {
-  document.getElementById("AdminForm").style.display = "block";
   document.getElementById("shadow").style.display = "block";
 }
 

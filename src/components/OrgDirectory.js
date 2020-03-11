@@ -4,7 +4,7 @@ import {editDistance} from "../tools/stringSearch";
 
 var keyVal = 0;
 
-class Directory extends React.Component {
+class OrgDirectory extends React.Component {
 
     constructor(props) {
         super(props);
@@ -60,9 +60,6 @@ class Directory extends React.Component {
     render() {
         return (
             <div id="Directory" className="directory">
-                <button onClick={activeBtn()} className="btn1 active">Clubs</button>
-                <button onClick={activeBtn()} className="btn1">Organizations</button>
-                <br/>
                 <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search.." name="search"></input>
                 <br/>
                 <ul>
@@ -113,16 +110,4 @@ class Directory extends React.Component {
         this.setState({filteredMarkers : markers});
     }}
 
-function activeBtn() {
-    //Get the active button using a loop
-    var btns = document.getElementsByClassName("btn1");
-    console.log(btns);
-    for (var i = 0; i < btns.length; i++) {
-    btns[i].addEventListener("click", function() {
-        var current = document.getElementsByClassName("active");
-        current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-    });
-}}
-
-export default Directory;
+export default OrgDirectory;

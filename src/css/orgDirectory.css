@@ -1,0 +1,101 @@
+.directory {
+    position: fixed;
+    float: left;
+    z-index: 2;
+    overflow: hidden;
+    margin-top:66px;
+    margin-left:15px;
+    min-width:400px;
+    pointer-events:none;
+  }
+
+  .directory form {
+    box-sizing: border-box;
+  }
+
+  /* Style the search field */
+  .directory input[type=text] {
+    padding: 10px;
+    font-size: 15px;
+    border: thin solid grey;
+    float: left;
+    width: 75%;
+    background: white;
+    pointer-events:all;
+  }
+
+  /* Style the submit button */
+  .directory button.btn2 {
+    position:relative;
+    float: left;
+    width: 10%;
+    padding: 9px;
+    background: linear-gradient( #eeeeee 0%,#cccccc 100%);
+    color: gray;
+    font-size: 17px;
+    border: thin solid grey;
+    border-left: none;
+    cursor: pointer;
+    margin:0;
+    pointer-events:all;
+  }
+      
+  .directory button.btn2:hover {
+    background: linear-gradient(#63b6db 0%,#309dcf 100%);
+    color:white;
+  }
+
+  .directory button.btn2::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  .directory ul {
+    position:fixed;
+    top:220px;
+    height:68%;
+    width:281px;
+    overflow:hidden;
+    overflow-y: auto;
+    pointer-events:all;
+    background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
+  }
+
+  /* Style the list items */
+  .directory ul li {
+    position: relative;
+    padding: 2px 2px 2px 4px;
+    width:315px;
+    margin-left:-40px;
+    background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
+    font-size: 18px;
+    list-style-type:none;
+    border-bottom:thin solid lightgray;
+    pointer-events:all;
+    cursor: pointer;
+  }
+
+  .directory ul li:hover {
+    background: linear-gradient(rgb(243, 243, 243) 0%,rgb(240, 239, 239) 47%,rgb(235, 233, 233) 100%);
+  }
+
+  .directory ul li h2 {
+    margin-top:7px;
+    margin-left:5px;
+    margin-right:5px;
+    font-size:16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight:400;
+  }
+
+  .directory ul li h3 {
+    margin-top:-8px;
+    margin-left:5px;
+    margin-right:5px;
+    font-size:12px;
+    width:92%;
+    font-family: 'Roboto', sans-serif;
+    font-weight:400;
+    color:gray;
+  }
