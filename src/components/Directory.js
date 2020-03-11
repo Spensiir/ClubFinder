@@ -117,12 +117,15 @@ class Directory extends React.Component {
 function activeBtn() {
     //Get the active button using a loop
     var btns = document.getElementsByClassName("btn1");
-    for (var i = 0; i < btns.length; i++) {
-    btns[i].addEventListener("click", function() {
-        var current = document.getElementsByClassName("active");
-        current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-    });
-}}
+    console.log(btns.length > 0);
+    if (btns.length > 0) {
+        btns[0].addEventListener("click", function() {
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+        });
+    }   
+        
+}
 
 export default Directory;
