@@ -66,12 +66,11 @@ class App extends React.Component {
   };
 
   setAdmin = (isAdminStr) => {
-    console.log(isAdminStr);
-    if(isAdminStr === "False") {
+    if(isAdminStr === false) {
       this.setState({
         isAdmin: false
       });
-    } else if (isAdminStr === "True") {
+    } else {
       this.setState({
         isAdmin: true
       });
@@ -117,9 +116,9 @@ async removeMarker() {
         editDisabled = true;
     }
     
-    var signedIn = "none";
-    var adminSignedIn = "none";
-    var notOrg = "block";
+    var signedIn;
+    var adminSignedIn;
+    var notOrg;
     if (this.state.username !== "user" && this.state.isAdmin) {
       signedIn = "none";
       adminSignedIn = "block";
@@ -128,6 +127,10 @@ async removeMarker() {
       signedIn = "block";
       adminSignedIn = "none";
       notOrg = "none";
+    } else {
+      signedIn = "none";
+      adminSignedIn = "none";
+      notOrg = "block";
     }
 
     return (

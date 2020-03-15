@@ -45,7 +45,7 @@
     margin: 2%;
     right:5px;
     bottom:20px;
-    background-color: black;
+    background: linear-gradient( #45484d 0%,#000000 100%);
     color: white;
     border-radius:10px;
     text-align: center;
@@ -54,11 +54,13 @@
     font-family: "Times New Roman", Times, serif;
     position:relative;
     float: right;
+    transition:0.5s;
 }
 
 .orgForm button:hover {
-    background-color: #ddd;
+    background: #ddd;
     color: black;
+    cursor:pointer;
 }
 
 

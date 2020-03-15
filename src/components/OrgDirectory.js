@@ -1,5 +1,5 @@
 import React from "react"
-import "../css/directory.css"
+import "../css/orgDirectory.css"
 import {editDistance} from "../tools/stringSearch";
 
 var keyVal = 0;
@@ -59,8 +59,8 @@ class OrgDirectory extends React.Component {
 
     render() {
         return (
-            <div id="Directory" className="directory">
-                <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search.." name="search"></input>
+            <div id="orgdirectory" className="orgDirectory">
+                <input onChange={e => this.searchFunction()} id="orgSearchInput" type="text" placeholder="Search.." name="search"></input>
                 <br/>
                 <ul>
                 { 
@@ -79,7 +79,7 @@ class OrgDirectory extends React.Component {
     searchFunction() {
         //var input, li, a, i, txtValue;
         var input;
-        input = document.getElementById("searchInput").value;
+        input = document.getElementById("orgSearchInput").value;
         //li = document.getElementsByTagName("li");
         // Loop through all list items, and hide those who don't match the search query
         var markers = this.state.markers;

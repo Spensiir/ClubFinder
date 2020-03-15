@@ -18,13 +18,7 @@ class Directory extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.currSelect !== state.selected && props.currSelect !== null) {
-            return {
-                selected : props.currSelect,
-                markers : props.currMarkers,
-                filteredMarkers: props.currMarkers
-            };
-        } else if (props.currSelect !== state.selected && props.currSelect == null) {
+        if (props.currSelect !== state.selected) {
             return {
                 selected : props.currSelect,
                 markers : props.currMarkers,
@@ -63,7 +57,7 @@ class Directory extends React.Component {
                 <button onClick={activeBtn()} className="btn1 active">Clubs</button>
                 <button onClick={activeBtn()} className="btn1">Organizations</button>
                 <br/>
-                <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search.." name="search"></input>
+                <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search the Club List..." name="search"></input>
                 <br/>
                 <ul>
                 { 
@@ -109,14 +103,12 @@ class Directory extends React.Component {
                 return -1;
             }
             return 1});
-            console.log(markers.length);
         this.setState({filteredMarkers : markers});
     }}
 
 function activeBtn() {
     //Get the active button using a loop
     var btns = document.getElementsByClassName("btn1");
-    console.log(btns);
     for (var i = 0; i < btns.length; i++) {
     btns[i].addEventListener("click", function() {
         var current = document.getElementsByClassName("active");

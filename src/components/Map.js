@@ -90,18 +90,58 @@ class SimpleMap extends React.Component {
 
 
     render() {
-        var details;
+        var details, weapons, contact, phone, description;
+
         if (this.state.selected !== undefined && this.state.selected !== null) {
+
+        if (this.state.selected.weapons == "" || this.state.selected.weapons == null) {
+            weapons = "none";
+        } else {
+            weapons = "block";
+        }
+
+        if (this.state.selected.contact == "" || this.state.selected.contact == null) {
+            contact = "none";
+        } else {
+            contact = "block";
+        }
+
+        if (this.state.selected.phone == "" || this.state.selected.phone == null) {
+            phone = "none";
+        } else {
+            phone = "block";
+        }
+
+        if (this.state.selected.description == "" || this.state.selected.description == null) {
+            description = "none";
+        } else {
+            description = "block";
+        }
+
             details = (<div className="locDetails">
-                    <h2>{this.state.selected.name}</h2>
-                <table>
-                    <tbody>
-                        <tr>
-                            <i className="fa fa-map-marker"></i>
-                            <th>{this.state.selected.address}</th>
-                        </tr>
-                    </tbody>
-                </table>
+                    <h1>{this.state.selected.name}</h1>
+                    <br/>
+                            <h2>{this.state.selected.address}</h2>
+                            <br/><hr></hr>
+                            <div style = {{display:contact}}><h3 className="fas fa-user"></h3>
+                            <h4>{this.state.selected.contact}</h4></div>
+
+                            <div style = {{display:phone}}><h3 className="fas fa-phone"></h3>
+                            <h4>{this.state.selected.phone}</h4></div>
+
+                            <h3 className="fas fa-globe"></h3>
+                            <a href={this.state.selected.website}>{this.state.selected.website}</a>
+                            <br/>
+
+                            <h3 className="fas fa-envelope"></h3>
+                            <a href={this.state.selected.email}>{this.state.selected.email}</a>
+                            <br/>
+
+                            <div style = {{display:weapons}}><h3 className="fas fa-fan"></h3>
+                            <h4>{this.state.selected.weapons}</h4></div>
+                            
+                            <div style={{display:description}}><hr></hr>
+                            <h4>{this.state.selected.description}</h4></div>
                 </div>
                 )
         } else {

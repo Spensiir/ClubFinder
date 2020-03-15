@@ -2,17 +2,15 @@
     display: none;
     position: fixed;
     width: 900px;
-    height: 510px;
+    height: 560px;
     left: calc(50% - 450px);
-    top: calc(50% - 255px);
+    top: 18%;
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
     z-index: 9;
     border-radius: 10px;
-}
-
-.addForm form {
+    overflow-y:auto;
 }
 
 .addForm h1 {
@@ -26,16 +24,31 @@
     border: none;
     background: #f1f1f1;
     font-size: large;
+    font-family: 'Roboto', sans-serif;
 }
+
+.addForm textarea {
+    width: 90%;
+    height:150px;
+    padding: 15px;
+    margin: 5px 3% 22px 3%;
+    border: none;
+    background: #f1f1f1;
+    font-size: large;
+    resize: none;
+    font-family: 'Roboto', sans-serif;
+}
+
 .addForm label {
     margin-left: 3%;
 }
 
 .addForm button {
     margin: 2%;
-    right:5px;
+    margin-bottom:0%;
+    right:15px;
     bottom:20px;
-    background-color: black;
+    background: linear-gradient( #45484d 0%,#000000 100%);
     color: white;
     border-radius:10px;
     text-align: center;
@@ -44,11 +57,13 @@
     font-family: "Times New Roman", Times, serif;
     position:relative;
     float: right;
+    transition:0.5s;
 }
 
 .addForm button:hover {
-    background-color: #ddd;
+    background: #ddd;
     color: black;
+    cursor:pointer;
 }
 
 

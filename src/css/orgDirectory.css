@@ -1,74 +1,50 @@
-.directory {
+.orgDirectory {
     position: fixed;
     float: left;
     z-index: 2;
     overflow: hidden;
-    margin-top:66px;
+    margin-top:76px;
     margin-left:15px;
     min-width:400px;
     pointer-events:none;
   }
 
-  .directory form {
+  .orgDirectory form {
     box-sizing: border-box;
   }
 
   /* Style the search field */
-  .directory input[type=text] {
-    padding: 10px;
+  .orgDirectory input[type=text] {
+    top:5%;
+    padding: 2.5%;
     font-size: 15px;
     border: thin solid grey;
     float: left;
     width: 75%;
     background: white;
     pointer-events:all;
+    z-index:5;
   }
 
-  /* Style the submit button */
-  .directory button.btn2 {
-    position:relative;
-    float: left;
-    width: 10%;
-    padding: 9px;
-    background: linear-gradient( #eeeeee 0%,#cccccc 100%);
-    color: gray;
-    font-size: 17px;
-    border: thin solid grey;
-    border-left: none;
-    cursor: pointer;
-    margin:0;
-    pointer-events:all;
-  }
-      
-  .directory button.btn2:hover {
-    background: linear-gradient(#63b6db 0%,#309dcf 100%);
-    color:white;
-  }
-
-  .directory button.btn2::after {
-    content: "";
-    clear: both;
-    display: table;
-  }
-
-  .directory ul {
+  .orgDirectory ul {
     position:fixed;
-    top:220px;
-    height:68%;
+    top:184px;
+    max-height:72%;
     width:281px;
     overflow:hidden;
     overflow-y: auto;
     pointer-events:all;
     background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
+    opacity:0.95;
   }
 
   /* Style the list items */
-  .directory ul li {
+  .orgDirectory ul li {
     position: relative;
     padding: 2px 2px 2px 4px;
     width:315px;
     margin-left:-40px;
-    background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
+    background: white;
     font-size: 18px;
     list-style-type:none;
     border-bottom:thin solid lightgray;
@@ -76,11 +52,11 @@
     cursor: pointer;
   }
 
-  .directory ul li:hover {
+  .orgDirectory ul li:hover {
     background: linear-gradient(rgb(243, 243, 243) 0%,rgb(240, 239, 239) 47%,rgb(235, 233, 233) 100%);
   }
 
-  .directory ul li h2 {
+  .orgDirectory ul li h2 {
     margin-top:7px;
     margin-left:5px;
     margin-right:5px;
@@ -89,7 +65,7 @@
     font-weight:400;
   }
 
-  .directory ul li h3 {
+  .orgDirectory ul li h3 {
     margin-top:-8px;
     margin-left:5px;
     margin-right:5px;
@@ -98,4 +74,18 @@
     font-family: 'Roboto', sans-serif;
     font-weight:400;
     color:gray;
+  }
+
+    ::-webkit-scrollbar {
+    width:8px;
+    height:3px;
+    border-left:0;
+    background:rgba(0,0,0,0.1);
+  }
+  ::-webkit-scrollbar-track {
+    background:none;
+  }
+  ::-webkit-scrollbar-thumb {
+    background:gray;
+    border-radius:0;
   }

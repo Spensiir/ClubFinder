@@ -6,6 +6,8 @@
 
     width: 100%;
     height:100%;
+    contain:size;
+    
     z-index: -1;
 }
 
@@ -20,30 +22,67 @@
     border-radius: 100%;
     user-select: none;
     transform: translate(-50%, -50%);
-    &:hover {
-         z-index: 1;
-     }
 }
 
 .marker:hover {
     width:23px;
     height:23px;
     border-color: darkred;
+    z-index:1;
+    transition:0.2s;
 }
 
 .locDetails {
     position:fixed;
-    padding-left: 1%;
+    padding-left:8px;
     padding-bottom:14px;
     padding-right:8px;
+    padding-top: 14px;
     border-radius:10px;
     text-align:left;
     top:162px;
     left:352px;
     width:300px;
     z-index: 3;
-    font-size: 14px;
-    font-family: "Times New Roman", Times, serif;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    box-shadow: 3px 3px 5px grey;
+    white-space:pre-line;
+    font-family: 'Roboto', sans-serif;
+    font-weight:400;
 
     background-color: white;
 }
+
+.locDetails h1 {
+    font-size: 20px;
+    display:inline;
+}
+
+.locDetails h2 {
+    position:relative;
+    display:inline;
+    font-size:14px;
+    color:rgb(87, 87, 87);
+    top:2px;
+}
+
+.locDetails h3 {
+    display:inline;
+    font-size:14px;
+    margin-right:6px;
+}
+
+.locDetails h4 {
+    position:relative;
+    display:inline;
+    font-size:14px;
+    top:1px;
+}
+
+.locDetails a {
+    font-size:14px;
+}
+
+
+

@@ -3,7 +3,6 @@
     float: left;
     z-index: 2;
     overflow: hidden;
-    margin-top:66px;
     margin-left:15px;
     min-width:400px;
     pointer-events:none;
@@ -13,11 +12,11 @@
     display: inline-block;
     color: black;
     text-align: center;
-    padding: 6px 45px;
+    padding: 6px 11.2%;
     text-decoration: none;
     font-size: 17px;
     font-family: "Times New Roman", Times, serif;
-    margin-top: 10px;
+    margin-top: 76px;
     pointer-events:all;
   }
 
@@ -33,10 +32,11 @@
 
   /* Style the search field */
   .directory input[type=text] {
-    padding: 10px;
+    position:relative;
+    display:inline;
+    padding: 2.5%;
     font-size: 15px;
     border: thin solid grey;
-    float: left;
     width: 75%;
     background: white;
     pointer-events:all;
@@ -71,13 +71,14 @@
 
   .directory ul {
     position:fixed;
-    top:220px;
-    height:68%;
     width:281px;
+    top:220px;
+    max-height:68%;
     overflow:hidden;
     overflow-y: auto;
     pointer-events:all;
     background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
+    opacity:0.96;
   }
 
   /* Style the list items */
@@ -86,7 +87,7 @@
     padding: 2px 2px 2px 4px;
     width:315px;
     margin-left:-40px;
-    background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
+    background: white;
     font-size: 18px;
     list-style-type:none;
     border-bottom:thin solid lightgray;
@@ -116,4 +117,18 @@
     font-family: 'Roboto', sans-serif;
     font-weight:400;
     color:gray;
+  }
+
+  ::-webkit-scrollbar {
+    width:8px;
+    height:3px;
+    border-left:0;
+    background:rgba(0,0,0,0.1);
+  }
+  ::-webkit-scrollbar-track {
+    background:none;
+  }
+  ::-webkit-scrollbar-thumb {
+    background:gray;
+    border-radius:0;
   }
