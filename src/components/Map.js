@@ -3,6 +3,10 @@ import "../css/map.css";
 import "../css/directory.css";
 import GoogleMapReact from 'google-map-react';
 import { config } from '../tools/config.js';
+import EditForm from "./EditForm.js";
+import locationManager from "../managers/LocationManager.js"
+
+var isUser = "none";
 
 const Marker = (props) => {
     const { color } = props;
@@ -39,6 +43,8 @@ class SimpleMap extends React.Component {
             }
 
         this.onChildClick = this.onChildClick.bind(this);
+        this.editMarkerCallback = this.editMarkerCallback.bind(this);
+        this.removeMarker = this.removeMarker.bind(this);
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -50,7 +56,7 @@ class SimpleMap extends React.Component {
             };
         } else if (props.currSelect !== state.selected && props.currSelect == null) {
             return {
-                selected : props.intialSelect,
+                selected : props.currSelect,
                 markers : props.currMarkers
             };
         } else if (props.currMarkers.length !== state.markers.length) {
@@ -84,13 +90,27 @@ class SimpleMap extends React.Component {
         if (this.state.selected) {
             this.state.selected.color = "red";
         }
-        
         this.setState({selected: this.props.currSelect});
     };
 
+    editMarkerCallback = async (markerFromForm) => {
+        await locationManager.editLocation(this.state.selected, markerFromForm);
+        this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+    };
+
+    async removeMarker() {
+        await locationManager.removeLocation(this.state.selected);
+        this.setState({markers : await locationManager.updateLocations(), selected: null});
+    };
 
     render() {
         var details, weapons, contact, phone, description;
+        var editDisabled = false;
+        isSignedIn();
+
+        if (this.state.selected !== null) {
+            editDisabled = true;
+        }
 
         if (this.state.selected !== undefined && this.state.selected !== null) {
 
@@ -118,11 +138,16 @@ class SimpleMap extends React.Component {
             description = "block";
         }
 
-            details = (<div className="locDetails">
-                    <h1>{this.state.selected.name}</h1>
-                    <br/>
+            details = (<div className="locDetails" id="details" style={{display: "block"}}>
+                                <i style={{display:isUser}} onClick={this.removeMarker} className="fas fa-trash-alt">
+                                <span class = "tooltip">Remove This Club</span></i>
+                                <i style={{display:isUser}} disabled={!editDisabled} onClick={openEditForm} className="fas fa-pencil-alt">
+                                <span class = "tooltip">Edit This Club</span></i>
+                            <h1>{this.state.selected.name}</h1>
+                            <br/>
                             <h2>{this.state.selected.address}</h2>
-                            <br/><hr></hr>
+                            <br/>
+                            <hr></hr>
                             <div style = {{display:contact}}><h3 className="fas fa-user"></h3>
                             <h4>{this.state.selected.contact}</h4></div>
 
@@ -145,11 +170,16 @@ class SimpleMap extends React.Component {
                 </div>
                 )
         } else {
-            details = <div className="locDetails" style={{display: "none"}}/>
+            details = <div className="locDetails" id="details" style={{display: "none"}}/>
         }
+
         return (
             // Important! Always set the container height explicitly
-            <div className='Map' style={{ height: '90vh', width: '100%'}}>
+            <div className="App">   
+            <div className="shadow" id="shadow"/>
+            <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
+            <div className='Map' style={{ height: '100vh', width: '100%'}}>
+            {details}
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: config.API_KEY}}
                     defaultZoom= {5}
@@ -172,11 +202,27 @@ class SimpleMap extends React.Component {
                                 color = {each.color}
                             />)
                     }
-
                 </GoogleMapReact>
-                {details}
+            </div>
+            <div/>
             </div>
         );
+    }
+}
+
+function openEditForm() {
+    document.getElementById("EditFormDiv").style.display = "block";
+    document.getElementById("shadow").style.display = "block";
+    document.getElementById("details").style.display = "none";
+}
+
+function isSignedIn() {
+    if (document.getElementById("topNav") != null) {
+        if (document.getElementById("topNav2").style.display == "block" || document.getElementById("topNav").style.display == "block") {
+            isUser = "block";
+        } else {
+            isUser = "none";
+        }
     }
 }
 

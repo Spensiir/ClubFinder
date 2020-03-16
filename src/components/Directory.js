@@ -1,8 +1,12 @@
 import React from "react"
 import "../css/directory.css"
 import {editDistance} from "../tools/stringSearch";
+import AddForm from "./AddForm.js";
+import locationManager from "../managers/LocationManager.js"
 
 var keyVal = 0;
+var isUser = "none";
+var isNotOrg = "inline";
 
 class Directory extends React.Component {
 
@@ -15,6 +19,7 @@ class Directory extends React.Component {
             allWords: "",
             selected : this.props.currSelect
         }
+        this.markerCallback = this.markerCallback.bind(this);
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -38,7 +43,6 @@ class Directory extends React.Component {
         if (key !== 0) {
             for (var i = 0; i < this.state.markers.length; i++) {
                 if (key === markers[i].name) {
-                    //console.log(this.state.selected);
                     if (this.state.selected) {
                         this.state.selected.color = "red";
                     }  
@@ -51,14 +55,24 @@ class Directory extends React.Component {
         }
     };
 
+    markerCallback = async (markerFromForm) => {
+        await locationManager.addLocation(markerFromForm);
+        this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+    };
+
     render() {
+        isSignedIn();
         return (
+            <div className="App">   
+            <div className="shadow" id="shadow"/>
             <div id="Directory" className="directory">
+                <div style={{display:isNotOrg}}><br/>
                 <button onClick={activeBtn()} className="btn1 active">Clubs</button>
                 <button onClick={activeBtn()} className="btn1">Organizations</button>
-                <br/>
+                </div><br/>
                 <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search the Club List..." name="search"></input>
-                <br/>
+                <i style={{display:isUser}} onClick={e => this.openAddForm()} className="fas fa-plus">
+                <span class="tooltip">Add A New Club</span></i>
                 <ul>
                 { 
                     this.state.filteredMarkers.map( (each) =>
@@ -70,6 +84,8 @@ class Directory extends React.Component {
                 }
                 </ul>
             </div>
+            <AddForm updateMarkers={this.markerCallback.bind(this)}/>
+            <div/></div>
         )
     }
 
@@ -104,7 +120,14 @@ class Directory extends React.Component {
             }
             return 1});
         this.setState({filteredMarkers : markers});
-    }}
+    }
+
+    openAddForm() {
+        document.getElementById("AddFormDiv").style.display = "block";
+        document.getElementById("shadow").style.display = "block";
+        document.getElementById("details").style.display = "none";
+    }
+}
 
 function activeBtn() {
     //Get the active button using a loop
@@ -116,5 +139,20 @@ function activeBtn() {
         this.className += " active";
     });
 }}
+
+function isSignedIn() {
+    if (document.getElementById("topNav") != null) {
+        if (document.getElementById("topNav2").style.display == "block" || document.getElementById("topNav").style.display == "block") {
+            isUser = "initial";
+        } else {
+            isUser = "none";
+        }
+        if (document.getElementById("topNav").style.display == "block") {
+            isNotOrg = "none";
+        } else {
+            isNotOrg = "inline";
+        }
+    }
+}
 
 export default Directory;

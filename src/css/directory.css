@@ -2,21 +2,23 @@
     position: fixed;
     float: left;
     z-index: 2;
+    top:86px;
     overflow: hidden;
-    margin-left:15px;
+    margin-left:8px;
     min-width:400px;
     pointer-events:none;
   }
 
   .directory button.btn1 {
-    display: inline-block;
+    display: inline;
+    background-color:white;
     color: black;
     text-align: center;
-    padding: 6px 11.2%;
+    padding: 6px 13%;
     text-decoration: none;
     font-size: 17px;
     font-family: "Times New Roman", Times, serif;
-    margin-top: 76px;
+    cursor:pointer;
     pointer-events:all;
   }
 
@@ -24,6 +26,10 @@
   .directory button.btn1.active {
     background-color:gray;
     color: white;
+  }
+
+  .directory button.btn1:focus {
+    outline:none;
   }
 
   .directory form {
@@ -37,10 +43,52 @@
     padding: 2.5%;
     font-size: 15px;
     border: thin solid grey;
-    width: 75%;
+    width: 82.3%;
     background: white;
     pointer-events:all;
   }
+
+  .directory input[type=text]:focus {
+    outline:none;
+  }
+
+  .directory i {
+    position:relative;
+    right:7%;
+    top:4px;
+    font-size:24px;
+    color:gray;
+    pointer-events:all;
+    transition:0.4s;
+    cursor:pointer;
+  }
+
+  .directory i:hover {
+    color:darkblue;
+  }
+
+  .directory i .tooltip {
+    opacity:0;
+    width: 10px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: fixed;
+    z-index: 1;
+    transition:0.4s;
+    font-size:2px;
+    top:95px;
+    font-family:'Roboto', sans-serif;
+  }
+
+  .directory i:hover .tooltip {
+      opacity:1;
+      width:120px;
+      font-size:14px;
+  }
+
 
   /* Style the submit button */
   .directory button.btn2 {
@@ -71,9 +119,9 @@
 
   .directory ul {
     position:fixed;
-    width:281px;
-    top:220px;
-    max-height:68%;
+    margin-top:0px;
+    width:311px;
+    max-height:75%;
     overflow:hidden;
     overflow-y: auto;
     pointer-events:all;
@@ -85,7 +133,7 @@
   .directory ul li {
     position: relative;
     padding: 2px 2px 2px 4px;
-    width:315px;
+    width:344px;
     margin-left:-40px;
     background: white;
     font-size: 18px;
