@@ -72,7 +72,6 @@ class SimpleMap extends React.Component {
         if (key !== 0) {
             for (var i = 0; i < this.state.markers.length; i++) {
                 if (key === markers[i].name) {
-                    console.log(this.state.selected);
                     if (this.state.selected) {
                         this.state.selected.color = "red";
                     }  
@@ -106,7 +105,7 @@ class SimpleMap extends React.Component {
     render() {
         var details, weapons, contact, phone, description;
         var editDisabled = false;
-        isSignedIn();
+        this.isSignedIn();
 
         if (this.state.selected !== null) {
             editDisabled = true;
@@ -139,10 +138,10 @@ class SimpleMap extends React.Component {
         }
 
             details = (<div className="locDetails" id="details" style={{display: "block"}}>
-                                <i style={{display:isUser}} onClick={this.removeMarker} className="fas fa-trash-alt">
-                                <span class = "tooltip">Remove This Club</span></i>
-                                <i style={{display:isUser}} disabled={!editDisabled} onClick={openEditForm} className="fas fa-pencil-alt">
-                                <span class = "tooltip">Edit This Club</span></i>
+                            <i style={{display:isUser}} onClick={this.removeMarker} className="fas fa-trash-alt">
+                            <span class = "tooltip">Remove This Club</span></i>
+                            <i style={{display:isUser}} disabled={!editDisabled} onClick={this.openEditForm} className="fas fa-pencil-alt">
+                            <span class = "tooltip">Edit This Club</span></i>
                             <h1>{this.state.selected.name}</h1>
                             <br/>
                             <h2>{this.state.selected.address}</h2>
@@ -164,7 +163,7 @@ class SimpleMap extends React.Component {
 
                             <div style = {{display:weapons}}><h3 className="fas fa-fan"></h3>
                             <h4>{this.state.selected.weapons}</h4></div>
-                            
+
                             <div style={{display:description}}><hr></hr>
                             <h4>{this.state.selected.description}</h4></div>
                 </div>
@@ -177,7 +176,7 @@ class SimpleMap extends React.Component {
             // Important! Always set the container height explicitly
             <div className="App">   
             <div className="shadow" id="shadow"/>
-            <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
+            <EditForm updateMarkers={this.editMarkerCallback.bind(this)} currSelect={this.state.selected} />
             <div className='Map' style={{ height: '100vh', width: '100%'}}>
             {details}
                 <GoogleMapReact
@@ -208,20 +207,20 @@ class SimpleMap extends React.Component {
             </div>
         );
     }
-}
 
-function openEditForm() {
-    document.getElementById("EditFormDiv").style.display = "block";
-    document.getElementById("shadow").style.display = "block";
-    document.getElementById("details").style.display = "none";
-}
-
-function isSignedIn() {
-    if (document.getElementById("topNav") != null) {
-        if (document.getElementById("topNav2").style.display == "block" || document.getElementById("topNav").style.display == "block") {
-            isUser = "block";
-        } else {
-            isUser = "none";
+    openEditForm() {
+        document.getElementById("EditFormDiv").style.display = "block";
+        document.getElementById("shadow").style.display = "block";
+        document.getElementById("details").style.display = "none";
+    }
+    
+    isSignedIn() {
+        if (document.getElementById("topNav") != null) {
+            if (document.getElementById("topNav2").style.display == "block" || document.getElementById("topNav").style.display == "block") {
+                isUser = "block";
+            } else {
+                isUser = "none";
+            }
         }
     }
 }

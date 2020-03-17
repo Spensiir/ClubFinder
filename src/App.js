@@ -14,8 +14,8 @@ class App extends React.Component {
     this.state = {
       logButton:
       <div className="App-header2">
-      <button onClick={openSignin}>Sign In</button>
-      <button style={{borderRight:"thin solid gray"}} onClick={openRegister}>Register</button>
+      <button onClick={this.openSignin}>Sign In</button>
+      <button style={{borderRight:"thin solid gray"}} onClick={this.openRegister}>Register</button>
       </div>,
       username:"user",
         markers : [],
@@ -36,11 +36,13 @@ class App extends React.Component {
   }
 
   onClickSubmit = async () => {
-    openSignin();
+    this.openSignin();
+    this.closeEverything();
   };
 
   onClickRegister = () => {
-    openRegister();
+    this.openRegister();
+    this.closeEverything();
   };
 
   onClickSignOut = async () => {
@@ -49,13 +51,14 @@ class App extends React.Component {
         markers: await locationManager.updateLocations()
     });
 
+    this.closeEverything();
     this.setState(
       {
         username: "user",
         logButton: 
         <div className="App-header2">
-          <button onClick={openSignin}>Sign In</button>
-          <button style={{borderRight:"thin solid gray"}} onClick={openRegister}>Register</button>
+          <button onClick={this.openSignin}>Sign In</button>
+          <button style={{borderRight:"thin solid gray"}} onClick={this.openRegister}>Register</button>
         </div>});
   };
 
@@ -70,7 +73,6 @@ class App extends React.Component {
       });
     }
   };
-
 
   usernameCallback = async (usernameData) => {
     this.setState({
@@ -91,7 +93,6 @@ selectedCallback = (markerFromMap) => {
 };
 
   render() {
-    
     var signedIn;
     var adminSignedIn;
     var notOrg;
@@ -110,7 +111,7 @@ selectedCallback = (markerFromMap) => {
     }
 
     return (
-      <div className="App">   
+      <div>
         <div className="shadow" id="shadow"/>
           <div className="App-header">
             <h1>HEMAA Club Finder</h1>
@@ -120,7 +121,7 @@ selectedCallback = (markerFromMap) => {
           <div className="topnav" id="topNav" style={{display : signedIn}}>
           </div>
           <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
-            <button onClick={openRegister}>Add Organization</button>
+            <button onClick={e => this.openRegister}>Add Organization</button>
           </div>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected} callbackFromApp={this.usernameCallback}/>
@@ -129,18 +130,24 @@ selectedCallback = (markerFromMap) => {
       </div>
     )
   };
-}
 
-function openSignin() {
-  document.getElementById("SigninForm").style.display = "block";
-  document.getElementById("shadow").style.display = "block";
-  document.getElementById("details").style.display = "none";
-}
+  closeEverything () {
+    document.getElementById("details").style.display = "none";
+    this.setState({selected: null});
+  }
 
-function openRegister() {
-  document.getElementById("OrgForm").style.display = "block";
-  document.getElementById("shadow").style.display = "block";
-  document.getElementById("details").style.display = "none";
+  openSignin() {
+    document.getElementById("SigninForm").style.display = "block";
+    document.getElementById("shadow").style.display = "block";
+    document.getElementById("details").style.display = "none";
+  }
+  
+  openRegister() {
+    document.getElementById("OrgForm").style.display = "block";
+    document.getElementById("shadow").style.display = "block";
+    document.getElementById("details").style.display = "none";
+  }
+
 }
 
 export default App;
