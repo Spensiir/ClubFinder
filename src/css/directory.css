@@ -2,9 +2,8 @@
     position: fixed;
     float: left;
     z-index: 2;
-    top:86px;
+    top:78px;
     overflow: hidden;
-    margin-left:8px;
     min-width:400px;
     pointer-events:none;
   }
@@ -14,12 +13,29 @@
     background-color:white;
     color: black;
     text-align: center;
-    padding: 6px 13%;
+    padding: 6px 13.3%;
     text-decoration: none;
     font-size: 17px;
     font-family: "Times New Roman", Times, serif;
     cursor:pointer;
     pointer-events:all;
+    border:thin solid lightgray;
+    transition:0.5s;
+  }
+
+  .directory button.btnGray {
+    display: inline;
+    background-color:white;
+    color: lightgray;
+    text-align: center;
+    padding: 6px 13.3%;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: "Times New Roman", Times, serif;
+    cursor:default;
+    pointer-events:all;
+    border:thin solid lightgray;
+    transition:0.5s;
   }
 
   /* Style the "active" element to highlight the current page */
@@ -29,6 +45,10 @@
   }
 
   .directory button.btn1:focus {
+    outline:none;
+  }
+
+  .directory button.btnGray:focus {
     outline:none;
   }
 
@@ -43,9 +63,10 @@
     padding: 2.5%;
     font-size: 15px;
     border: thin solid grey;
-    width: 82.3%;
+    width: 82.1%;
     background: white;
     pointer-events:all;
+    transition:0.5s;
   }
 
   .directory input[type=text]:focus {
@@ -79,7 +100,7 @@
     z-index: 1;
     transition:0.4s;
     font-size:2px;
-    top:95px;
+    top:120px;
     font-family:'Roboto', sans-serif;
   }
 
@@ -104,6 +125,7 @@
     cursor: pointer;
     margin:0;
     pointer-events:all;
+    transition:0.5s;
   }
       
   .directory button.btn2:hover {
@@ -120,13 +142,14 @@
   .directory ul {
     position:fixed;
     margin-top:0px;
-    width:311px;
-    max-height:75%;
+    width:310px;
+    max-height:80%;
     overflow:hidden;
     overflow-y: auto;
     pointer-events:all;
     background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
     opacity:0.96;
+    transition:0.5s;
   }
 
   /* Style the list items */
@@ -168,13 +191,13 @@
   }
 
   ::-webkit-scrollbar {
-    width:8px;
+    width:6px;
     height:3px;
     border-left:0;
     background:rgba(0,0,0,0.1);
   }
   ::-webkit-scrollbar-track {
-    background:none;
+    background:whitesmoke;
   }
   ::-webkit-scrollbar-thumb {
     background:gray;

@@ -3,7 +3,6 @@ import "../css/map.css";
 import "../css/directory.css";
 import GoogleMapReact from 'google-map-react';
 import { config } from '../tools/config.js';
-import EditForm from "./EditForm.js";
 import locationManager from "../managers/LocationManager.js"
 
 var isUser = "none";
@@ -41,9 +40,7 @@ class SimpleMap extends React.Component {
                         });
                     })
             }
-
         this.onChildClick = this.onChildClick.bind(this);
-        this.editMarkerCallback = this.editMarkerCallback.bind(this);
         this.removeMarker = this.removeMarker.bind(this);
     }
 
@@ -56,7 +53,7 @@ class SimpleMap extends React.Component {
             };
         } else if (props.currSelect !== state.selected && props.currSelect == null) {
             return {
-                selected : props.currSelect,
+                selected : props.initialSelect,
                 markers : props.currMarkers
             };
         } else if (props.currMarkers.length !== state.markers.length) {
@@ -91,12 +88,7 @@ class SimpleMap extends React.Component {
         }
         this.setState({selected: this.props.currSelect});
     };
-
-    editMarkerCallback = async (markerFromForm) => {
-        await locationManager.editLocation(this.state.selected, markerFromForm);
-        this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
-    };
-
+        
     async removeMarker() {
         await locationManager.removeLocation(this.state.selected);
         this.setState({markers : await locationManager.updateLocations(), selected: null});
@@ -139,9 +131,9 @@ class SimpleMap extends React.Component {
 
             details = (<div className="locDetails" id="details" style={{display: "block"}}>
                             <i style={{display:isUser}} onClick={this.removeMarker} className="fas fa-trash-alt">
-                            <span class = "tooltip">Remove This Club</span></i>
+                            <span className = "tooltip">Remove This Club</span></i>
                             <i style={{display:isUser}} disabled={!editDisabled} onClick={this.openEditForm} className="fas fa-pencil-alt">
-                            <span class = "tooltip">Edit This Club</span></i>
+                            <span className = "tooltip">Edit This Club</span></i>
                             <h1>{this.state.selected.name}</h1>
                             <br/>
                             <h2>{this.state.selected.address}</h2>
@@ -174,9 +166,6 @@ class SimpleMap extends React.Component {
 
         return (
             // Important! Always set the container height explicitly
-            <div className="App">   
-            <div className="shadow" id="shadow"/>
-            <EditForm updateMarkers={this.editMarkerCallback.bind(this)} currSelect={this.state.selected} />
             <div className='Map' style={{ height: '100vh', width: '100%'}}>
             {details}
                 <GoogleMapReact
@@ -203,15 +192,12 @@ class SimpleMap extends React.Component {
                     }
                 </GoogleMapReact>
             </div>
-            <div/>
-            </div>
         );
     }
 
     openEditForm() {
         document.getElementById("EditFormDiv").style.display = "block";
         document.getElementById("shadow").style.display = "block";
-        document.getElementById("details").style.display = "none";
     }
     
     isSignedIn() {

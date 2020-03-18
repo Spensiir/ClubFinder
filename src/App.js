@@ -1,6 +1,8 @@
 import React from 'react';
 import "./css/app.css"
 import "./css/navigationBar.css";
+import AddForm from './components/AddForm.js';
+import EditForm from "./components/EditForm.js";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
@@ -8,14 +10,16 @@ import Directory from './components/Directory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 
+var checkMove = 0;
+
 class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       logButton:
-      <div className="App-header2">
-      <button onClick={this.openSignin}>Sign In</button>
-      <button style={{borderRight:"thin solid gray"}} onClick={this.openRegister}>Register</button>
+      <div className="App-header2" id="mainHeader2">
+      <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
+      <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
       </div>,
       username:"user",
         markers : [],
@@ -25,7 +29,10 @@ class App extends React.Component {
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
     this.onClickRegister = this.onClickRegister.bind(this);
+    this.markerCallback = this.markerCallback.bind(this);
+    this.removeMarker = this.removeMarker.bind(this);
     this.selectedCallback = this.selectedCallback.bind(this);
+    this.editMarkerCallback = this.editMarkerCallback.bind(this);
     this.setAdmin = this.setAdmin.bind(this);
   }
 
@@ -52,13 +59,14 @@ class App extends React.Component {
     });
 
     this.closeEverything();
+    this.signOutClosing();
     this.setState(
       {
         username: "user",
         logButton: 
-        <div className="App-header2">
-          <button onClick={this.openSignin}>Sign In</button>
-          <button style={{borderRight:"thin solid gray"}} onClick={this.openRegister}>Register</button>
+        <div className="App-header2" id="mainHeader2">
+          <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
+          <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
         </div>});
   };
 
@@ -80,42 +88,54 @@ class App extends React.Component {
     });
     this.setState({username: usernameData}, async () => this.setState(
       { logButton:
-        <div className="App-header2">
-        <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
+        <div className="App-header2" id="mainHeader2">
+        <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
         </div>}));
   };
 
-selectedCallback = (markerFromMap) => {
+  markerCallback = async (markerFromForm) => {
+    await locationManager.addLocation(markerFromForm);
+    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+  };
+
+  editMarkerCallback = async (markerFromForm) => {
+    await locationManager.editLocation(this.state.selected, markerFromForm);
+    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+  };
+
+  selectedCallback = (markerFromMap) => {
     if (markerFromMap) {
       markerFromMap.color = "yellow";
     }  
     this.setState({selected : markerFromMap});
-};
+  };
+
+  async removeMarker() {
+    await locationManager.removeLocation(this.state.selected);
+    this.setState({markers : await locationManager.updateLocations(), selected: null});
+  };
 
   render() {
     var signedIn;
     var adminSignedIn;
-    var notOrg;
     if (this.state.username !== "user" && this.state.isAdmin) {
       signedIn = "none";
       adminSignedIn = "block";
-      notOrg = "block";
     } else if (this.state.username !== "user") {
       signedIn = "block";
       adminSignedIn = "none";
-      notOrg = "none";
     } else {
       signedIn = "none";
       adminSignedIn = "none";
-      notOrg = "block";
     }
 
     return (
       <div>
         <div className="shadow" id="shadow"/>
-          <div className="App-header">
-            <h1>HEMAA Club Finder</h1>
-            <h2 style={{display : signedIn}}>Welcome, {this.state.username}</h2>
+          <div className="App-header" id="mainHeader">
+            <h1 id="title">HEMAA Club Finder</h1>
+            <h2 id="welcome" style={{display : signedIn}}>Welcome, {this.state.username}</h2>
+            <button onClick={e => moveDirectory()} id="mover" className="btn2"><i class="fas fa-caret-left" id="arrow"></i></button>
           </div>
           {this.state.logButton}
           <div className="topnav" id="topNav" style={{display : signedIn}}>
@@ -123,10 +143,12 @@ selectedCallback = (markerFromMap) => {
           <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
             <button onClick={e => this.openRegister}>Add Organization</button>
           </div>
-          <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected} callbackFromApp={this.usernameCallback}/>
-          <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
+          <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
+          <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <AddForm updateMarkers={this.markerCallback.bind(this)}/>
+          <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
       </div>
     )
   };
@@ -139,15 +161,42 @@ selectedCallback = (markerFromMap) => {
   openSignin() {
     document.getElementById("SigninForm").style.display = "block";
     document.getElementById("shadow").style.display = "block";
-    document.getElementById("details").style.display = "none";
   }
-  
+
   openRegister() {
     document.getElementById("OrgForm").style.display = "block";
     document.getElementById("shadow").style.display = "block";
-    document.getElementById("details").style.display = "none";
   }
 
+  signOutClosing() {
+    document.getElementById("nonOrgButtons").style.display = "inline";
+    document.getElementById("orgButtons").style.display = "none";
+    document.getElementById("addPlus").style.display = "none";
+  }
+}
+
+function moveDirectory() {
+  if (checkMove === 0) {
+    document.getElementById("mainHeader").style.marginLeft = "-380px";
+    document.getElementById("mainHeader2").style.marginLeft = "-380px";
+    document.getElementById("searchInput").style.marginLeft = "-380px";
+    document.getElementById("UL").style.marginLeft = "-380px";
+    document.getElementById("clubs").style.marginLeft = "-380px";
+    document.getElementById("clubs2").style.marginLeft = "-380px";
+    document.getElementById("mover").style.marginLeft = "30px";
+    document.getElementById("details").style.marginLeft = "-350px";
+    checkMove = 1;
+  } else {
+    document.getElementById("mainHeader").style.marginLeft = "0px";
+    document.getElementById("mainHeader2").style.marginLeft = "0px";
+    document.getElementById("searchInput").style.marginLeft = "0px";
+    document.getElementById("UL").style.marginLeft = "0px";
+    document.getElementById("clubs").style.marginLeft = "0px";
+    document.getElementById("clubs2").style.marginLeft = "0px";
+    document.getElementById("mover").style.marginLeft = "0px";
+    document.getElementById("details").style.marginLeft = "0px";
+    checkMove = 0;
+  }
 }
 
 export default App;

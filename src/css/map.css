@@ -16,8 +16,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     background-color: #000;
     border: 2px solid #fff;
     border-radius: 100%;
@@ -26,8 +26,8 @@
 }
 
 .marker:hover {
-    width:23px;
-    height:23px;
+    width:18px;
+    height:18px;
     border-color: darkred;
     z-index:1;
     transition:0.2s;
@@ -40,8 +40,8 @@
     padding-right:8px;
     padding-top: 14px;
     text-align:left;
-    top:109px;
-    left:370px;
+    top:105px;
+    left:360px;
     width:300px;
     z-index: 3;
     overflow:hidden;
@@ -49,6 +49,7 @@
     box-shadow: 3px 3px 5px grey;
     white-space:pre-line;
     font-family: 'Roboto', sans-serif;
+    transition:0.5s;
 
     background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgb(251, 251, 251) 47%,rgb(246, 246, 246) 100%); 
 }

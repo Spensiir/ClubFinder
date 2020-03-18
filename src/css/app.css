@@ -4,9 +4,10 @@
     width:350px;
     height:70px;
     font-family: 'Roboto', sans-serif;
-    margin-left:8px;
-    margin-top:8px;
     text-shadow: 1px 1px 5px lightgray;
+    max-width:350px;
+    transition:0.5s;
+    margin-left:0px;
 }
 
 .App-header h1 {
@@ -15,18 +16,17 @@
     min-width:330px;
     text-align:left;
     margin-left:4%;
-    width:300px;
 }
 
 .App-header h2 {
     position:fixed;
     font-size:12px;
-    top:24px;
+    top:16px;
     text-align:left;
     width:350px;
     margin-top:40px;
-    margin-left:15px;
-    color:rgb(57, 57, 233);
+    margin-left:18px;
+    color:rgb(106, 197, 253);
 }
 
 .App-header2 {
@@ -34,7 +34,7 @@
     width:350px;
     position:relative;
     height:30px;
-    margin-left:8px;
+    transition:0.5s;
 }
 
 .App-header2 button {
@@ -50,13 +50,41 @@
 }
 
 .App-header2 button:hover {
-    color:darkblue;
+    color:rgb(106, 197, 253);
     width:22%;
-    font-size:16px;
+    font-size:14px;
 }
 
 .App-header2 button:focus {
     outline:none;
+}
+
+.App-header button.btn2 {
+    position:fixed;
+    width:30px;
+    height:100px;
+    margin-left:0px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    z-index:0;
+    transition:0.4s;
+    cursor:pointer;
+    background-color:whitesmoke;
+}
+
+.App-header button.btn2:hover {
+    background-color:lightgray;
+}
+
+.App-header button.btn2:focus {
+    outline:none;
+}
+
+.App-header button.btn2 i {
+    position:relative;
+    font-size:25px;
+    top:50%;
+    color:rgb(106, 197, 253);
 }
 
 .shadow {

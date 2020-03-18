@@ -106,25 +106,25 @@ class AddForm extends React.Component {
                     <input type="text" name="address" onChange={e => this.setAddress(e)} required/>
 
                     <label><b>City</b></label>
-                    <input type="text" style={{width:276}} className="city" name="city" onChange={e => this.setCity(e)} required/>
+                    <input type="text" style={{width:"36.7%"}} className="city" name="city" onChange={e => this.setCity(e)} required/>
 
                     <label><b>State</b></label>
-                    <input type="text" style={{width:30}} className="state" name="state" onChange={e => this.setSt(e)} required/>
+                    <input type="text" style={{width:"4%"}} className="state" name="state" onChange={e => this.setSt(e)} required/>
 
                     <label><b>Zip</b></label>
-                    <input type="text" style={{width:90}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
+                    <input type="text" style={{width:"11.8%"}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
                     <br/>
                     <label><b>Website</b></label>
-                    <input type="text" style={{width:246}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
+                    <input type="text" style={{width:"32.5%"}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
 
                     <label><b>Email</b></label>
-                    <input type="text" style={{width:200}} className="email" name="email" onChange={e => this.setEmail(e)} required/>
+                    <input type="text" style={{width:"29.8%"}} className="email" name="email" onChange={e => this.setEmail(e)} required/>
                     <br/>
                     <label><b>Contact Name</b></label>
-                    <input type="text" style={{width:200}} className="contact" name="contact" onChange={e => this.setContact(e)}/>
+                    <input type="text" style={{width:"26.4%"}} className="contact" name="contact" onChange={e => this.setContact(e)}/>
 
                     <label><b>Phone #</b></label>
-                    <input type="text" style={{width:150}} className="phone" name="phone" onChange={e => this.setPhone(e)}/>
+                    <input type="text" style={{width:"27%"}} className="phone" name="phone" onChange={e => this.setPhone(e)}/>
                     <br/>
                     <label><b>Weapons</b></label>
                     <input type="text"className="website" name="website" onChange={e => this.setWeapons(e)}/>
@@ -141,6 +141,7 @@ class AddForm extends React.Component {
 }
 
 function closeAddForm() {
+    document.getElementById("AddFormDiv").scrollTop = (0,0);
     document.getElementById("AddFormDiv").style.display = "none";
     document.getElementById("shadow").style.display = "none";
     document.getElementById("addFormDiv").reset();
