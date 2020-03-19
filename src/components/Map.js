@@ -175,7 +175,9 @@ class SimpleMap extends React.Component {
                     onChildClick={this.onChildClick}
                     onClick = {this.onClick}
                     center = {this.state.center}
+                    
                 >
+
                     <Marker
                         lat={this.state.defaultCenter.lat}
                         lng={this.state.defaultCenter.lng}

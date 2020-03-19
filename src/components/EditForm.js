@@ -167,11 +167,11 @@ class EditForm extends React.Component {
         return (
             <div className="addForm" id="EditFormDiv">
                 <form id="editFormDiv" onSubmit={this.submitForm}>
-                    <h1> Edit an Existing Club </h1>
-                    <label><b>Club Name</b></label>
+                    <h1> Edit Your Club </h1>
+                    <label><b>Club Name *</b></label>
                     <input type="text" defaultValue={this.state.default_club_name} name="club_name" onChange={e =>this.setClubName(e)} required/>
 
-                    <label><b>Address</b></label>
+                    <label><b>Address *</b></label>
                     <input type="text" defaultValue={this.state.default_address} name="address" onChange={e => this.setAddress(e)} placeholder={this.state.address} required/>
 
                     <label><b>City</b></label>
@@ -183,11 +183,11 @@ class EditForm extends React.Component {
                     <label><b>Zip</b></label>
                     <input type="text" defaultValue={this.state.default_zip} style={{width:"11.8%"}} className="zip" name="zip" onChange={e => this.setZip(e)}/>
                     <br/>
-                    <label><b>Website</b></label>
-                    <input type="text" defaultValue={this.state.default_website} style={{width:"32.5%"}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
+                    <label><b>Website *</b></label>
+                    <input type="text" defaultValue={this.state.default_website} style={{width:"31%"}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
 
-                    <label><b>Email</b></label>
-                    <input type="text" defaultValue={this.state.default_email} style={{width:"29.8%"}} className="email" name="email" onChange={e => this.setEmail(e)} required/>
+                    <label><b>Email *</b></label>
+                    <input type="text" defaultValue={this.state.default_email} style={{width:"28.3%"}} className="email" name="email" onChange={e => this.setEmail(e)} required/>
                     <br/>
                     <label><b>Contact Name</b></label>
                     <input type="text" defaultValue={this.state.default_contact} style={{width:"26.4%"}} className="contact" name="contact" onChange={e => this.setContact(e)}/>

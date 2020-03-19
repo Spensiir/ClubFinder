@@ -13,10 +13,10 @@
     background-color:white;
     color: black;
     text-align: center;
-    padding: 6px 13.3%;
+    padding: 6px 13.6%;
     text-decoration: none;
-    font-size: 17px;
-    font-family: "Times New Roman", Times, serif;
+    font-size: 15px;
+    font-family: "Roboto", serif;
     cursor:pointer;
     pointer-events:all;
     border:thin solid lightgray;
@@ -150,6 +150,7 @@
     background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
     opacity:0.96;
     transition:0.5s;
+    box-shadow: 3px 3px 5px gray;
   }
 
   /* Style the list items */
@@ -167,10 +168,11 @@
   }
 
   .directory ul li:hover {
-    background: linear-gradient(rgb(243, 243, 243) 0%,rgb(240, 239, 239) 47%,rgb(235, 233, 233) 100%);
+    background: linear-gradient(rgb(253, 253, 253) 0%,rgb(243, 253, 255) 47%,rgb(237, 249, 253) 100%);
   }
 
   .directory ul li h2 {
+    color:rgba(0, 74, 160, 0.8);
     margin-top:7px;
     margin-left:5px;
     margin-right:5px;
@@ -200,6 +202,6 @@
     background:whitesmoke;
   }
   ::-webkit-scrollbar-thumb {
-    background:gray;
+    background:rgba(2, 106, 224, 0.8);
     border-radius:0;
   }

@@ -16,6 +16,8 @@
     min-width:330px;
     text-align:left;
     margin-left:4%;
+    color:transparent;
+    text-shadow: 0 0 1px rgba(0, 119, 255, 0.8), 0 0 0 rgb(82, 82, 82);
 }
 
 .App-header h2 {
@@ -26,7 +28,7 @@
     width:350px;
     margin-top:40px;
     margin-left:18px;
-    color:rgb(106, 197, 253);
+    color:rgb(80, 80, 80);
 }
 
 .App-header2 {
@@ -50,7 +52,8 @@
 }
 
 .App-header2 button:hover {
-    color:rgb(106, 197, 253);
+    color:transparent;
+    text-shadow: 0 0 1px rgba(0, 119, 255, 0.8), 0 0 0 rgb(82, 82, 82);
     width:22%;
     font-size:14px;
 }

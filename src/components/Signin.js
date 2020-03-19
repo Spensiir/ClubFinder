@@ -3,7 +3,7 @@ import "../css/signin.css"
 import {userManager} from "../managers/UserManager.js"
 
 class Signin extends React.Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {username: "", password: ""};
@@ -40,10 +40,10 @@ class Signin extends React.Component {
                 <form id="signinform" onSubmit={e=>this.submitSignin(e)}>
                     <h1>Sign In</h1>
                     <label><b>Email</b></label>
-                    <input type="text" name="username" onChange={e=>this.setUsername(e)} required/>
+                    <input type="text" name="username" default={this.state.username} onChange={e=>this.setUsername(e)} required/>
 
                     <label><b>Password</b></label>
-                    <input type="password" name="password" onChange={e=>this.setPassword(e)} required/>
+                    <input type="password" name="password" default={this.state.password} onChange={e=>this.setPassword(e)} required/>
                     
                     <br/>
                     <button type="submit" className="submit">Submit</button>
