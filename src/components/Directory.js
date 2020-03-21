@@ -23,9 +23,7 @@ class Directory extends React.Component {
     static getDerivedStateFromProps(props, state) {
         if (props.currSelect !== state.selected) {
             return {
-                selected : props.currSelect,
-                markers : props.currMarkers,
-                filteredMarkers: props.currMarkers
+                selected : props.currSelect
             };
         } else if (props.currMarkers.length !== state.markers.length) {
             return {
@@ -69,7 +67,17 @@ class Directory extends React.Component {
                 <i style={{display:isUser}} id="addPlus" onClick={e => this.openAddForm()} className="fas fa-plus">
                 <span className="tooltip">Add A New Club</span></i>
                 <ul id="UL">
-                { 
+                {
+                    this.state.filteredMarkers.map( (each) =>
+                        <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
+                            <h2>{each.name}</h2>
+                            <h3>{each.address}</h3>
+                        </li>
+                    )
+                }
+                </ul>
+                <ul id="UL2">
+                {
                     this.state.filteredMarkers.map( (each) =>
                         <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
                             <h2>{each.name}</h2>
@@ -102,16 +110,13 @@ class Directory extends React.Component {
 
             if (name.toUpperCase().includes(input.toUpperCase()) || address.toUpperCase().includes(input.toUpperCase())) {
                 markers[i].dist = 0.0;
-                //console.log(markers[i].dist);
             }
         }
 
         markers = markers.filter(function (a) { return a.dist < .75});
         markers.sort(function (a, b) {
-            if (a.dist <= b.dist) {
-                return -1;
-            }
-            return 1});
+            return a.dist - b.dist
+        })
         this.setState({filteredMarkers : markers});
     }
 
@@ -129,6 +134,7 @@ function activeBtn() {
         var current = document.getElementsByClassName("active");
         current[0].className = current[0].className.replace(" active", "");
         this.className += " active";
+        checkTab();
     });
 }}
 
@@ -146,6 +152,16 @@ function isSignedIn() {
             isNotOrg = "inline";
             isOrg = "none";
         }
+    }
+}
+
+function checkTab() {
+    if (document.getElementById("clubs").className === "btn1 active") {
+        document.getElementById("UL").style.display = "block";
+        document.getElementById("UL2").style.display = "none";
+    } else {
+        document.getElementById("UL").style.display = "none";
+        document.getElementById("UL2").style.display = "block";
     }
 }
 

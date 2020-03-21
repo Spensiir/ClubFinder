@@ -90,8 +90,7 @@ class SimpleMap extends React.Component {
     };
         
     async removeMarker() {
-        await locationManager.removeLocation(this.state.selected);
-        this.setState({markers : await locationManager.updateLocations(), selected: null});
+        this.props.removeMarker();
     };
 
     render() {
@@ -105,25 +104,25 @@ class SimpleMap extends React.Component {
 
         if (this.state.selected !== undefined && this.state.selected !== null) {
 
-        if (this.state.selected.weapons == "" || this.state.selected.weapons == null) {
+        if (this.state.selected.weapons === "" || this.state.selected.weapons == null) {
             weapons = "none";
         } else {
             weapons = "block";
         }
 
-        if (this.state.selected.contact == "" || this.state.selected.contact == null) {
+        if (this.state.selected.contact === "" || this.state.selected.contact == null) {
             contact = "none";
         } else {
             contact = "block";
         }
 
-        if (this.state.selected.phone == "" || this.state.selected.phone == null) {
+        if (this.state.selected.phone === "" || this.state.selected.phone == null) {
             phone = "none";
         } else {
             phone = "block";
         }
 
-        if (this.state.selected.description == "" || this.state.selected.description == null) {
+        if (this.state.selected.description === "" || this.state.selected.description == null) {
             description = "none";
         } else {
             description = "block";
@@ -150,7 +149,7 @@ class SimpleMap extends React.Component {
                             <br/>
 
                             <h3 className="fas fa-envelope"></h3>
-                            <a href={this.state.selected.email}>{this.state.selected.email}</a>
+                            <a href={this.state.selected.orgEmail}>{this.state.selected.orgEmail}</a>
                             <br/>
 
                             <div style = {{display:weapons}}><h3 className="fas fa-fan"></h3>
@@ -175,7 +174,6 @@ class SimpleMap extends React.Component {
                     onChildClick={this.onChildClick}
                     onClick = {this.onClick}
                     center = {this.state.center}
-                    
                 >
 
                     <Marker
@@ -204,7 +202,7 @@ class SimpleMap extends React.Component {
     
     isSignedIn() {
         if (document.getElementById("topNav") != null) {
-            if (document.getElementById("topNav2").style.display == "block" || document.getElementById("topNav").style.display == "block") {
+            if (document.getElementById("topNav2").style.display === "block" || document.getElementById("topNav").style.display === "block") {
                 isUser = "block";
             } else {
                 isUser = "none";

@@ -2,6 +2,7 @@ import React from 'react';
 import '../css/addform.css';
 import { getCoords } from '../tools/coords.js';
 import { userManager } from '../managers/UserManager';
+import { countries } from '../tools/locationForms';
 
 class AddForm extends React.Component {
     constructor(props) {
@@ -126,7 +127,7 @@ class AddForm extends React.Component {
                     <label><b>Phone #</b></label>
                     <input type="text" style={{width:"27%"}} className="phone" name="phone" onChange={e => this.setPhone(e)}/>
                     <br/>
-                    <label><b>Weapons</b></label>
+                    <label><b>Weapons / Studies</b></label>
                     <input type="text"className="website" name="website" onChange={e => this.setWeapons(e)}/>
                     <br/>
                     <label><b>Club Description</b></label>

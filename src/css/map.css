@@ -123,5 +123,14 @@
     font-size:14px;
 }
 
+.locDetails {
+    animation: fadeEffect 0.4s; 
+  }
+  
+  @keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
 
 

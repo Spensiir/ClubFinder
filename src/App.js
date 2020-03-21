@@ -135,7 +135,7 @@ class App extends React.Component {
           <div className="App-header" id="mainHeader">
             <h1 id="title">HEMAA Club Finder</h1>
             <h2 id="welcome" style={{display : signedIn}}>Welcome, {this.state.username}</h2>
-            <button onClick={e => moveDirectory()} id="mover" className="btn2"><i class="fas fa-caret-left" id="arrow"></i></button>
+            <button onClick={e => moveDirectory()} id="mover" className="btn2"><i className="fas fa-caret-left" id="arrow"></i></button>
           </div>
           {this.state.logButton}
           <div className="topnav" id="topNav" style={{display : signedIn}}>
@@ -146,7 +146,7 @@ class App extends React.Component {
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <SimpleMap removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
       </div>
@@ -181,6 +181,7 @@ function moveDirectory() {
     document.getElementById("mainHeader2").style.marginLeft = "-380px";
     document.getElementById("searchInput").style.marginLeft = "-380px";
     document.getElementById("UL").style.marginLeft = "-380px";
+    document.getElementById("UL2").style.marginLeft = "-380px";
     document.getElementById("clubs").style.marginLeft = "-380px";
     document.getElementById("clubs2").style.marginLeft = "-380px";
     document.getElementById("mover").style.marginLeft = "30px";
@@ -191,6 +192,7 @@ function moveDirectory() {
     document.getElementById("mainHeader2").style.marginLeft = "0px";
     document.getElementById("searchInput").style.marginLeft = "0px";
     document.getElementById("UL").style.marginLeft = "0px";
+    document.getElementById("UL2").style.marginLeft = "0px";
     document.getElementById("clubs").style.marginLeft = "0px";
     document.getElementById("clubs2").style.marginLeft = "0px";
     document.getElementById("mover").style.marginLeft = "0px";
