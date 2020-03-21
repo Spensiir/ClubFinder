@@ -10,6 +10,7 @@ import AdminRegistration from './components/AdminRegistration.js';
 import Directory from './components/Directory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
+import Profile from './components/Profile.js';
 
 class App extends React.Component {
   constructor (props) {
@@ -123,6 +124,7 @@ async removeMarker() {
           </header>
           {this.state.logButton}
           <div className="topnav" style={{display : signedIn}}>
+            <button onClick={openProfile}>Profile</button>
             <button onClick={openAddForm}>Add</button>
             <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
             <button onClick={this.removeMarker}>Remove</button>
@@ -132,7 +134,7 @@ async removeMarker() {
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory currMarkers={this.state.markers}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          
+          <Profile/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
@@ -149,6 +151,11 @@ function openSignin() {
 
 function openRegister() {
   document.getElementById("OrgForm").style.display = "block";
+  document.getElementById("shadow").style.display = "block";
+}
+
+function openProfile() {
+  document.getElementById("ProfileForm").style.display = "block";
   document.getElementById("shadow").style.display = "block";
 }
 

@@ -50,6 +50,19 @@ class OrganizationManager {
         }
     }
 
+    async getOrganization(userEmail) {
+        let organization;
+        var req = config.SERVER_URL + "/organizations/getOrganizations" + "/" + userEmail;
+        await axios.get(req)
+            .then(res => {
+                organization = res.data;
+            })
+            .catch(function (error) {
+                organization = "";
+            });
+            return organization;
+    }
+
     async updateOrganizations() {
         var req = config.SERVER_URL + "/organizations/getOrganizations";
         let newOrganizations;
@@ -71,5 +84,4 @@ class OrganizationManager {
     }
 }
 
-let organizationManager = new OrganizationManager();
-export default organizationManager;
+export let organizationManager = new OrganizationManager();
