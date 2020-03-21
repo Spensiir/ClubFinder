@@ -48,14 +48,7 @@ class UserManager {
                 {
                     name: organization.name, 
                     email: organization.email,
-                    address: organization.address, 
-                    country: organization.country,
-                    city: organization.city,
-                    state: organization.state,
-                    zip: organization.zip,
                     website: organization.website,
-                    phone: organization.phone,
-                    description: organization.description,
                     username: organization.username,
                     admin: "False"
                 }

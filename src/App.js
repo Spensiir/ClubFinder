@@ -1,25 +1,26 @@
 import React from 'react';
 import "./css/app.css"
 import "./css/navigationBar.css";
-import AddForm from "./components/AddForm";
-import EditForm from "./components/EditForm";
+import AddForm from './components/AddForm.js';
+import EditForm from "./components/EditForm.js";
 import SimpleMap from "./components/Map";
 import Signin from './components/Signin.js';
 import OrgRegistration from './components/OrgRegistration.js';
-import AdminRegistration from './components/AdminRegistration.js';
 import Directory from './components/Directory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 import Profile from './components/Profile.js';
+
+var checkMove = 0;
 
 class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       logButton:
-      <div className="topnav">
-      <button onClick={openSignin}>Sign In To Manage Your Clubs</button>
-      <button onClick={openRegister}>Register Your Organization</button>
+      <div className="App-header2" id="mainHeader2">
+      <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
+      <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
       </div>,
       username:"user",
         markers : [],
@@ -43,11 +44,13 @@ class App extends React.Component {
   }
 
   onClickSubmit = async () => {
-    openSignin();
+    this.openSignin();
+    this.closeEverything();
   };
 
   onClickRegister = () => {
-    openRegister();
+    this.openRegister();
+    this.closeEverything();
   };
 
   onClickSignOut = async () => {
@@ -56,20 +59,28 @@ class App extends React.Component {
         markers: await locationManager.updateLocations()
     });
 
+    this.closeEverything();
+    this.signOutClosing();
     this.setState(
       {
         username: "user",
         logButton: 
-        <div className="topnav">
-          <button onClick={openSignin}>Sign In To Manage Your Clubs</button>
-          <button onClick={openRegister}>Register Your Organization</button>
+        <div className="App-header2" id="mainHeader2">
+          <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
+          <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
         </div>});
   };
 
   setAdmin = (isAdminStr) => {
-    this.setState({
-      isAdmin: isAdminStr
-    });
+    if(isAdminStr === false) {
+      this.setState({
+        isAdmin: false
+      });
+    } else {
+      this.setState({
+        isAdmin: true
+      });
+    }
   };
 
   usernameCallback = async (usernameData) => {
@@ -77,101 +88,124 @@ class App extends React.Component {
         markers: await locationManager.updateLocations()
     });
     this.setState({username: usernameData}, async () => this.setState(
-      { logButton: null}));
+      { logButton:
+        <div className="App-header2" id="mainHeader2">
+        <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
+        </div>}));
   };
 
   markerCallback = async (markerFromForm) => {
     await locationManager.addLocation(markerFromForm);
     this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
-};
+  };
 
-
-editMarkerCallback = async (markerFromForm) => {
+  editMarkerCallback = async (markerFromForm) => {
     await locationManager.editLocation(this.state.selected, markerFromForm);
     this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
-};
+  };
 
-selectedCallback = (markerFromMap) => {
+  selectedCallback = (markerFromMap) => {
     if (markerFromMap) {
       markerFromMap.color = "yellow";
     }  
     this.setState({selected : markerFromMap});
-};
+  };
 
-async removeMarker() {
+  async removeMarker() {
     await locationManager.removeLocation(this.state.selected);
     this.setState({markers : await locationManager.updateLocations(), selected: null});
-
-};
+  };
 
   render() {
-    var editDisabled = false;
-    if (this.state.selected !== null) {
-        editDisabled = true;
-    }
-    
-    var signedIn = "none";
-    if (this.state.username !== "user") {
+    var signedIn;
+    var adminSignedIn;
+    if (this.state.username !== "user" && this.state.isAdmin) {
+      signedIn = "none";
+      adminSignedIn = "block";
+    } else if (this.state.username !== "user") {
       signedIn = "block";
+      adminSignedIn = "none";
+    } else {
+      signedIn = "none";
+      adminSignedIn = "none";
     }
 
     return (
-      <div className="App">   
+      <div>
         <div className="shadow" id="shadow"/>
-          <header className="App-header">
-            <h1>HEMAA Club Finder</h1>
-            <h2 style={{display : signedIn}}>Welcome, {this.state.username}</h2>
-          </header>
-          {this.state.logButton}
-          <div className="topnav" style={{display : signedIn}}>
-            <button onClick={openProfile}>Profile</button>
-            <button onClick={openAddForm}>Add</button>
-            <button disabled={!editDisabled} onClick={openEditForm}>Edit</button>
-            <button onClick={this.removeMarker}>Remove</button>
-            <button onClick={openAdminRegistration}>Register Admin</button>
-            <button className="signout" onClick={this.onClickSignOut}>Sign Out</button>
+          <div className="App-header" id="mainHeader">
+            <h1 id="title">HEMAA Club Finder</h1>
+            <h2 id="welcome" style={{display : signedIn}}>Welcome, {this.state.username}</h2>
+            <button onClick={e => moveDirectory()} id="mover" className="btn2"><i className="fas fa-caret-left" id="arrow"></i></button>
           </div>
+          {this.state.logButton}
+          <div className="topnav" id="topNav" style={{display : signedIn}}>
+          </div>
+          <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
+            <button onClick={e => this.openRegister}>Add Organization</button>
+          </div>
+          <OrgRegistration callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory currMarkers={this.state.markers}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <Profile/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
-          <OrgRegistration callbackFromApp={this.usernameCallback}/>
-          <AdminRegistration callbackFromApp={this.usernameCallback}/>
       </div>
     )
   };
+
+  closeEverything () {
+    document.getElementById("details").style.display = "none";
+    this.setState({selected: null});
+  }
+
+  openSignin() {
+    document.getElementById("SigninForm").style.display = "block";
+    document.getElementById("shadow").style.display = "block";
+  }
+
+  openProfile() {
+    document.getElementById("ProfileForm").style.display = "block";
+    document.getElementById("shadow").style.display = "block";
 }
 
-function openSignin() {
-  document.getElementById("SigninForm").style.display = "block";
-  document.getElementById("shadow").style.display = "block";
+  openAdminRegistration() {
+    document.getElementById("AdminForm").style.display = "block";
+    document.getElementById("shadow").style.display = "block";
 }
 
-function openRegister() {
-  document.getElementById("OrgForm").style.display = "block";
-  document.getElementById("shadow").style.display = "block";
+  signOutClosing() {
+    document.getElementById("nonOrgButtons").style.display = "inline";
+    document.getElementById("orgButtons").style.display = "none";
+    document.getElementById("addPlus").style.display = "none";
+  }
 }
 
-function openProfile() {
-  document.getElementById("ProfileForm").style.display = "block";
-  document.getElementById("shadow").style.display = "block";
-}
-
-function openAdminRegistration() {
-  document.getElementById("AdminForm").style.display = "block";
-  document.getElementById("shadow").style.display = "block";
-}
-
-function openAddForm() {
-  document.getElementById("AddFormDiv").style.display = "block";
-  document.getElementById("shadow").style.display = "block";
-}
-
-function openEditForm() {
-  document.getElementById("EditFormDiv").style.display = "block";
-  document.getElementById("shadow").style.display = "block";
+function moveDirectory() {
+  if (checkMove === 0) {
+    document.getElementById("mainHeader").style.marginLeft = "-380px";
+    document.getElementById("mainHeader2").style.marginLeft = "-380px";
+    document.getElementById("searchInput").style.marginLeft = "-380px";
+    document.getElementById("UL").style.marginLeft = "-380px";
+    document.getElementById("UL2").style.marginLeft = "-380px";
+    document.getElementById("clubs").style.marginLeft = "-380px";
+    document.getElementById("clubs2").style.marginLeft = "-380px";
+    document.getElementById("mover").style.marginLeft = "30px";
+    document.getElementById("details").style.marginLeft = "-350px";
+    checkMove = 1;
+  } else {
+    document.getElementById("mainHeader").style.marginLeft = "0px";
+    document.getElementById("mainHeader2").style.marginLeft = "0px";
+    document.getElementById("searchInput").style.marginLeft = "0px";
+    document.getElementById("UL").style.marginLeft = "0px";
+    document.getElementById("UL2").style.marginLeft = "0px";
+    document.getElementById("clubs").style.marginLeft = "0px";
+    document.getElementById("clubs2").style.marginLeft = "0px";
+    document.getElementById("mover").style.marginLeft = "0px";
+    document.getElementById("details").style.marginLeft = "0px";
+    checkMove = 0;
+  }
 }
 
 export default App;

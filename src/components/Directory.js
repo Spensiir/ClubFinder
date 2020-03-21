@@ -1,8 +1,11 @@
 import React from "react"
 import "../css/directory.css"
-import {editDistance} from "../tools/stringSearch";
+import {editDistance} from "../tools/stringSearch"
 
 var keyVal = 0;
+var isUser = "none";
+var isNotOrg = "inline";
+var isOrg = "none";
 
 class Directory extends React.Component {
 
@@ -12,30 +15,71 @@ class Directory extends React.Component {
         {
             markers: this.props.currMarkers,
             filteredMarkers: this.props.currMarkers,
-            allWords: ""
+            allWords: "",
+            selected : this.props.currSelect
         }
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.currMarkers.length !== state.markers.length) {
-            return {markers: props.currMarkers}
+        if (props.currSelect !== state.selected) {
+            return {
+                selected : props.currSelect
+            };
+        } else if (props.currMarkers.length !== state.markers.length) {
+            return {
+                markers : props.currMarkers,
+                filteredMarkers: props.currMarkers
+            }
         }
-        return null
+        return null;
     }
 
+    onChildClick = (key) => {
+        var markers = this.state.markers;
+        if (key !== 0) {
+            for (var i = 0; i < this.state.markers.length; i++) {
+                if (key === markers[i].name) {
+                    if (this.state.selected) {
+                        this.state.selected.color = "red";
+                    }  
+                    this.props.updateSelected(markers[i]);
+                    this.setState({selected: this.props.currSelect});
+                }
+            }
+        } else {
+            this.setState({selected: this.props.currSelect});
+        }
+    };
+
     render() {
+        isSignedIn();
         return (
             <div id="Directory" className="directory">
-                <button onClick={activeBtn()} className="btn1 active">Clubs</button>
-                <button onClick={activeBtn()} className="btn1">Organizations</button>
-                <br/>
-                <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search.." name="search"></input>
-                <button className="btn2" type="submit"><i className="fa fa-search"></i></button>
-                <br/>
-                <ul>
-                { 
+                <div id="nonOrgButtons" style={{display:isNotOrg}}><br/>
+                <button onClick={activeBtn()} id="clubs" className="btn1 active">Clubs</button>
+                <button onClick={activeBtn()} id="orgs" className="btn1">Organizations</button>
+                <br/></div>
+                <div id="orgButtons" style={{display:isOrg}}><br/>
+                <button id="clubs2" className="btnGray">Clubs</button>
+                <button id="orgs2" className="btnGray">Organizations</button>
+                <br/></div>
+                <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search the Club List..." name="search"></input>
+                <i style={{display:isUser}} id="addPlus" onClick={e => this.openAddForm()} className="fas fa-plus">
+                <span className="tooltip">Add A New Club</span></i>
+                <ul id="UL">
+                {
                     this.state.filteredMarkers.map( (each) =>
-                        <li type="button" onClick={displayDetails(each.name)} key={keyVal++} id="listItem">
+                        <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
+                            <h2>{each.name}</h2>
+                            <h3>{each.address}</h3>
+                        </li>
+                    )
+                }
+                </ul>
+                <ul id="UL2">
+                {
+                    this.state.filteredMarkers.map( (each) =>
+                        <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
                             <h2>{each.name}</h2>
                             <h3>{each.address}</h3>
                         </li>
@@ -67,18 +111,19 @@ class Directory extends React.Component {
             if (name.toUpperCase().includes(input.toUpperCase()) || address.toUpperCase().includes(input.toUpperCase())) {
                 markers[i].dist = 0.0;
             }
-            //console.log(markers[i].dist);
         }
 
         markers = markers.filter(function (a) { return a.dist < .75});
         markers.sort(function (a, b) {
-            if (a.dist <= b.dist) {
-                return -1;
-            }
-            return 1});
+            return a.dist - b.dist
+        })
         this.setState({filteredMarkers : markers});
     }
 
+    openAddForm() {
+        document.getElementById("AddFormDiv").style.display = "block";
+        document.getElementById("shadow").style.display = "block";
+    }
 }
 
 function activeBtn() {
@@ -89,11 +134,35 @@ function activeBtn() {
         var current = document.getElementsByClassName("active");
         current[0].className = current[0].className.replace(" active", "");
         this.className += " active";
+        checkTab();
     });
 }}
 
-function displayDetails(name) {
-    // console.log(name);
+function isSignedIn() {
+    if (document.getElementById("topNav") != null) {
+        if (document.getElementById("topNav2").style.display == "block" || document.getElementById("topNav").style.display == "block") {
+            isUser = "initial";
+        } else {
+            isUser = "none";
+        }
+        if (document.getElementById("topNav").style.display == "block") {
+            isNotOrg = "none";
+            isOrg = "inline";
+        } else {
+            isNotOrg = "inline";
+            isOrg = "none";
+        }
+    }
+}
+
+function checkTab() {
+    if (document.getElementById("clubs").className === "btn1 active") {
+        document.getElementById("UL").style.display = "block";
+        document.getElementById("UL2").style.display = "none";
+    } else {
+        document.getElementById("UL").style.display = "none";
+        document.getElementById("UL2").style.display = "block";
+    }
 }
 
 export default Directory;
