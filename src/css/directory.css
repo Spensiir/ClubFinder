@@ -2,23 +2,40 @@
     position: fixed;
     float: left;
     z-index: 2;
+    top:78px;
     overflow: hidden;
-    margin-top:66px;
-    margin-left:15px;
     min-width:400px;
     pointer-events:none;
   }
 
   .directory button.btn1 {
-    display: inline-block;
+    display: inline;
+    background-color:white;
     color: black;
     text-align: center;
-    padding: 6px 45px;
+    padding: 6px 13.6%;
+    text-decoration: none;
+    font-size: 15px;
+    font-family: "Roboto", serif;
+    cursor:pointer;
+    pointer-events:all;
+    border:thin solid lightgray;
+    transition:0.5s;
+  }
+
+  .directory button.btnGray {
+    display: inline;
+    background-color:white;
+    color: lightgray;
+    text-align: center;
+    padding: 6px 13.3%;
     text-decoration: none;
     font-size: 17px;
     font-family: "Times New Roman", Times, serif;
-    margin-top: 10px;
+    cursor:default;
     pointer-events:all;
+    border:thin solid lightgray;
+    transition:0.5s;
   }
 
   /* Style the "active" element to highlight the current page */
@@ -27,20 +44,72 @@
     color: white;
   }
 
+  .directory button.btn1:focus {
+    outline:none;
+  }
+
+  .directory button.btnGray:focus {
+    outline:none;
+  }
+
   .directory form {
     box-sizing: border-box;
   }
 
   /* Style the search field */
   .directory input[type=text] {
-    padding: 10px;
+    position:relative;
+    display:inline;
+    padding: 2.5%;
     font-size: 15px;
     border: thin solid grey;
-    float: left;
-    width: 75%;
+    width: 82.1%;
     background: white;
     pointer-events:all;
+    transition:0.5s;
   }
+
+  .directory input[type=text]:focus {
+    outline:none;
+  }
+
+  .directory i {
+    position:relative;
+    right:7%;
+    top:4px;
+    font-size:24px;
+    color:gray;
+    pointer-events:all;
+    transition:0.4s;
+    cursor:pointer;
+  }
+
+  .directory i:hover {
+    color:darkblue;
+  }
+
+  .directory i .tooltip {
+    opacity:0;
+    width: 10px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: fixed;
+    z-index: 1;
+    transition:0.4s;
+    font-size:2px;
+    top:120px;
+    font-family:'Roboto', sans-serif;
+  }
+
+  .directory i:hover .tooltip {
+      opacity:1;
+      width:120px;
+      font-size:14px;
+  }
+
 
   /* Style the submit button */
   .directory button.btn2 {
@@ -56,6 +125,7 @@
     cursor: pointer;
     margin:0;
     pointer-events:all;
+    transition:0.5s;
   }
       
   .directory button.btn2:hover {
@@ -71,22 +141,25 @@
 
   .directory ul {
     position:fixed;
-    top:220px;
-    height:68%;
-    width:281px;
+    margin-top:0px;
+    width:310px;
+    max-height:80%;
     overflow:hidden;
     overflow-y: auto;
     pointer-events:all;
     background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
+    opacity:0.96;
+    transition:0.5s;
+    box-shadow: 3px 3px 5px gray;
   }
 
   /* Style the list items */
   .directory ul li {
     position: relative;
     padding: 2px 2px 2px 4px;
-    width:315px;
+    width:344px;
     margin-left:-40px;
-    background: linear-gradient(rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%);
+    background: white;
     font-size: 18px;
     list-style-type:none;
     border-bottom:thin solid lightgray;
@@ -95,10 +168,11 @@
   }
 
   .directory ul li:hover {
-    background: linear-gradient(rgb(243, 243, 243) 0%,rgb(240, 239, 239) 47%,rgb(235, 233, 233) 100%);
+    background: linear-gradient(rgb(253, 253, 253) 0%,rgb(243, 253, 255) 47%,rgb(237, 249, 253) 100%);
   }
 
   .directory ul li h2 {
+    color:rgba(0, 74, 160, 0.8);
     margin-top:7px;
     margin-left:5px;
     margin-right:5px;
@@ -116,4 +190,18 @@
     font-family: 'Roboto', sans-serif;
     font-weight:400;
     color:gray;
+  }
+
+  ::-webkit-scrollbar {
+    width:6px;
+    height:3px;
+    border-left:0;
+    background:rgba(0,0,0,0.1);
+  }
+  ::-webkit-scrollbar-track {
+    background:whitesmoke;
+  }
+  ::-webkit-scrollbar-thumb {
+    background:rgba(2, 106, 224, 0.8);
+    border-radius:0;
   }

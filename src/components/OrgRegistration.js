@@ -6,7 +6,7 @@ class OrgRegistration extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {org_name: "", email: "", address: "", city : "", st : "", zip: "", country: "", website: "", phone:"", description:"", username: "", password:"", password2:""};
+        this.state = {org_name: "", email: "", website: "", username: "", password:"", password2:""};
         this.submitForm = this.submitForm.bind(this);
     }
 
@@ -16,29 +16,8 @@ class OrgRegistration extends React.Component {
     setEmail(event) {
         this.setState({email : event.target.value});
     }
-    setAddress(event) {
-        this.setState({address: event.target.value});
-    }
-    setCountry(event) {
-        this.setState({zip: event.target.value});
-    }
-    setCity(event) {
-        this.setState({city: event.target.value});
-    }
-    setSt(event) {
-        this.setState({st: event.target.value});
-    }
-    setZip(event) {
-        this.setState({zip: event.target.value});
-    }
     setWebsite(event) {
         this.setState({website: event.target.value});
-    }
-    setPhone(event) {
-        this.setState({phone: event.target.value});
-    }
-    setDescription(event) {
-        this.setState({phone: event.target.value});
     }
     setUsername(event) {
         this.setState({username: event.target.value});
@@ -56,14 +35,7 @@ class OrgRegistration extends React.Component {
         {
             name: this.state.org_name, 
             email: this.state.email,
-            address: this.state.address, 
-            country: this.state.country,
-            city: this.state.city,
-            state: this.state.st,
-            zip: this.state.zip,
             website: this.state.website,
-            phone: this.state.phone,
-            description: this.state.description,
             username: this.state.username,
             password: this.state.password
         }
@@ -97,39 +69,21 @@ class OrgRegistration extends React.Component {
                     <h1> Register an Organization </h1>
                     <label><b>Organization Name</b></label>
                     <input type="text"  name="club_name" onChange={e =>this.setOrgName(e)} required/>
-                    
-                    <label><b>Address</b></label>
-                    <input type="text" name="address" onChange={e => this.setAddress(e)} required/>
-
-                    <label><b>Country</b></label>
-                    <input type="text" style={{width:150}}  name="country" onChange={e => this.setCity(e)} required/>
-
-                    <label><b>City</b></label>
-                    <input type="text" style={{width:150}}  name="city" onChange={e => this.setCity(e)} required/>
-
-                    <label><b>State</b></label>
-                    <input type="text" style={{width:30}} name="state" onChange={e => this.setSt(e)} required/>
-                    <br/>
-                    <label><b>Zip</b></label>
-                    <input type="text" style={{width:90}} name="zip" onChange={e => this.setZip(e)} required/>
-
-                    <label><b>Phone</b></label>
-                    <input type="text" style={{width:200}} name="phone" onChange={e => this.setPhone(e)} required/>
 
                     <label><b>Website</b></label>
-                    <input type="text" style={{width:200}} name="website" onChange={e => this.setWebsite(e)} required/>
+                    <input type="text" name="website" onChange={e => this.setWebsite(e)} required/>
 
                     <label><b>Email</b></label>
-                    <input type="text" name="email" style={{width:300}} onChange={e => this.setEmail(e)} required/>
+                    <input type="text" name="email" style={{width:"31%"}} onChange={e => this.setEmail(e)} required/>
 
                     <label><b>Username</b></label>
-                    <input type="text" style={{width:325}} name="username" onChange={e => this.setUsername(e)} required/>
+                    <input type="text" style={{width:"30.3%"}} name="username" onChange={e => this.setUsername(e)} required/>
                     <br/>
                     <label><b>Password</b></label>
-                    <input type="password" style={{width:270}} name="password" onChange={e => this.setPassword(e)} required/>
+                    <input type="password" style={{width:"27.2%", padding:"8px"}} name="password" onChange={e => this.setPassword(e)} required/>
 
                     <label><b>Confirm Password</b></label>
-                    <input type="password" style={{width:263}} name="password2" onChange={e => this.setPassword2(e)} required/>
+                    <input type="password" style={{width:"22.6%", padding:"8px"}} name="password2" onChange={e => this.setPassword2(e)} required/>
 
                     <br/>
                     <button type="submit" className="submit">Submit</button>

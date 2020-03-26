@@ -21,7 +21,8 @@
     font-size: 17px;
     font-family: "Times New Roman", Times, serif;
     margin-left:8px;
-    pointer-events:auto;
+    pointer-events:none;
+    transition:0.3s;
   }
 
   .topnav button.signout {
