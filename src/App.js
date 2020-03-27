@@ -10,6 +10,7 @@ import Directory from './components/Directory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 import Profile from './components/Profile.js';
+import { organizationManager } from './managers/OrganizationManager';
 
 var checkMove = 0;
 
@@ -25,7 +26,9 @@ class App extends React.Component {
       username:"user",
         markers : [],
         selected : null,
-        isAdmin : null
+        isAdmin : null,
+        user : userManager.getUser(),
+        organization : organizationManager.getOrganization(),
       };
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
@@ -35,6 +38,7 @@ class App extends React.Component {
     this.selectedCallback = this.selectedCallback.bind(this);
     this.editMarkerCallback = this.editMarkerCallback.bind(this);
     this.setAdmin = this.setAdmin.bind(this);
+    this.editOrganizationCallback = this.editOrganizationCallback.bind(this);
   }
 
   async componentDidMount() {
@@ -83,15 +87,30 @@ class App extends React.Component {
     }
   };
 
-  usernameCallback = async (usernameData) => {
+  usernameCallback = async (username, password) => {
+    var confirmed = await userManager.fireSignIn(username, password);
+        if (confirmed[0]) {
+            window.currUser = username;
+            this.setAdmin(confirmed[2]);
+            this.onClickSubmit();
+        } else {
+            return confirmed;
+        }
     this.setState({
-        markers: await locationManager.updateLocations()
+        markers: await locationManager.updateLocations(),
+        user: userManager.getUser(),
+        organization: await organizationManager.getOrganization(),
     });
-    this.setState({username: usernameData}, async () => this.setState(
+    console.log("*" + this.state.user.email);
+    console.log("*" + this.state.organization.website);
+
+    this.setState({username: username}, async () => this.setState(
       { logButton:
         <div className="App-header2" id="mainHeader2">
         <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
+        <button id="profileButton" style={{borderRight:"thin solid gray"}} onClick={this.openProfile}><b>Profile</b></button>
         </div>}));
+        return confirmed;
   };
 
   markerCallback = async (markerFromForm) => {
@@ -103,6 +122,11 @@ class App extends React.Component {
     await locationManager.editLocation(this.state.selected, markerFromForm);
     this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
   };
+
+  editOrganizationCallback = async (orgFromForm) => {
+    await organizationManager.editOrganization(this.state.organization, orgFromForm);
+    this.setState({organization : orgFromForm});
+  }
 
   selectedCallback = (markerFromMap) => {
     if (markerFromMap) {
@@ -148,7 +172,7 @@ class App extends React.Component {
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory currMarkers={this.state.markers}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <Profile/>
+          <Profile currentUser = {this.state.user} currentOrg = {this.state.organization} updateOrg = {this.editOrganizationCallback.bind(this)} />
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
       </div>
@@ -162,6 +186,11 @@ class App extends React.Component {
 
   openSignin() {
     document.getElementById("SigninForm").style.display = "block";
+    document.getElementById("shadow").style.display = "block";
+  }
+
+  openRegister() {
+    document.getElementById("OrgForm").style.display = "block";
     document.getElementById("shadow").style.display = "block";
   }
 

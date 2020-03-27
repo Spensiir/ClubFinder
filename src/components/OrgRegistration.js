@@ -99,7 +99,6 @@ function closeOrgForm() {
     document.getElementById("shadow").style.display = "none";
     document.getElementById("orgFormDiv").reset();
     window.formOpen = false;
-
 }
 
 export default OrgRegistration;

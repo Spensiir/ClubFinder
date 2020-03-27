@@ -50,9 +50,14 @@ class OrganizationManager {
         }
     }
 
-    async getOrganization(userEmail) {
-        let organization;
-        var req = config.SERVER_URL + "/organizations/getOrganizations" + "/" + userEmail;
+    async getOrganization() {
+        var organization;
+        let uid;
+        if (userManager.getUser() !== null && userManager.getUser() !== undefined) {
+            console.log("**" + userManager.getUser().email);
+            uid = userManager.getUser().uid;
+        } 
+        var req = config.SERVER_URL + "/organizations/getOrganization/" + uid;
         await axios.get(req)
             .then(res => {
                 organization = res.data;
@@ -60,7 +65,7 @@ class OrganizationManager {
             .catch(function (error) {
                 organization = "";
             });
-            return organization;
+        return organization;
     }
 
     async updateOrganizations() {
