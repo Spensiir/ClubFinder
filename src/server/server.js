@@ -1,8 +1,9 @@
 const express = require('express')
 const https = require('https')
 const request = require('request');
-const app = express()
-const port = 3001
+const app = express();
+const port = 3001;
+const axios = require("axios");
 var keys = require('./keys'); // get file with all api keys
 var firebase = require("firebase/app");
 var bodyParser = require('body-parser');
@@ -44,10 +45,10 @@ app.use(function(req, res, next) {
     };
 });
 
-app.get('/locations/getLocations', function (req, res) {
+app.get('/locations/getLocations/currCoords/:lat/:lng', function(req, res) {
     var ref = firebase.database().ref('locations');
     var locations = [];
-    ref.once('value').then(function(snapshot) {
+    ref.once('value').then(async function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             locations.push({name: childSnapshot.val()["name"],
                 address: childSnapshot.val()["address"],
@@ -62,14 +63,14 @@ app.get('/locations/getLocations', function (req, res) {
                 color: childSnapshot.val()["color"],
                 orgEmail: childSnapshot.val()["orgEmail"]});
         });
-        res.send(locations);
+        res.send(await getDistances(locations, req.params.lat, req.params.lng));
     });
 });
 
-app.get('/locations/getLocations/:email', function (req, res) {
+app.get('/locations/getLocations/currCoords/:lat/:lng/:email', function (req, res) {
     var ref = firebase.database().ref('locations');
     var locations = [];
-    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(function(snapshot) {
+    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(async function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             locations.push({name: childSnapshot.val()["name"],
                 address: childSnapshot.val()["address"],
@@ -84,7 +85,7 @@ app.get('/locations/getLocations/:email', function (req, res) {
                 color: childSnapshot.val()["color"],
                 orgEmail: childSnapshot.val()["orgEmail"]});
         });
-        res.send(locations);
+        res.send(await getDistances(locations, req.params.lat, req.params.lng));
     })
 });
 
@@ -202,7 +203,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 /**
  * Route converts address into lat and long coordinates
  */
-app.get('/location/getCoords/address/:address', function (req, res) {
+app.get('/locations/getCoords/address/:address', function (req, res) {
     var location = null;
 
     request('https://maps.googleapis.com/maps/api/geocode/json?address=' + req.params.address + '&key=' + keys.GEOCODE_API_KEY, function(err, result, body) {
@@ -211,5 +212,41 @@ app.get('/location/getCoords/address/:address', function (req, res) {
         res.send(location);
     });
 })
+
+async function getDistances(markers, lat, lng) {
+    var newMarkers;
+    var origins = lat + "," + lng + "&";
+    var destinations = "destinations=";
+
+    markers.forEach(marker => {
+        destinations += marker.lat + "%2C" + marker.lng + "%7C";
+    });
+    destinations = destinations.substr(0, destinations.length - 3);
+
+    await axios.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + origins + destinations + "&key=" + keys.GEOCODE_API_KEY)
+        .then(res => {
+            var results = res.data;
+            for (var i=0; i < markers.length; i++) {
+                if (results.rows[0].elements[i].status == 'OK') {
+                    markers[i].distance = results.rows[0].elements[i].distance.text;
+                } else {
+                    markers[i].distance = "N/A"
+                }
+            }
+
+            markers.sort(function (a, b) {
+                if (a.distance == "N/A") { return 10000;}
+                if (b.distance == "N/A") {return -10000;}
+                return parseFloat(a.distance.replace(',', '')) - parseFloat(b.distance.replace(',', ''));
+            });
+
+            newMarkers = markers;
+        }).catch(err => {
+            console.log(err);
+            newMarkers = markers;
+        });
+    //console.log(newMarkers);
+    return newMarkers;
+}
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

@@ -41,10 +41,10 @@ class UserManager {
         var confirmed;
         var err; 
         await firebase.auth().createUserWithEmailAndPassword(organization.email, organization.password)
-        .then(() => {
+        .then(async () => {
             user = firebase.auth().currentUser.uid;
 
-            firebase.database().ref('organizations/' + user).set(
+            await firebase.database().ref('organizations/' + user).set(
                 {
                     name: organization.name, 
                     email: organization.email,
@@ -52,12 +52,8 @@ class UserManager {
                     username: organization.username,
                     admin: "False"
                 }
-                )
-            .then(result => {
-            console.log(organization)
-            })
-            .catch(function (error) {
-            console.log(error);
+                ).catch(function (error) {
+                    console.log(error);
             });
             confirmed = true;
             err = "Ok.";

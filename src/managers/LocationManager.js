@@ -1,6 +1,6 @@
 import {config} from '../tools/config.js';
 import axios from 'axios';
-import {userManager} from "./UserManager.js";
+import {userManager} from "./UserManager";
 
 class LocationManager {
     locations;
@@ -15,7 +15,6 @@ class LocationManager {
             .catch(function (error) {
                 console.log(error);
             });
-        this.locations = await this.updateLocations();
         return null;
     }
 
@@ -34,7 +33,6 @@ class LocationManager {
             .catch(function (error) {
                 console.log(error);
             });
-        this.locations = await this.updateLocations();
         return null;
     }
 
@@ -47,13 +45,13 @@ class LocationManager {
         }
     }
 
-    async updateLocations() {
-        var req = config.SERVER_URL + "/locations/getLocations";
+    async updateLocations(userManager, isAdmin, lat, lng) {
+        var req = config.SERVER_URL + "/locations/getLocations/currCoords/" + lat + '/' + lng;
         let newLocations;
         var currUser = userManager.getUser();
 
         // if a user is signed in then append the user id to the request
-        if (currUser) {
+        if (currUser && !isAdmin) {
             req += "/" + currUser.email;
         }
 
@@ -64,6 +62,8 @@ class LocationManager {
                 newLocations = []; // if an error occurs the no locations will appear
                 console.log(error);
             });
+
+        this.locations = newLocations;
         return newLocations;
     }
 }

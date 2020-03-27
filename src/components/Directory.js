@@ -80,7 +80,7 @@ class Directory extends React.Component {
                 {
                     this.state.filteredMarkers.map( (each) =>
                         <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
-                            <h2>{each.name}</h2>
+                            <h2>{each.name} ({each.distance})</h2>
                             <h3>{each.address}</h3>
                         </li>
                     )

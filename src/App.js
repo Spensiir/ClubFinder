@@ -24,8 +24,11 @@ class App extends React.Component {
       username:"user",
         markers : [],
         selected : null,
-        isAdmin : null
+        isAdmin : null,
+        currLat : null,
+        currLng : null,
       };
+
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
     this.onClickRegister = this.onClickRegister.bind(this);
@@ -37,8 +40,11 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    this.setState({
-        markers: await locationManager.updateLocations()
+    await navigator.geolocation.getCurrentPosition(async position => {
+        this.setState({currLat: position.coords.latitude, currLng: position.coords.longitude});
+        this.setState({
+            markers: await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)
+        });
     });
   }
 
@@ -55,7 +61,7 @@ class App extends React.Component {
   onClickSignOut = async () => {
     await userManager.fireSignOut();
     this.setState({
-        markers: await locationManager.updateLocations()
+        markers: await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)
     });
 
     this.closeEverything();
@@ -84,7 +90,7 @@ class App extends React.Component {
 
   usernameCallback = async (usernameData) => {
     this.setState({
-        markers: await locationManager.updateLocations()
+        markers: await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)
     });
     this.setState({username: usernameData}, async () => this.setState(
       { logButton:
@@ -95,12 +101,12 @@ class App extends React.Component {
 
   markerCallback = async (markerFromForm) => {
     await locationManager.addLocation(markerFromForm);
-    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+    this.setState({markers : await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
   };
 
   editMarkerCallback = async (markerFromForm) => {
     await locationManager.editLocation(this.state.selected, markerFromForm);
-    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+    this.setState({markers : await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
   };
 
   selectedCallback = (markerFromMap) => {
@@ -112,7 +118,7 @@ class App extends React.Component {
 
   async removeMarker() {
     await locationManager.removeLocation(this.state.selected);
-    this.setState({markers : await locationManager.updateLocations(), selected: null});
+    this.setState({markers : await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: null});
   };
 
   render() {
@@ -143,7 +149,7 @@ class App extends React.Component {
           <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
             <button onClick={e => this.openRegister}>Add Organization</button>
           </div>
-          <OrgRegistration callbackFromApp={this.usernameCallback}/>
+          <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <SimpleMap removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
