@@ -42,7 +42,7 @@ class OrganizationManager {
     }
 
     async getOrganizations() {
-        console.log("location manger: line 45");
+        console.log("location manager: line 45");
         if (await this.organizations) {
             return this.organizations;
         } else {
@@ -53,12 +53,6 @@ class OrganizationManager {
     async updateOrganizations() {
         var req = config.SERVER_URL + "/organizations/getOrganizations";
         let newOrganizations;
-        var currUser = userManager.getUser();
-
-        // if a user is signed in then append the user id to the request
-        if (currUser) {
-            req += "/" + currUser.email;
-        }
 
         await axios.get(req)
             .then(res => {

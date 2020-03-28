@@ -9,6 +9,7 @@ import OrgRegistration from './components/OrgRegistration.js';
 import Directory from './components/Directory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
+import organizationManager from "./managers/OrganizationManager";
 
 var checkMove = 0;
 
@@ -23,6 +24,7 @@ class App extends React.Component {
       </div>,
       username:"user",
         markers : [],
+        organizations : [],
         selected : null,
         isAdmin : null
       };
@@ -38,7 +40,8 @@ class App extends React.Component {
 
   async componentDidMount() {
     this.setState({
-        markers: await locationManager.updateLocations()
+        markers: await locationManager.updateLocations(),
+        organizations: await organizationManager.updateOrganizations()
     });
   }
 
@@ -84,7 +87,8 @@ class App extends React.Component {
 
   usernameCallback = async (usernameData) => {
     this.setState({
-        markers: await locationManager.updateLocations()
+        markers: await locationManager.updateLocations(),
+        organizations: await organizationManager.updateOrganizations()
     });
     this.setState({username: usernameData}, async () => this.setState(
       { logButton:
@@ -145,7 +149,7 @@ class App extends React.Component {
           </div>
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <Directory organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <SimpleMap removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
@@ -172,6 +176,9 @@ class App extends React.Component {
     document.getElementById("nonOrgButtons").style.display = "inline";
     document.getElementById("orgButtons").style.display = "none";
     document.getElementById("addPlus").style.display = "none";
+    document.getElementById("clubs").className = "btn1 active";
+    document.getElementById("orgs").className = "btn1";
+
   }
 }
 
