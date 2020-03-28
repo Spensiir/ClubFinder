@@ -14,6 +14,7 @@ class Directory extends React.Component {
         this.state = 
         {
             markers: this.props.currMarkers,
+            orgs:this.props.organizations,
             filteredMarkers: this.props.currMarkers,
             allWords: "",
             selected : this.props.currSelect
@@ -28,6 +29,7 @@ class Directory extends React.Component {
         } else if (props.currMarkers.length !== state.markers.length) {
             return {
                 markers : props.currMarkers,
+                orgs: props.organizations,
                 filteredMarkers: props.currMarkers
             }
         }
@@ -76,12 +78,12 @@ class Directory extends React.Component {
                     )
                 }
                 </ul>
-                <ul id="UL2">
+                <ul style={{display:"none"}} id="UL2">
                 {
-                    this.state.filteredMarkers.map( (each) =>
-                        <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
+                    this.state.orgs.map( (each) =>
+                        <li type="button" key={keyVal++} id="listItem">
                             <h2>{each.name}</h2>
-                            <h3>{each.address}</h3>
+                            <h3>{each.website}</h3>
                         </li>
                     )
                 }
@@ -148,6 +150,8 @@ function isSignedIn() {
         if (document.getElementById("topNav").style.display == "block") {
             isNotOrg = "none";
             isOrg = "inline";
+            document.getElementById("UL").style.display = "block";
+            document.getElementById("UL2").style.display = "none";
         } else {
             isNotOrg = "inline";
             isOrg = "none";

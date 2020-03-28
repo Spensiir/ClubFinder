@@ -106,14 +106,17 @@ class AddForm extends React.Component {
                     <label><b>Address</b></label>
                     <input type="text" name="address" onChange={e => this.setAddress(e)} required/>
 
+                    <label><b>Country</b></label>
+                    {countries}
+                    
+                    <label><b>State / Province</b></label>
+                    <input type="text" style={{width:"23.7%"}} className="state" name="state" onChange={e => this.setSt(e)} required/>
+                    <br/>
                     <label><b>City</b></label>
-                    <input type="text" style={{width:"36.7%"}} className="city" name="city" onChange={e => this.setCity(e)} required/>
-
-                    <label><b>State</b></label>
-                    <input type="text" style={{width:"4%"}} className="state" name="state" onChange={e => this.setSt(e)} required/>
+                    <input type="text" style={{width:"48.2%"}} className="city" name="city" onChange={e => this.setCity(e)} required/>
 
                     <label><b>Zip</b></label>
-                    <input type="text" style={{width:"11.8%"}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
+                    <input type="text" style={{width:"20.2%"}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
                     <br/>
                     <label><b>Website</b></label>
                     <input type="text" style={{width:"32.5%"}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
@@ -129,7 +132,7 @@ class AddForm extends React.Component {
                     <br/>
                     <label><b>Weapons / Studies</b></label>
                     <input type="text"className="website" name="website" onChange={e => this.setWeapons(e)}/>
-                    <br/>
+
                     <label><b>Club Description</b></label>
                     <textarea type="text" className="description" name="description" onChange={e => this.setDescription(e)}/>
 
