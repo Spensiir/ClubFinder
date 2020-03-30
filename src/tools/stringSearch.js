@@ -9,14 +9,14 @@ export function editDistance(str1, str2) {
         T[0][i] = i;
     }
 
-    for (var i=0; i <= str1.length; i++) {
+    for (i=0; i <= str1.length; i++) {
         T[i][0] = i;
     }
 
     //solving it bottom-up manner
    var m = str1.length;
    var n = str1.length;
-   for (var i = 1; i <= m; i++) {
+   for (i = 1; i <= m; i++) {
        for (var j = 1; j <= n; j++) {
            //If last characters are matching, ignore the last character
            // then the solution will be same as without the last character.

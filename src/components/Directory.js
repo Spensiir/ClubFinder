@@ -23,11 +23,17 @@ class Directory extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.currSelect !== state.selected) {
+        if (props.currSelect !== state.selected && !props.equalMarkers(props.currMarkers, state.markers)) {
+            return {
+                selected : props.currSelect,
+                markers : props.currMarkers,
+                filteredMarkers: props.currMarkers
+            };
+        } else if (props.currSelect !== state.selected) {
             return {
                 selected : props.currSelect
             };
-        } else if (props.currMarkers.length !== state.markers.length) {
+        } else if (!props.equalMarkers(props.currMarkers, state.markers)) {
             return {
                 markers : props.currMarkers,
                 orgs: props.organizations,
@@ -43,14 +49,18 @@ class Directory extends React.Component {
             for (var i = 0; i < this.state.markers.length; i++) {
                 if (key === markers[i].name) {
                     if (this.state.selected) {
-                        this.state.selected.color = "red";
-                    }  
+                        var selectedMarker = this.state.selected;
+                        selectedMarker.color = "red";
+                        this.setState({selected : selectedMarker});
+                        console.log("selected: ", this.state.selected);
+                    }
                     this.props.updateSelected(markers[i]);
-                    this.setState({selected: this.props.currSelect});
+
+                    this.setState({selected: this.props.currSelect, zoom: 9});
                 }
             }
         } else {
-            this.setState({selected: this.props.currSelect});
+            this.setState({selected: this.props.currSelect, zoom: 9});
         }
     };
 
@@ -86,7 +96,7 @@ class Directory extends React.Component {
                 {
                     this.state.filteredMarkers.map( (each) =>
                         <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
-                            <h2>{each.name}</h2>
+                            <h2>{each.name} ({each.distance})</h2>
                             <h3>{each.address}</h3>
                         </li>
                     )
@@ -94,6 +104,7 @@ class Directory extends React.Component {
                 </ul>
                 <ul style={{display:"none"}} id="UL2">
                 {
+
                     this.state.orgs.map( (each) =>
                         <li type="button" onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
                             <h2>{each.name}</h2>
@@ -156,12 +167,12 @@ function activeBtn() {
 
 function isSignedIn() {
     if (document.getElementById("topNav") != null) {
-        if (document.getElementById("topNav2").style.display == "block" || document.getElementById("topNav").style.display == "block") {
+        if (document.getElementById("topNav2").style.display === "block" || document.getElementById("topNav").style.display === "block") {
             isUser = "initial";
         } else {
             isUser = "none";
         }
-        if (document.getElementById("topNav").style.display == "block") {
+        if (document.getElementById("topNav").style.display === "block") {
             isNotOrg = "none";
             isOrg = "inline";
             document.getElementById("UL").style.display = "block";
@@ -182,5 +193,4 @@ function checkTab() {
         document.getElementById("UL2").style.display = "block";
     }
 }
-
 export default Directory;

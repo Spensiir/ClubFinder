@@ -71,6 +71,7 @@ class OrganizationManager {
     async updateOrganizations() {
         var req = config.SERVER_URL + "/organizations/getOrganizations";
         let newOrganizations;
+        var currUser = userManager.getUser();
 
         await axios.get(req)
             .then(res => {
