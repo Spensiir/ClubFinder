@@ -128,23 +128,48 @@ app.delete('/locations/removeLocation', function(req, res) {
 });
 
 /////////////////////////////////////////////////////////
+app.get('/organizations/getOrganization/:uid', function(req, res) {
+    var ref;
+    try {
+        ref = firebase.database().ref('organizations/'+req.params.uid);
+    } catch(TypeError) {
+        console.log("User has not been set yet");
+    }
+    ref.once('value').then(function(snapshot) {
+        var organization = {
+            name: snapshot.val()["name"],
+            address: snapshot.val()["address"],
+            country: snapshot.val()["country"],
+            city: snapshot.val()["city"],
+            state: snapshot.val()["state"],
+            zip: snapshot.val()["zip"],
+            description: snapshot.val()["description"],
+            website: snapshot.val()["website"],
+            email: snapshot.val()["email"],
+            username: snapshot.val()["username"],
+        }
+        res.send(organization);
+    });
+})
 app.get('/organizations/getOrganizations', function (req, res) {
     var ref = firebase.database().ref('organizations');
     var organizations = [];
     ref.once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-            organizations.push({
-                name: childSnapshot.val()["name"],
-                address: childSnapshot.val()["address"],
-                country: childSnapshot.val()["country"],
-                city: childSnapshot.val()["city"],
-                state: childSnapshot.val()["state"],
-                zip: childSnapshot.val()["zip"],
-                description: childSnapshot.val()["description"],
-                website: childSnapshot.val()["website"],
-                email: childSnapshot.val()["email"],
-                username: childSnapshot.val()["username"],
-            });
+            if (childSnapshot.val()["admin"] == "False") {
+                    organizations.push({
+                        name: childSnapshot.val()["name"],
+                        address: childSnapshot.val()["address"],
+                        country: childSnapshot.val()["country"],
+                        city: childSnapshot.val()["city"],
+                        state: childSnapshot.val()["state"],
+                        zip: childSnapshot.val()["zip"],
+                        description: childSnapshot.val()["description"],
+                        website: childSnapshot.val()["website"],
+                        email: childSnapshot.val()["email"],
+                        username: childSnapshot.val()["username"],
+                });
+            }
         });
         res.send(organizations);
     });

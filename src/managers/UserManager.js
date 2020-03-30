@@ -23,7 +23,7 @@ class UserManager {
             .then(res => {
                 adminStr = res.data;
             }).catch(function (error) {
-                adminStr = "false"; // if an error occurs the no locations will appear
+                adminStr = "false"; // if an error occurs then no locations will appear
                 console.log(error);
             });
         }

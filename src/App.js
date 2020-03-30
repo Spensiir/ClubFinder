@@ -9,6 +9,8 @@ import OrgRegistration from './components/OrgRegistration.js';
 import Directory from './components/Directory.js';
 import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
+import Profile from './components/Profile.js';
+import { organizationManager } from './managers/OrganizationManager';
 
 var checkMove = 0;
 
@@ -152,6 +154,14 @@ class App extends React.Component {
         }
         this.setState({selected : markerFromMap});
     };
+      
+    organizationCallback = async (orgClicked) => {
+      var newlocs = await locationManager.getClickedLocations(orgClicked)
+      this.setState({
+        markers: newlocs
+      })
+    
+  }
 
     async removeMarker() {
         await locationManager.removeLocation(this.state.selected);
@@ -188,7 +198,7 @@ class App extends React.Component {
                 </div>
                 <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
                 <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-                <Directory equalMarkers={this.equalMarkers.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+                <Directory equalMarkers={this.equalMarkers.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected} updateMarkers={this.organizationCallback.bind(this)/>
                 <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
                 <AddForm updateMarkers={this.markerCallback.bind(this)}/>
                 <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />

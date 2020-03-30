@@ -68,6 +68,22 @@ class LocationManager {
         this.locations = newLocations;
         return newLocations;
     }
+
+    async getClickedLocations(email) {
+        var req = config.SERVER_URL + "/locations/getLocations";
+        let newLocations;
+
+        req += "/" + email;
+
+        await axios.get(req)
+            .then(res => {
+                newLocations = res.data;
+            }).catch(function (error) {
+                newLocations = []; // if an error occurs the no locations will appear
+                console.log(error);
+            });
+        return newLocations;
+    }
 }
 
 let locationManager = new LocationManager();

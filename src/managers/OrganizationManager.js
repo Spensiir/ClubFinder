@@ -42,12 +42,30 @@ class OrganizationManager {
     }
 
     async getOrganizations() {
-        console.log("location manger: line 45");
+        console.log("location manager: line 45");
         if (await this.organizations) {
             return this.organizations;
         } else {
             return [];
         }
+    }
+
+    async getOrganization() {
+        var organization;
+        let uid;
+        if (userManager.getUser() !== null && userManager.getUser() !== undefined) {
+            console.log("**" + userManager.getUser().email);
+            uid = userManager.getUser().uid;
+        } 
+        var req = config.SERVER_URL + "/organizations/getOrganization/" + uid;
+        await axios.get(req)
+            .then(res => {
+                organization = res.data;
+            })
+            .catch(function (error) {
+                organization = "";
+            });
+        return organization;
     }
 
     async updateOrganizations() {
@@ -66,5 +84,4 @@ class OrganizationManager {
     }
 }
 
-let organizationManager = new OrganizationManager();
-export default organizationManager;
+export let organizationManager = new OrganizationManager();

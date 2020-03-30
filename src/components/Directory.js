@@ -1,6 +1,7 @@
 import React from "react"
 import "../css/directory.css"
 import {editDistance} from "../tools/stringSearch"
+import locationManager from "../managers/LocationManager.js"
 
 var keyVal = 0;
 var isUser = "none";
@@ -14,6 +15,7 @@ class Directory extends React.Component {
         this.state = 
         {
             markers: this.props.currMarkers,
+            orgs:this.props.organizations,
             filteredMarkers: this.props.currMarkers,
             allWords: "",
             selected : this.props.currSelect
@@ -34,6 +36,7 @@ class Directory extends React.Component {
         } else if (!props.equalMarkers(props.currMarkers, state.markers)) {
             return {
                 markers : props.currMarkers,
+                orgs: props.organizations,
                 filteredMarkers: props.currMarkers
             }
         }
@@ -61,6 +64,19 @@ class Directory extends React.Component {
         }
     };
 
+    onOrgClick = (key) => {
+        var orgs = this.state.orgs;
+        if (key !== 0) {
+            for (var i = 0; i < this.state.orgs.length; i++) {
+                if (key === orgs[i].email) {
+                    this.props.updateMarkers(orgs[i].email);
+                }
+            }
+        } else {
+            console.log('org is 0');
+        }
+    };
+
     render() {
         isSignedIn();
         return (
@@ -80,18 +96,19 @@ class Directory extends React.Component {
                 {
                     this.state.filteredMarkers.map( (each) =>
                         <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
-                            <h2>{each.name}</h2>
+                            <h2>{each.name} ({each.distance})</h2>
                             <h3>{each.address}</h3>
                         </li>
                     )
                 }
                 </ul>
-                <ul id="UL2">
+                <ul style={{display:"none"}} id="UL2">
                 {
-                    this.state.filteredMarkers.map( (each) =>
-                        <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
-                            <h2>{each.name} ({each.distance})</h2>
-                            <h3>{each.address}</h3>
+
+                    this.state.orgs.map( (each) =>
+                        <li type="button" onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
+                            <h2>{each.name}</h2>
+                            <h3>{each.website}</h3>
                         </li>
                     )
                 }
@@ -158,6 +175,8 @@ function isSignedIn() {
         if (document.getElementById("topNav").style.display === "block") {
             isNotOrg = "none";
             isOrg = "inline";
+            document.getElementById("UL").style.display = "block";
+            document.getElementById("UL2").style.display = "none";
         } else {
             isNotOrg = "inline";
             isOrg = "none";
