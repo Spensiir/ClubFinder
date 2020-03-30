@@ -131,9 +131,7 @@ class App extends React.Component {
   }
 
   organizationCallback = async (orgClicked) => {
-    console.log(orgClicked);
     var newlocs = await locationManager.getClickedLocations(orgClicked)
-    console.log(newlocs);
     this.setState({
       markers: newlocs
     })
@@ -222,6 +220,7 @@ class App extends React.Component {
     document.getElementById("addPlus").style.display = "none";
     document.getElementById("clubs").className = "btn1 active";
     document.getElementById("orgs").className = "btn1";
+
   }
 }
 
