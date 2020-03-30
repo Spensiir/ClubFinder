@@ -25,7 +25,7 @@ class App extends React.Component {
                 </div>,
             username:"user",
             organizations: [],
-            organization: organizationManager.getOrganization(),
+            organization: null,
             markers : [],
             selected : null,
             isAdmin : null,
@@ -140,7 +140,8 @@ class App extends React.Component {
 
     usernameCallback = async (usernameData) => {
         this.setState({
-            markers: await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng)
+            markers: await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng),
+            organization: await organizationManager.getOrganization()
         });
         this.setState({username: usernameData}, async () => this.setState(
             { logButton:
