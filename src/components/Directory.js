@@ -1,6 +1,7 @@
 import React from "react"
 import "../css/directory.css"
 import {editDistance} from "../tools/stringSearch"
+import locationManager from "../managers/LocationManager.js"
 
 var keyVal = 0;
 var isUser = "none";
@@ -53,6 +54,19 @@ class Directory extends React.Component {
         }
     };
 
+    onOrgClick = (key) => {
+        var orgs = this.state.orgs;
+        if (key !== 0) {
+            for (var i = 0; i < this.state.orgs.length; i++) {
+                if (key === orgs[i].email) {
+                    this.props.updateMarkers(orgs[i].email);
+                }
+            }
+        } else {
+            console.log('org is 0');
+        }
+    };
+
     render() {
         isSignedIn();
         return (
@@ -81,7 +95,7 @@ class Directory extends React.Component {
                 <ul style={{display:"none"}} id="UL2">
                 {
                     this.state.orgs.map( (each) =>
-                        <li type="button" key={keyVal++} id="listItem">
+                        <li type="button" onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
                             <h2>{each.name}</h2>
                             <h3>{each.website}</h3>
                         </li>

@@ -101,7 +101,7 @@ class App extends React.Component {
     this.setState({
         markers: await locationManager.updateLocations(),
         user: userManager.getUser(),
-        organization: await organizationManager.getOrganization(),
+        organizations: await organizationManager.updateOrganizations(),
     });
     console.log("*" + this.state.user.email);
     console.log("*" + this.state.organization.website);
@@ -128,6 +128,16 @@ class App extends React.Component {
   editOrganizationCallback = async (orgFromForm) => {
     await organizationManager.editOrganization(this.state.organization, orgFromForm);
     this.setState({organization : orgFromForm});
+  }
+
+  organizationCallback = async (orgClicked) => {
+    console.log(orgClicked);
+    var newlocs = await locationManager.getClickedLocations(orgClicked)
+    console.log(newlocs);
+    this.setState({
+      markers: newlocs
+    })
+    
   }
 
   selectedCallback = (markerFromMap) => {
@@ -172,7 +182,7 @@ class App extends React.Component {
           </div>
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <Directory organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected} updateMarkers={this.organizationCallback.bind(this)}/>
           <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <Profile currentUser = {this.state.user} currentOrg = {this.state.organization} updateOrg = {this.editOrganizationCallback.bind(this)} />
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>

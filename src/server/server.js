@@ -155,18 +155,20 @@ app.get('/organizations/getOrganizations', function (req, res) {
     var organizations = [];
     ref.once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-            organizations.push({
-                name: childSnapshot.val()["name"],
-                address: childSnapshot.val()["address"],
-                country: childSnapshot.val()["country"],
-                city: childSnapshot.val()["city"],
-                state: childSnapshot.val()["state"],
-                zip: childSnapshot.val()["zip"],
-                description: childSnapshot.val()["description"],
-                website: childSnapshot.val()["website"],
-                email: childSnapshot.val()["email"],
-                username: childSnapshot.val()["username"],
-            });
+            if (childSnapshot.val()["admin"] == "False") {
+                    organizations.push({
+                        name: childSnapshot.val()["name"],
+                        address: childSnapshot.val()["address"],
+                        country: childSnapshot.val()["country"],
+                        city: childSnapshot.val()["city"],
+                        state: childSnapshot.val()["state"],
+                        zip: childSnapshot.val()["zip"],
+                        description: childSnapshot.val()["description"],
+                        website: childSnapshot.val()["website"],
+                        email: childSnapshot.val()["email"],
+                        username: childSnapshot.val()["username"],
+                });
+            }
         });
         res.send(organizations);
     });
