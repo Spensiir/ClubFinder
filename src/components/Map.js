@@ -25,6 +25,7 @@ class SimpleMap extends React.Component {
                 zoom: 5,
                 markers: this.props.currMarkers,
                 selected: this.props.currSelect,
+                centerChange: false
             };
 
             if ("geolocation" in navigator) {
@@ -57,14 +58,27 @@ class SimpleMap extends React.Component {
             };
         } else if (props.currSelect !== state.selected && props.currSelect == null) {
             return {
-                selected : props.initialSelect,
+                selected : props.currSelect,
                 markers : props.currMarkers,
                 zoom : 5
             };
-        } else if (props.currMarkers.length !== state.markers.length) {
+        } else if (!props.equalMarkers(props.currMarkers, state.markers)) {
             return {
+                selected : props.currSelect,
                 markers : props.currMarkers
             }
+        } else if (props.currSelect && state.centerChange === true) {
+            return {
+                center: { lat : props.currSelect.lat, lng: props.currSelect.lng },
+                centerChange : false
+            };
+        } else if (props.currSelect !== state.selected) {
+            return {
+                selected: props.currSelect,
+                center: {lat: props.currSelect.lat, lng: props.currSelect.lng},
+                markers: props.currMarkers,
+                zoom: 9
+            };
         }
         return null;
     }
@@ -75,9 +89,12 @@ class SimpleMap extends React.Component {
             for (var i = 0; i < this.state.markers.length; i++) {
                 if (key === markers[i].name) {
                     if (this.state.selected) {
-                        this.state.selected.color = "red";
+                        var selectedMarker = this.state.selected;
+                        selectedMarker.color = "red";
+                        this.setState({selected : selectedMarker});
                     }  
                     this.props.updateSelected(markers[i]);
+
                     this.setState({selected: this.props.currSelect, zoom: 9});
                 }
             }
@@ -194,6 +211,14 @@ class SimpleMap extends React.Component {
                                 lng = {each.lng}
                                 color = {each.color}
                             />)
+                    }
+                    {
+                        this.state.selected &&
+                        <Marker key={this.state.selected.name}
+                           lat = {this.state.selected.lat}
+                           lng = {this.state.selected.lng}
+                           color = {this.state.selected.color}
+                        />
                     }
                 </GoogleMapReact>
             </div>

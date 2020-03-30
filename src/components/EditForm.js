@@ -19,7 +19,7 @@ class EditForm extends React.Component {
                 phone:this.props.initialSelect.phone, 
                 description:this.props.initialSelect.description, 
                 weapons: this.props.initialSelect.weapons,
-                email:this.props.initialSelect.email
+                email:this.props.initialSelect.email,
             };
         } else {
             this.state = {club_name: "",
@@ -36,6 +36,10 @@ class EditForm extends React.Component {
                 email:""
             };
         }
+
+        var newDetails = this.state;
+        this.state.newDetails = newDetails;
+
         this.submitForm = this.submitForm.bind(this);
     }
 
@@ -53,75 +57,101 @@ class EditForm extends React.Component {
                 lat: props.initialSelect.lat,
                 lng: props.initialSelect.lng,
                 color: props.initialSelect.color,
-                orgEmail: props.initialSelect.orgEmail
+                orgEmail: props.initialSelect.orgEmail,
+                newDetails : props.initialSelect
             };
-        } else if (props.initialSelect !== null && props.initialSelect.default_club_name !== state.club_name) {
+        } else if (props.initialSelect !== null && props.initialSelect.club_name !== state.club_name) {
             return {
-                default_club_name: props.initialSelect.name,
-                default_address: props.initialSelect.address,
-                default_website: props.initialSelect.website,
-                default_weapons: props.initialSelect.weapons,
-                default_contact: props.initialSelect.contact, 
-                default_phone:props.initialSelect.phone, 
-                default_description:props.initialSelect.description, 
-                default_email:props.initialSelect.email,
-                default_lat: props.initialSelect.lat,
-                default_lng: props.initialSelect.lng,
-                default_color: props.initialSelect.color,
-                default_orgEmail: props.initialSelect.orgEmail
+                club_name: props.initialSelect.name,
+                address: props.initialSelect.address,
+                website: props.initialSelect.website,
+                weapons: props.initialSelect.weapons,
+                contact: props.initialSelect.contact,
+                phone:props.initialSelect.phone,
+                description:props.initialSelect.description,
+                email:props.initialSelect.email,
+                lat: props.initialSelect.lat,
+                lng: props.initialSelect.lng,
+                color: props.initialSelect.color,
+                orgEmail: props.initialSelect.orgEmail,
+                newDetails : props.initialSelect
             };
         } else if (props.initialSelect !== null && props.initialSelect.address !== state.default_address) {
             return {
-                default_club_name: props.initialSelect.name,
-                default_address: props.initialSelect.address,
-                default_website: props.initialSelect.website,
-                default_weapons: props.initialSelect.weapons,
-                default_contact: props.initialSelect.contact, 
-                default_phone:props.initialSelect.phone, 
-                default_description:props.initialSelect.description, 
-                default_email:props.initialSelect.email,
-                default_lat: props.initialSelect.lat,
-                default_lng: props.initialSelect.lng,
-                default_color: props.initialSelect.color,
-                default_orgEmail: props.initialSelect.orgEmail
+                club_name: props.initialSelect.name,
+                address: props.initialSelect.address,
+                website: props.initialSelect.website,
+                weapons: props.initialSelect.weapons,
+                contact: props.initialSelect.contact,
+                phone:props.initialSelect.phone,
+                description:props.initialSelect.description,
+                email:props.initialSelect.email,
+                lat: props.initialSelect.lat,
+                lng: props.initialSelect.lng,
+                color: props.initialSelect.color,
+                orgEmail: props.initialSelect.orgEmail,
+                newDetails : props.initialSelect
             };
         }
         return null;
     }
 
     setClubName(event) {
-        this.setState({club_name: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.club_name = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setAddress(event) {
-        this.setState({address: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.address = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setCity(event) {
-        this.setState({city: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.city = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setSt(event) {
-        this.setState({state: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.state = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setZip(event) {
-        this.setState({zip: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.zip = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setWebsite(event) {
-        this.setState({website: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.website = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setContact(event) {
-        this.setState({contact: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.contact = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setPhone(event) {
-        this.setState({phone: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.phone = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setDescription(event) {
-        this.setState({description: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.description = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setWeapons(event) {
-        this.setState({weapons: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.weapons = event.target.value;
+        this.setState({newDetails : newDetails});
     }
     setEmail(event) {
-        this.setState({email: event.target.value});
+        var newDetails = this.state.newDetails;
+        newDetails.email= event.target.value;
+        this.setState({newDetails : newDetails});
     }
+
     async submitForm(event) {
         event.preventDefault();
         var loc = {address: this.state.address,
@@ -137,25 +167,13 @@ class EditForm extends React.Component {
         });
 
         if (coords.lat !== null && coords.lng !== null) {
-            this.props.updateMarkers({
-                name: this.state.club_name,
-                address: this.state.address + ", " 
-                + this.state.city + ", " 
-                + this.state.state + ", " 
-                + this.state.zip,
-                state: this.state.state,
-                city: this.state.city,
-                zip: this.state.zip,
-                website: this.state.website,
-                contact: this.state.contact,
-                phone: this.state.phone,
-                description: this.state.description,
-                weapons: this.state.weapons,
-                email: this.state.email,
-                lat: coords.lat,
-                lng: coords.lng,
-                color: "red",
-                orgEmail: userManager.getUser().email});
+            var newDetails = this.state.newDetails;
+            newDetails.lat = coords.lat;
+            newDetails.lng = coords.lng;
+            newDetails.color = "red";
+            newDetails.orgEmail = userManager.getUser().email;
+
+            this.props.updateMarkers(newDetails);
         } else {
             console.log("Bad location...");
         }
@@ -169,37 +187,37 @@ class EditForm extends React.Component {
                 <form id="editFormDiv" onSubmit={this.submitForm}>
                     <h1> Edit Your Club </h1>
                     <label><b>Club Name *</b></label>
-                    <input type="text" defaultValue={this.state.default_club_name} name="club_name" onChange={e =>this.setClubName(e)} required/>
+                    <input type="text" defaultValue={this.state.club_name} name="club_name" onChange={e =>this.setClubName(e)} required/>
 
                     <label><b>Address *</b></label>
-                    <input type="text" defaultValue={this.state.default_address} name="address" onChange={e => this.setAddress(e)} placeholder={this.state.address} required/>
+                    <input type="text" defaultValue={this.state.address} name="address" onChange={e => this.setAddress(e)} placeholder={this.state.address} required/>
 
                     <label><b>City</b></label>
-                    <input type="text" defaultValue={this.state.default_city} style={{width:"36.7%"}} className="city" name="city" onChange={e => this.setCity(e)}/>
+                    <input type="text" defaultValue={this.state.city} style={{width:"36.7%"}} className="city" name="city" onChange={e => this.setCity(e)}/>
 
                     <label><b>State</b></label>
-                    <input type="text" defaultValue={this.state.default_state} style={{width:"4%"}} className="state" name="state" onChange={e => this.setSt(e)}/>
+                    <input type="text" defaultValue={this.state.state} style={{width:"4%"}} className="state" name="state" onChange={e => this.setSt(e)}/>
 
                     <label><b>Zip</b></label>
-                    <input type="text" defaultValue={this.state.default_zip} style={{width:"11.8%"}} className="zip" name="zip" onChange={e => this.setZip(e)}/>
+                    <input type="text" defaultValue={this.state.zip} style={{width:"11.8%"}} className="zip" name="zip" onChange={e => this.setZip(e)}/>
                     <br/>
                     <label><b>Website *</b></label>
-                    <input type="text" defaultValue={this.state.default_website} style={{width:"31%"}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
+                    <input type="text" defaultValue={this.state.website} style={{width:"31%"}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
 
                     <label><b>Email *</b></label>
-                    <input type="text" defaultValue={this.state.default_email} style={{width:"28.3%"}} className="email" name="email" onChange={e => this.setEmail(e)} required/>
+                    <input type="text" defaultValue={this.state.email} style={{width:"28.3%"}} className="email" name="email" onChange={e => this.setEmail(e)} required/>
                     <br/>
                     <label><b>Contact Name</b></label>
-                    <input type="text" defaultValue={this.state.default_contact} style={{width:"26.4%"}} className="contact" name="contact" onChange={e => this.setContact(e)}/>
+                    <input type="text" defaultValue={this.state.contact} style={{width:"26.4%"}} className="contact" name="contact" onChange={e => this.setContact(e)}/>
 
                     <label><b>Phone #</b></label>
-                    <input type="text" defaultValue={this.state.default_phone} style={{width:"27%"}} className="phone" name="phone" onChange={e => this.setPhone(e)}/>
+                    <input type="text" defaultValue={this.state.phone} style={{width:"27%"}} className="phone" name="phone" onChange={e => this.setPhone(e)}/>
                     <br/>
                     <label><b>Weapons</b></label>
-                    <input type="text" defaultValue={this.state.default_weapons} className="website" name="website" onChange={e => this.setWeapons(e)}/>
+                    <input type="text" defaultValue={this.state.weapons} className="website" name="website" onChange={e => this.setWeapons(e)}/>
                     <br/>
                     <label><b>Club Description</b></label>
-                    <textarea type="text" defaultValue={this.state.default_description} className="description" name="description" onChange={e => this.setDescription(e)}/>
+                    <textarea type="text" defaultValue={this.state.description} className="description" name="description" onChange={e => this.setDescription(e)}/>
                     <button type="submit" className="submit">Submit</button>
                     <button type="button" className="submit" onClick={this.closeEditForm}>Close</button>
                 </form>

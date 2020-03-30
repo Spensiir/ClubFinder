@@ -12,6 +12,7 @@ var bodyParser = require('body-parser');
 require("firebase/auth");
 require("firebase/firestore");
 require('firebase/database');
+require('firebase-admin');
 //Added by Ben
 var firebase = require('firebase');
 
@@ -91,15 +92,14 @@ app.get('/locations/getLocations/currCoords/:lat/:lng/:email', function (req, re
 
 
 app.post('/locations/addLocation', function (req, res) {
-    //console.log(req.body);
+    console.log(req.body);
     firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
     .then(result => {
-    //console.log(req.body)
-    res.sendStatus(200);
+        //console.log(req.body)
+        res.sendStatus(200);
     })
     .catch(function (error) {
-    //console.log(error);
-    res.sendStatus(400);
+        res.sendStatus(400);
     })
 })
 
@@ -211,7 +211,19 @@ app.get('/locations/getCoords/address/:address', function (req, res) {
         location = results.geometry.location;
         res.send(location);
     });
-})
+});
+
+app.get('/organizations/newOrg', function (req, res) {
+    admin.auth().createUser({
+        email: req.body.email,
+        password: req.body.password
+    }).then(function(createdUser) {
+        res.send(createdUser.uid);
+    }).catch(function(error) {
+        console.log("Error creating new user: ", error);
+        res.sendStatus(400);
+    });
+});
 
 async function getDistances(markers, lat, lng) {
     var newMarkers;

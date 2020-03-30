@@ -2,7 +2,7 @@ import React from 'react';
 import '../css/addform.css';
 import { getCoords } from '../tools/coords.js';
 import { userManager } from '../managers/UserManager';
-import { countries } from '../tools/locationForms';
+// import { countries } from '../tools/locationForms';
 
 class AddForm extends React.Component {
     constructor(props) {

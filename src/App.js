@@ -13,198 +13,235 @@ import {userManager} from "./managers/UserManager";
 var checkMove = 0;
 
 class App extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      logButton:
-      <div className="App-header2" id="mainHeader2">
-      <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
-      <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
-      </div>,
-      username:"user",
-        markers : [],
-        selected : null,
-        isAdmin : null,
-        currLat : null,
-        currLng : null,
-      };
+    constructor (props) {
+        super(props);
+        this.state = {
+            logButton:
+                <div className="App-header2" id="mainHeader2">
+                    <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
+                    <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
+                </div>,
+            username:"user",
+            markers : [],
+            selected : null,
+            isAdmin : null,
+            currLat : null,
+            currLng : null,
+        };
 
-    this.usernameCallback = this.usernameCallback.bind(this);
-    this.onClickSubmit = this.onClickSubmit.bind(this);
-    this.onClickRegister = this.onClickRegister.bind(this);
-    this.markerCallback = this.markerCallback.bind(this);
-    this.removeMarker = this.removeMarker.bind(this);
-    this.selectedCallback = this.selectedCallback.bind(this);
-    this.editMarkerCallback = this.editMarkerCallback.bind(this);
-    this.setAdmin = this.setAdmin.bind(this);
-  }
+        this.usernameCallback = this.usernameCallback.bind(this);
+        this.onClickSubmit = this.onClickSubmit.bind(this);
+        this.onClickRegister = this.onClickRegister.bind(this);
+        this.markerCallback = this.markerCallback.bind(this);
+        this.removeMarker = this.removeMarker.bind(this);
+        this.selectedCallback = this.selectedCallback.bind(this);
+        this.editMarkerCallback = this.editMarkerCallback.bind(this);
+        this.setAdmin = this.setAdmin.bind(this);
+        this.equalMarkers.bind(this);
+    }
 
-  async componentDidMount() {
-    await navigator.geolocation.getCurrentPosition(async position => {
-        this.setState({currLat: position.coords.latitude, currLng: position.coords.longitude});
+    async componentDidMount() {
+        await navigator.geolocation.getCurrentPosition(async position => {
+            this.setState({currLat: position.coords.latitude, currLng: position.coords.longitude});
+            this.setState({
+                markers: await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)
+            });
+        });
+    }
+
+    onClickSubmit = async () => {
+        this.openSignin();
+        this.closeEverything();
+    };
+
+    onClickRegister = () => {
+        this.openRegister();
+        this.closeEverything();
+    };
+
+    equalMarkers(markers1, markers2) {
+        if (markers1 === null && markers2 !== null) {
+            return false;
+        }
+        if (markers1 !== null && markers2 === null) {
+            return false;
+        }
+
+        if (markers1 === null && markers2 === null) {
+            return true;
+        }
+        if (markers1.length !== markers2.length) {
+            return false;
+        }
+
+        for (let i=0; i < markers1.length; i++) {
+            if (markers1[i].name !== markers2[i].name) return false;
+            if (markers1[i].city !== markers2[i].city) return false;
+            if (markers1[i].address !== markers2[i].address) return false;
+            if (markers1[i].contact !== markers2[i].contact) return false;
+            if (markers1[i].color !== markers2[i].color) return false;
+            if (markers1[i].description !== markers2[i].description) return false;
+            if (markers1[i].email !== markers2[i].email) return false;
+            if (markers1[i].lat !== markers2[i].lat) return false;
+            if (markers1[i].lng !== markers2[i].lng) return false;
+            if (markers1[i].orgEmail !== markers2[i].orgEmail) return false;
+            if (markers1[i].phone !== markers2[i].phone) return false;
+            if (markers1[i].state !== markers2[i].state) return false;
+            if (markers1[i].weapons !== markers2[i].weapons) return false;
+            if (markers1[i].website!== markers2[i].website) return false;
+            if (markers1[i].zip !== markers2[i].zip) return false;
+        }
+        return true;
+    }
+
+    onClickSignOut = async () => {
+        await userManager.fireSignOut();
         this.setState({
             markers: await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)
         });
-    });
-  }
 
-  onClickSubmit = async () => {
-    this.openSignin();
-    this.closeEverything();
-  };
+        this.closeEverything();
+        this.signOutClosing();
+        this.setState(
+            {
+                username: "user",
+                logButton:
+                    <div className="App-header2" id="mainHeader2">
+                        <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
+                        <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
+                    </div>});
+    };
 
-  onClickRegister = () => {
-    this.openRegister();
-    this.closeEverything();
-  };
+    setAdmin = (isAdminStr) => {
+        if(isAdminStr === "True") {
+            this.setState({
+                isAdmin: true
+            });
+        } else {
+            this.setState({
+                isAdmin: false
+            });
+        }
+    };
 
-  onClickSignOut = async () => {
-    await userManager.fireSignOut();
-    this.setState({
-        markers: await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)
-    });
+    usernameCallback = async (usernameData) => {
+        this.setState({
+            markers: await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)
+        });
+        this.setState({username: usernameData}, async () => this.setState(
+            { logButton:
+                    <div className="App-header2" id="mainHeader2">
+                        <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
+                    </div>}));
+    };
 
-    this.closeEverything();
-    this.signOutClosing();
-    this.setState(
-      {
-        username: "user",
-        logButton: 
-        <div className="App-header2" id="mainHeader2">
-          <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
-          <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
-        </div>});
-  };
+    markerCallback = async (markerFromForm) => {
+        await locationManager.addLocation(markerFromForm);
+        this.setState({markers : await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
+    };
 
-  setAdmin = (isAdminStr) => {
-    if(isAdminStr === false) {
-      this.setState({
-        isAdmin: false
-      });
-    } else {
-      this.setState({
-        isAdmin: true
-      });
+    editMarkerCallback = async (markerFromForm) => {
+        await locationManager.editLocation(this.state.selected, markerFromForm);
+        this.setState({markers : await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)});
+        this.selectedCallback(markerFromForm);
+    };
+
+    selectedCallback = (markerFromMap) => {
+        if (markerFromMap) {
+            markerFromMap.color = "yellow";
+        }
+        this.setState({selected : markerFromMap});
+    };
+
+    async removeMarker() {
+        await locationManager.removeLocation(this.state.selected);
+        this.setState({markers : await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: null});
+    };
+
+    render() {
+        var signedIn;
+        var adminSignedIn;
+        if (this.state.username !== "user" && this.state.isAdmin) {
+            signedIn = "none";
+            adminSignedIn = "block";
+        } else if (this.state.username !== "user") {
+            signedIn = "block";
+            adminSignedIn = "none";
+        } else {
+            signedIn = "none";
+            adminSignedIn = "none";
+        }
+
+        return (
+            <div>
+                <div className="shadow" id="shadow"/>
+                <div className="App-header" id="mainHeader">
+                    <h1 id="title">HEMAA Club Finder</h1>
+                    <h2 id="welcome" style={{display : signedIn}}>Welcome, {this.state.username}</h2>
+                    <button onClick={e => moveDirectory()} id="mover" className="btn2"><i className="fas fa-caret-left" id="arrow"></i></button>
+                </div>
+                {this.state.logButton}
+                <div className="topnav" id="topNav" style={{display : signedIn}}>
+                </div>
+                <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
+                    <button onClick={e => this.openRegister}>Add Organization</button>
+                </div>
+                <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
+                <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
+                <Directory equalMarkers={this.equalMarkers.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+                <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+                <AddForm updateMarkers={this.markerCallback.bind(this)}/>
+                <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
+            </div>
+        )
+    };
+
+    closeEverything () {
+        document.getElementById("details").style.display = "none";
+        this.setState({selected: null});
     }
-  };
 
-  usernameCallback = async (usernameData) => {
-    this.setState({
-        markers: await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)
-    });
-    this.setState({username: usernameData}, async () => this.setState(
-      { logButton:
-        <div className="App-header2" id="mainHeader2">
-        <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
-        </div>}));
-  };
-
-  markerCallback = async (markerFromForm) => {
-    await locationManager.addLocation(markerFromForm);
-    this.setState({markers : await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
-  };
-
-  editMarkerCallback = async (markerFromForm) => {
-    await locationManager.editLocation(this.state.selected, markerFromForm);
-    this.setState({markers : await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
-  };
-
-  selectedCallback = (markerFromMap) => {
-    if (markerFromMap) {
-      markerFromMap.color = "yellow";
-    }  
-    this.setState({selected : markerFromMap});
-  };
-
-  async removeMarker() {
-    await locationManager.removeLocation(this.state.selected);
-    this.setState({markers : await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: null});
-  };
-
-  render() {
-    var signedIn;
-    var adminSignedIn;
-    if (this.state.username !== "user" && this.state.isAdmin) {
-      signedIn = "none";
-      adminSignedIn = "block";
-    } else if (this.state.username !== "user") {
-      signedIn = "block";
-      adminSignedIn = "none";
-    } else {
-      signedIn = "none";
-      adminSignedIn = "none";
+    openSignin() {
+        document.getElementById("SigninForm").style.display = "block";
+        document.getElementById("shadow").style.display = "block";
     }
 
-    return (
-      <div>
-        <div className="shadow" id="shadow"/>
-          <div className="App-header" id="mainHeader">
-            <h1 id="title">HEMAA Club Finder</h1>
-            <h2 id="welcome" style={{display : signedIn}}>Welcome, {this.state.username}</h2>
-            <button onClick={e => moveDirectory()} id="mover" className="btn2"><i className="fas fa-caret-left" id="arrow"></i></button>
-          </div>
-          {this.state.logButton}
-          <div className="topnav" id="topNav" style={{display : signedIn}}>
-          </div>
-          <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
-            <button onClick={e => this.openRegister}>Add Organization</button>
-          </div>
-          <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
-          <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <SimpleMap removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <AddForm updateMarkers={this.markerCallback.bind(this)}/>
-          <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
-      </div>
-    )
-  };
+    openRegister() {
+        document.getElementById("OrgForm").style.display = "block";
+        document.getElementById("shadow").style.display = "block";
+    }
 
-  closeEverything () {
-    document.getElementById("details").style.display = "none";
-    this.setState({selected: null});
-  }
-
-  openSignin() {
-    document.getElementById("SigninForm").style.display = "block";
-    document.getElementById("shadow").style.display = "block";
-  }
-
-  openRegister() {
-    document.getElementById("OrgForm").style.display = "block";
-    document.getElementById("shadow").style.display = "block";
-  }
-
-  signOutClosing() {
-    document.getElementById("nonOrgButtons").style.display = "inline";
-    document.getElementById("orgButtons").style.display = "none";
-    document.getElementById("addPlus").style.display = "none";
-  }
+    signOutClosing() {
+        document.getElementById("nonOrgButtons").style.display = "inline";
+        document.getElementById("orgButtons").style.display = "none";
+        document.getElementById("addPlus").style.display = "none";
+    }
 }
 
 function moveDirectory() {
-  if (checkMove === 0) {
-    document.getElementById("mainHeader").style.marginLeft = "-380px";
-    document.getElementById("mainHeader2").style.marginLeft = "-380px";
-    document.getElementById("searchInput").style.marginLeft = "-380px";
-    document.getElementById("UL").style.marginLeft = "-380px";
-    document.getElementById("UL2").style.marginLeft = "-380px";
-    document.getElementById("clubs").style.marginLeft = "-380px";
-    document.getElementById("clubs2").style.marginLeft = "-380px";
-    document.getElementById("mover").style.marginLeft = "30px";
-    document.getElementById("details").style.marginLeft = "-350px";
-    checkMove = 1;
-  } else {
-    document.getElementById("mainHeader").style.marginLeft = "0px";
-    document.getElementById("mainHeader2").style.marginLeft = "0px";
-    document.getElementById("searchInput").style.marginLeft = "0px";
-    document.getElementById("UL").style.marginLeft = "0px";
-    document.getElementById("UL2").style.marginLeft = "0px";
-    document.getElementById("clubs").style.marginLeft = "0px";
-    document.getElementById("clubs2").style.marginLeft = "0px";
-    document.getElementById("mover").style.marginLeft = "0px";
-    document.getElementById("details").style.marginLeft = "0px";
-    checkMove = 0;
-  }
+    if (checkMove === 0) {
+        document.getElementById("mainHeader").style.marginLeft = "-380px";
+        document.getElementById("mainHeader2").style.marginLeft = "-380px";
+        document.getElementById("searchInput").style.marginLeft = "-380px";
+        document.getElementById("UL").style.marginLeft = "-380px";
+        document.getElementById("UL2").style.marginLeft = "-380px";
+        document.getElementById("clubs").style.marginLeft = "-380px";
+        document.getElementById("clubs2").style.marginLeft = "-380px";
+        document.getElementById("mover").style.marginLeft = "30px";
+        document.getElementById("details").style.marginLeft = "-350px";
+        checkMove = 1;
+    } else {
+        document.getElementById("mainHeader").style.marginLeft = "0px";
+        document.getElementById("mainHeader2").style.marginLeft = "0px";
+        document.getElementById("searchInput").style.marginLeft = "0px";
+        document.getElementById("UL").style.marginLeft = "0px";
+        document.getElementById("UL2").style.marginLeft = "0px";
+        document.getElementById("clubs").style.marginLeft = "0px";
+        document.getElementById("clubs2").style.marginLeft = "0px";
+        document.getElementById("mover").style.marginLeft = "0px";
+        document.getElementById("details").style.marginLeft = "0px";
+        checkMove = 0;
+    }
 }
 
 export default App;

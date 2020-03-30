@@ -1,6 +1,5 @@
 import {config} from '../tools/config.js';
 import axios from 'axios';
-import {userManager} from "./UserManager";
 
 class LocationManager {
     locations;
@@ -12,6 +11,9 @@ class LocationManager {
     async addLocation(marker) {
         var req = config.SERVER_URL + "/locations/addLocation";
         await axios.post(req, marker)
+            .then(() => {
+                console.log("Successfully added...");
+            })
             .catch(function (error) {
                 console.log(error);
             });
@@ -26,7 +28,7 @@ class LocationManager {
 
     async removeLocation(marker) {
         var req = config.SERVER_URL + "/locations/removeLocation";
-        axios.delete(req, {data: marker})
+        await axios.delete(req, {data: marker})
             .then(res => {
                 console.log("Successfully removed...");
             })
@@ -37,7 +39,6 @@ class LocationManager {
     }
 
     async getLocations() {
-        console.log("location manger: line 45");
         if (await this.locations) {
             return this.locations;
         } else {
@@ -55,6 +56,7 @@ class LocationManager {
             req += "/" + currUser.email;
         }
 
+        console.log(req);
         await axios.get(req)
             .then(res => {
                 newLocations = res.data;

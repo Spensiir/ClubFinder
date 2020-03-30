@@ -55,11 +55,6 @@ class OrganizationManager {
         let newOrganizations;
         var currUser = userManager.getUser();
 
-        // if a user is signed in then append the user id to the request
-        if (currUser) {
-            req += "/" + currUser.email;
-        }
-
         await axios.get(req)
             .then(res => {
                 newOrganizations = res.data;

@@ -1,4 +1,4 @@
-import {firebase, admin} from '../tools/config.js';
+import {firebase} from '../tools/config.js';
 import {config} from '../tools/config.js';
 import axios from 'axios';
 
@@ -69,14 +69,18 @@ class UserManager {
     }
 
     async fireAdminCreateUser(user) {
-        admin.auth().createUser({
-            email: user.email,
-            password: user.password
-        }).then(function(createdUser){
-            return createdUser.uid;
-        }).catch(function(error){
-            console.log("Error creating new user", error);
-        });
+
+        var req = '/organizations/newOrg';
+        var uid;
+        await axios.post(req, user)
+            .then(res => {
+                uid = res;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        return uid;
     }
 
     async fireSignOut() {
