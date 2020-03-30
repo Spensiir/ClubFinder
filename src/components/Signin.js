@@ -26,7 +26,6 @@ class Signin extends React.Component {
         }
     }
     closeSignin(event) {
-        this.props.onClickSignOut();
         closeSignin();
     }
 
