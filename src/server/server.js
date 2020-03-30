@@ -188,7 +188,7 @@ app.get('/organizations/checkforAdmin/:uid', function (req, res) {
 
 app.post('/organizations/addOrganization', function (req, res) {
     //console.log(req.body);
-    firebase.database().ref('organizations/' + req.body.id).set(req.body)
+    firebase.database().ref('organization/' + req.body.id).set(req.body)
     .then(result => {
     //console.log(req.body)
     res.sendStatus(200);
@@ -199,9 +199,9 @@ app.post('/organizations/addOrganization', function (req, res) {
     })
 })
 
-app.post('/organizations/editOrganization', function(req, res) {
+app.post('/locations/editLocation', function(req, res) {
     //console.log(req.body);
-    firebase.database().ref('organizations/' + req.body.id).set(req.body)
+    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
     .then(result => {
     //console.log(req.body)
     res.sendStatus(200);
@@ -213,8 +213,8 @@ app.post('/organizations/editOrganization', function(req, res) {
 });
 
 
-app.delete('/organizations/removeOrganization', function(req, res) {
-    firebase.database().ref('organizations/' + req.body.id).remove()
+app.delete('/locations/removeLocation', function(req, res) {
+    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).remove()
         .then(() => {
             res.sendStatus(200);
         }).catch((error) => {
