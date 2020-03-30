@@ -40,6 +40,7 @@ class App extends React.Component {
         this.removeMarker = this.removeMarker.bind(this);
         this.selectedCallback = this.selectedCallback.bind(this);
         this.editMarkerCallback = this.editMarkerCallback.bind(this);
+        this.editOrganizationCallback = this.editOrganizationCallback.bind(this);
         this.setAdmin = this.setAdmin.bind(this);
         this.equalMarkers.bind(this);
     }
@@ -145,6 +146,7 @@ class App extends React.Component {
             { logButton:
                     <div className="App-header2" id="mainHeader2">
                         <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
+                        <button id="profileButton" style={{borderRight:"thin solid gray"}} onClick={this.openProfile}><b>Profile</b></button>
                     </div>}));
     };
 
@@ -158,6 +160,11 @@ class App extends React.Component {
         this.setState({markers : await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng)});
         this.selectedCallback(markerFromForm);
     };
+
+    editOrganizationCallback = async (orgFromForm) => {
+      await organizationManager.editOrganization(this.state.organization, orgFromForm);
+      this.setState({organization : orgFromForm});
+    }
 
     selectedCallback = (markerFromMap) => {
         if (markerFromMap) {
@@ -208,6 +215,7 @@ class App extends React.Component {
                 <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
                 <Directory equalMarkers={this.equalMarkers.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected} updateMarkers={this.organizationCallback.bind(this)}/>
                 <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+                <Profile currentUser = {this.state.user} currentOrg = {this.state.organization} updateOrg = {this.editOrganizationCallback.bind(this)} />
                 <AddForm updateMarkers={this.markerCallback.bind(this)}/>
                 <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
             </div>
@@ -228,6 +236,11 @@ class App extends React.Component {
         document.getElementById("OrgForm").style.display = "block";
         document.getElementById("shadow").style.display = "block";
     }
+
+    openProfile() {
+      document.getElementById("ProfileForm").style.display = "block";
+      document.getElementById("shadow").style.display = "block";
+  }
 
     signOutClosing() {
         document.getElementById("nonOrgButtons").style.display = "inline";
