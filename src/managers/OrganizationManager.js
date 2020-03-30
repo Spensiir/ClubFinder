@@ -12,7 +12,9 @@ class OrganizationManager {
 
     async addOrganization(organization) {
         var req = config.SERVER_URL + "/organizations/addOrganization";
-        var uid = userManager.fireAdminCreateUser(organization);
+        //var uid = userManager.fireAdminCreateUser(organization);
+        var uid = userManager.getUser().uid;
+        //console.log("****" + uid);
         organization.id = uid;
         await axios.post(req, organization)
         .catch(function (error) {
@@ -30,6 +32,7 @@ class OrganizationManager {
 
     async removeOrganization(organization) {
         var req = config.SERVER_URL + "/organizations/removeOrganization";
+        //organization.id = userManager.getUser().uid;
         axios.delete(req, {data: organization})
             .then(res => {
                 console.log("Successfully removed...");
@@ -71,7 +74,7 @@ class OrganizationManager {
     async updateOrganizations() {
         var req = config.SERVER_URL + "/organizations/getOrganizations";
         let newOrganizations;
-        var currUser = userManager.getUser();
+
 
         await axios.get(req)
             .then(res => {
