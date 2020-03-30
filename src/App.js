@@ -101,7 +101,7 @@ class App extends React.Component {
     this.setState({
         markers: await locationManager.updateLocations(),
         user: userManager.getUser(),
-        organization: await organizationManager.getOrganization(),
+        organizations: await organizationManager.updateOrganizations(),
     });
     console.log("*" + this.state.user.email);
     console.log("*" + this.state.organization.website);
@@ -212,7 +212,6 @@ class App extends React.Component {
     document.getElementById("addPlus").style.display = "none";
     document.getElementById("clubs").className = "btn1 active";
     document.getElementById("orgs").className = "btn1";
-
   }
 }
 
