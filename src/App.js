@@ -11,6 +11,7 @@ import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 import Profile from './components/Profile.js';
 import { organizationManager } from './managers/OrganizationManager';
+import ForgotPassword from './components/ForgotPassword';
 
 var checkMove = 0;
 
@@ -101,8 +102,8 @@ class App extends React.Component {
         user: userManager.getUser(),
         organization: await organizationManager.getOrganization(),
     });
-    console.log("*" + this.state.user.email);
-    console.log("*" + this.state.organization.website);
+    // console.log("*" + this.state.user.email);
+    // console.log("*" + this.state.organization.website);
 
     this.setState({username: username}, async () => this.setState(
       { logButton:
@@ -168,6 +169,7 @@ class App extends React.Component {
           <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
             <button onClick={e => this.openRegister}>Add Organization</button>
           </div>
+          <ForgotPassword/>
           <OrgRegistration callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory currMarkers={this.state.markers}/>
