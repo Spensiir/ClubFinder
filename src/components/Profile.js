@@ -12,6 +12,8 @@ class Profile extends React.Component {
             //var organization = organizationManager.getOrganization();
             this.state = {
                 user: this.props.currentUser,
+                id: props.currentUser.uid,
+                email: props.currentUser.email,
                 name: this.props.currentOrg.name,
                 country: this.props.currentOrg.country,
                 city: this.props.currentOrg.city,
@@ -26,6 +28,8 @@ class Profile extends React.Component {
         else {
             this.state = {
                 name: "",
+                id: "",
+                email: "",
                 country: "",
                 city: "",
                 state: "",
@@ -47,6 +51,8 @@ class Profile extends React.Component {
             //var organization = organizationManager.getOrganization();
             return {
                     user: props.currentUser,
+                    id: props.currentUser.uid,
+                    email: props.currentUser.email,
                     name: props.currentOrg.name,
                     country: props.currentOrg.country,
                     city: props.currentOrg.city,
@@ -62,6 +68,8 @@ class Profile extends React.Component {
             //var organization = organizationManager.getOrganization();
             return {
                 user: props.currentUser,
+                id: props.currentUser.uid,
+                email: props.currentUser.email,
                 name: props.currentOrg.name,
                 country: props.currentOrg.country,
                 city: props.currentOrg.city,
@@ -104,10 +112,17 @@ class Profile extends React.Component {
         this.setState({username: event.target.value});
     }
 
+    closeProfileForm() {
+        document.getElementById("ProfileForm").style.display = "none";
+        document.getElementById("shadow").style.display = "none";
+    }
+
     async submitForm(event) {
         event.preventDefault();
         this.props.updateOrg({
             name: this.state.name,
+            id: this.state.id,
+            email: this.state.email,
             country: this.state.country,
             city: this.state.city,
             state: this.state.state,
@@ -115,9 +130,9 @@ class Profile extends React.Component {
             website: this.state.website,
             phone: this.state.phone,
             description: this.state.description,
-            username: this.state.username
+            username: this.state.username,
         });
-        closeProfileForm();
+        this.closeProfileForm();
     }
 
     render() {
@@ -154,16 +169,11 @@ class Profile extends React.Component {
                     <input type="text" defaultValue= {this.state.phone} onChange={e =>this.setPhone(e)}/>
 
                     <button type="submit" className="submit">Submit</button>
-                    <button type="text" className="submit" onClick={this.closeProfileForm}>Close</button>
+                    <button type="text" className="close" onClick={this.closeProfileForm}>Close</button>
                 </form>
             </div>
         )
     }
-}
-
-function closeProfileForm() {
-    document.getElementById("ProfileForm").style.display = "none";
-    document.getElementById("shadow").style.display = "none";
 }
 
 export default Profile;
