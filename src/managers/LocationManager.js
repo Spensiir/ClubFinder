@@ -1,6 +1,5 @@
 import {config} from '../tools/config.js';
 import axios from 'axios';
-import {userManager} from "./UserManager.js";
 
 class LocationManager {
     locations;
@@ -12,10 +11,12 @@ class LocationManager {
     async addLocation(marker) {
         var req = config.SERVER_URL + "/locations/addLocation";
         await axios.post(req, marker)
+            .then(() => {
+                console.log("Successfully added...");
+            })
             .catch(function (error) {
                 console.log(error);
             });
-        this.locations = await this.updateLocations();
         return null;
     }
 
@@ -27,19 +28,17 @@ class LocationManager {
 
     async removeLocation(marker) {
         var req = config.SERVER_URL + "/locations/removeLocation";
-        axios.delete(req, {data: marker})
+        await axios.delete(req, {data: marker})
             .then(res => {
                 console.log("Successfully removed...");
             })
             .catch(function (error) {
                 console.log(error);
             });
-        this.locations = await this.updateLocations();
         return null;
     }
 
     async getLocations() {
-        console.log("location manger: line 45");
         if (await this.locations) {
             return this.locations;
         } else {
@@ -47,16 +46,16 @@ class LocationManager {
         }
     }
 
-    async updateLocations() {
-        var req = config.SERVER_URL + "/locations/getLocations";
+    async updateLocations(email, isAdmin, lat, lng) {
+        var req = config.SERVER_URL + "/locations/getLocations/currCoords/" + lat + '/' + lng;
         let newLocations;
-        var currUser = userManager.getUser();
 
         // if a user is signed in then append the user id to the request
-        if (currUser) {
-            req += "/" + currUser.email;
+        if (email && !isAdmin) {
+            req += "/" + email;
         }
 
+        console.log(req);
         await axios.get(req)
             .then(res => {
                 newLocations = res.data;
@@ -64,8 +63,12 @@ class LocationManager {
                 newLocations = []; // if an error occurs the no locations will appear
                 console.log(error);
             });
+
+        this.locations = newLocations;
         return newLocations;
     }
+
+
 }
 
 let locationManager = new LocationManager();

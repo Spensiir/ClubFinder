@@ -41,6 +41,7 @@
 
 .App-header2 button {
     float:right;
+    margin-right:5px;
     margin-top:0%;
     height:80%;
     width:20%;
