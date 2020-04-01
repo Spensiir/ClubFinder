@@ -111,7 +111,7 @@ class App extends React.Component {
     onClickSignOut = async () => {
         await userManager.fireSignOut();
         this.setState({
-            markers: await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng)
+            markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng)
         });
 
         this.closeEverything();
