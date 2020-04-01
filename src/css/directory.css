@@ -6,7 +6,6 @@
     overflow: hidden;
     min-width:400px;
     pointer-events:none;
-    max-width:350px;
   }
 
   .directory button.btn1 {
@@ -62,16 +61,12 @@
     position:relative;
     display:inline;
     padding: 2.5%;
-    padding-right:9%;
     font-size: 15px;
     border: thin solid grey;
-    width: 87.5%;
+    width: 82.1%;
     background: white;
     pointer-events:all;
     transition:0.5s;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;   
-    box-sizing: border-box;     
   }
 
   .directory input[type=text]:focus {
@@ -197,16 +192,16 @@
     color:gray;
   }
 
-  .directory ::-webkit-scrollbar {
+  ::-webkit-scrollbar {
     width:6px;
     height:3px;
     border-left:0;
     background:rgba(0,0,0,0.1);
   }
-  .directory ::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     background:whitesmoke;
   }
-  .directory ::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     background:rgba(2, 106, 224, 0.8);
     border-radius:0;
   }
