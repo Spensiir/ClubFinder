@@ -1,6 +1,5 @@
 import React from "react"
 import "../css/signin.css"
-import ForgotPassword from './ForgotPassword.js';
 import {userManager} from "../managers/UserManager.js"
 
 class Signin extends React.Component {
@@ -43,21 +42,13 @@ class Signin extends React.Component {
                     <input type="password" name="password" default={this.state.password} onChange={e=>this.setPassword(e)} required/>
                     
                     <br/>
-                    <ForgotPassword/>
-                    <button type = "text" onClick={this.openPasswordReset}>Forgot Password</button>
                     <button type="submit" className="submit">Submit</button>
                     <button type="text" className="submit" onClick={e=>this.closeSignin(e)}>Close</button>
                 </form>
             </div>
         );
     }
-    openPasswordReset() {
-        closeSignin();
-        document.getElementById("PasswordResetForm").style.display = "block";
-        document.getElementById("shadow").style.display = "block";
-    }
 }
-
 function closeSignin() {
 
     document.getElementById("SigninForm").style.display = "none";

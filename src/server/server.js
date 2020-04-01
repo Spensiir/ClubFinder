@@ -185,7 +185,7 @@ app.get('/organizations/checkforAdmin/:uid', function (req, res) {
 
 app.post('/organizations/addOrganization', function (req, res) {
     //console.log(req.body);
-    firebase.database().ref('organizations/' + req.body.id).set(req.body)
+    firebase.database().ref('organization/' + req.body.id).set(req.body)
     .then(result => {
     //console.log(req.body)
     res.sendStatus(200);
@@ -196,9 +196,9 @@ app.post('/organizations/addOrganization', function (req, res) {
     })
 })
 
-app.post('/organizations/editOrganization', function(req, res) {
+app.post('/locations/editLocation', function(req, res) {
     //console.log(req.body);
-    firebase.database().ref('organizations/' + req.body.id).set(req.body)
+    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
     .then(result => {
     //console.log(req.body)
     res.sendStatus(200);
@@ -210,8 +210,8 @@ app.post('/organizations/editOrganization', function(req, res) {
 });
 
 
-app.delete('/organizations/removeOrganization', function(req, res) {
-    firebase.database().ref('organizations/' + req.body.id).remove()
+app.delete('/locations/removeLocation', function(req, res) {
+    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).remove()
         .then(() => {
             res.sendStatus(200);
         }).catch((error) => {
@@ -233,6 +233,55 @@ app.get('/location/getCoords/address/:address', function (req, res) {
         location = results.geometry.location;
         res.send(location);
     });
-})
+
+});
+
+app.get('/organizations/newOrg', function (req, res) {
+    firebase.admin.auth().createUser({
+        email: req.body.email,
+        password: req.body.password
+    }).then(function(createdUser) {
+        res.send(createdUser.uid);
+    }).catch(function(error) {
+        console.log("Error creating new user: ", error);
+        res.sendStatus(400);
+    });
+});
+
+async function getDistances(markers, lat, lng) {
+    var newMarkers;
+    var origins = lat + "," + lng + "&";
+    var destinations = "destinations=";
+
+    markers.forEach(marker => {
+        destinations += marker.lat + "%2C" + marker.lng + "%7C";
+    });
+    destinations = destinations.substr(0, destinations.length - 3);
+
+    await axios.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + origins + destinations + "&key=" + keys.GEOCODE_API_KEY)
+        .then(res => {
+            var results = res.data;
+            for (var i=0; i < markers.length; i++) {
+                if (results.rows[0].elements[i].status == 'OK') {
+                    markers[i].distance = results.rows[0].elements[i].distance.text;
+                } else {
+                    markers[i].distance = "N/A"
+                }
+            }
+
+            markers.sort(function (a, b) {
+                if (a.distance == "N/A") { return 10000;}
+                if (b.distance == "N/A") {return -10000;}
+                return parseFloat(a.distance.replace(',', '')) - parseFloat(b.distance.replace(',', ''));
+            });
+
+            newMarkers = markers;
+        }).catch(err => {
+            console.log(err);
+            newMarkers = markers;
+        });
+    //console.log(newMarkers);
+    return newMarkers;
+}
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

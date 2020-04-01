@@ -72,6 +72,7 @@ class Directory extends React.Component {
                         <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
                             <h2>{each.name}</h2>
                             <h3>{each.address}</h3>
+                            <h4>{each.distance}</h4>
                         </li>
                     )
                 }

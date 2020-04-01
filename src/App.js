@@ -11,7 +11,6 @@ import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 import Profile from './components/Profile.js';
 import { organizationManager } from './managers/OrganizationManager';
-import ForgotPassword from './components/ForgotPassword';
 
 var checkMove = 0;
 
