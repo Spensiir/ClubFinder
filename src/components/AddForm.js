@@ -8,11 +8,11 @@ class AddForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {club_name: "", 
-            address: "",
-            country: "", 
+            address: "", 
             city : "", 
             state : "", 
             zip: "", 
+            country: "", 
             website: "", 
             contact: "", 
             phone:"", 
@@ -26,9 +26,6 @@ class AddForm extends React.Component {
     }
     setAddress(event) {
         this.setState({address: event.target.value});
-    }
-    setCountry(event) {
-        this.setState({country: event.target.value});
     }
     setCity(event) {
         this.setState({city: event.target.value});
@@ -61,7 +58,6 @@ class AddForm extends React.Component {
         //console.log("submit form");
         event.preventDefault();
         var loc = {address: this.state.address,
-            country: this.state.country,
             city : this.state.city,
             state : this.state.state,
             zip : this.state.zip
@@ -77,9 +73,8 @@ class AddForm extends React.Component {
             this.props.updateMarkers({name: this.state.club_name,
                 address: this.state.address + ", " 
                 + this.state.city + ", " 
-                + this.state.state + " " 
-                + this.state.zip + " "
-                + this.state.country,
+                + this.state.state + ", " 
+                + this.state.zip,
                 state: this.state.state,
                 city: this.state.city,
                 zip: this.state.zip,
@@ -106,22 +101,19 @@ class AddForm extends React.Component {
                 <form id="addFormDiv" onSubmit={this.submitForm}>
                     <h1> Add a New Club </h1>
                     <label><b>Club Name</b></label>
-                    <input type="text" name="club_name" onChange={e =>this.setClubName(e)} required/>
+                    <input type="text"  name="club_name" onChange={e =>this.setClubName(e)} required/>
 
                     <label><b>Address</b></label>
                     <input type="text" name="address" onChange={e => this.setAddress(e)} required/>
 
-                    <label><b>Country</b></label>
-                    {countries}
-                    
-                    <label><b>State / Province</b></label>
-                    <input type="text" style={{width:"23.7%"}} className="state" name="state" onChange={e => this.setSt(e)}/>
-                    <br/>
                     <label><b>City</b></label>
-                    <input type="text" style={{width:"48.2%"}} className="city" name="city" onChange={e => this.setCity(e)}/>
+                    <input type="text" style={{width:"36.7%"}} className="city" name="city" onChange={e => this.setCity(e)} required/>
+
+                    <label><b>State</b></label>
+                    <input type="text" style={{width:"4%"}} className="state" name="state" onChange={e => this.setSt(e)} required/>
 
                     <label><b>Zip</b></label>
-                    <input type="text" style={{width:"20.2%"}} className="zip" name="zip" onChange={e => this.setZip(e)}/>
+                    <input type="text" style={{width:"11.8%"}} className="zip" name="zip" onChange={e => this.setZip(e)} required/>
                     <br/>
                     <label><b>Website</b></label>
                     <input type="text" style={{width:"32.5%"}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
@@ -133,11 +125,11 @@ class AddForm extends React.Component {
                     <input type="text" style={{width:"26.4%"}} className="contact" name="contact" onChange={e => this.setContact(e)}/>
 
                     <label><b>Phone #</b></label>
-                    <input type="text" style={{width:"27%"}} className="phone" name="phone" placeholder="Optional" onChange={e => this.setPhone(e)}/>
+                    <input type="text" style={{width:"27%"}} className="phone" name="phone" onChange={e => this.setPhone(e)}/>
                     <br/>
                     <label><b>Weapons / Studies</b></label>
                     <input type="text"className="website" name="website" onChange={e => this.setWeapons(e)}/>
-
+                    <br/>
                     <label><b>Club Description</b></label>
                     <textarea type="text" className="description" name="description" onChange={e => this.setDescription(e)}/>
 

@@ -29,6 +29,9 @@ class App extends React.Component {
             isAdmin : null,
             currLat : null,
             currLng : null,
+            organization: null,
+            organizations: [],
+            user: null
         };
 
         this.usernameCallback = this.usernameCallback.bind(this);
@@ -60,6 +63,22 @@ class App extends React.Component {
         this.openRegister();
         this.closeEverything();
     };
+
+    
+  markerCallback = async (markerFromForm) => {
+    await locationManager.addLocation(markerFromForm);
+    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+  };
+
+  editMarkerCallback = async (markerFromForm) => {
+    await locationManager.editLocation(this.state.selected, markerFromForm);
+    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+  };
+
+  editOrganizationCallback = async (orgFromForm) => {
+    await organizationManager.editOrganization(this.state.organization, orgFromForm);
+    this.setState({organization : orgFromForm});
+  }
 
     equalMarkers(markers1, markers2) {
         if (markers1 === null && markers2 !== null) {
@@ -126,16 +145,31 @@ class App extends React.Component {
         }
     };
 
-    usernameCallback = async (usernameData) => {
-        this.setState({
-            markers: await locationManager.updateLocations(userManager, this.state.isAdmin, this.state.currLat, this.state.currLng)
-        });
-        this.setState({username: usernameData}, async () => this.setState(
-            { logButton:
-                    <div className="App-header2" id="mainHeader2">
-                        <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
-                    </div>}));
-    };
+  usernameCallback = async (username, password) => {
+    var confirmed = await userManager.fireSignIn(username, password);
+        if (confirmed[0]) {
+            window.currUser = username;
+            this.setAdmin(confirmed[2]);
+            this.onClickSubmit();
+        } else {
+            return confirmed;
+        }
+    this.setState({
+        markers: await locationManager.updateLocations(),
+        user: userManager.getUser(),
+        organization: await organizationManager.getOrganization(),
+    });
+    // console.log("*" + this.state.user.email);
+    // console.log("*" + this.state.organization.website);
+
+    this.setState({username: username}, async () => this.setState(
+      { logButton:
+        <div className="App-header2" id="mainHeader2">
+        <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
+        <button id="profileButton" style={{borderRight:"thin solid gray"}} onClick={this.openProfile}><b>Profile</b></button>
+        </div>}));
+        return confirmed;
+  };
 
     markerCallback = async (markerFromForm) => {
         await locationManager.addLocation(markerFromForm);
@@ -182,29 +216,31 @@ class App extends React.Component {
             adminSignedIn = "none";
         }
 
-        return (
-            <div>
-                <div className="shadow" id="shadow"/>
-                <div className="App-header" id="mainHeader">
-                    <h1 id="title">HEMAA Club Finder</h1>
-                    <h2 id="welcome" style={{display : signedIn}}>Welcome, {this.state.username}</h2>
-                    <button onClick={e => moveDirectory()} id="mover" className="btn2"><i className="fas fa-caret-left" id="arrow"></i></button>
-                </div>
-                {this.state.logButton}
-                <div className="topnav" id="topNav" style={{display : signedIn}}>
-                </div>
-                <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
-                    <button onClick={e => this.openRegister}>Add Organization</button>
-                </div>
-                <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
-                <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-                <Directory equalMarkers={this.equalMarkers.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected} updateMarkers={this.organizationCallback.bind(this)/>
-                <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-                <AddForm updateMarkers={this.markerCallback.bind(this)}/>
-                <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
-            </div>
-        )
-    };
+    return (
+      <div>
+        <div className="shadow" id="shadow"/>
+          <div className="App-header" id="mainHeader">
+            <h1 id="title">HEMAA Club Finder</h1>
+            <h2 id="welcome" style={{display : signedIn}}>Welcome, {this.state.username}</h2>
+            <button onClick={e => moveDirectory()} id="mover" className="btn2"><i className="fas fa-caret-left" id="arrow"></i></button>
+          </div>
+          {this.state.logButton}
+          <div className="topnav" id="topNav" style={{display : signedIn}}>
+          </div>
+          <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
+            <button onClick={e => this.openRegister}>Add Organization</button>
+          </div>
+          <ForgotPassword/>
+          <OrgRegistration callbackFromApp={this.usernameCallback}/>
+          <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
+          <Directory currMarkers={this.state.markers}/>
+          <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <Profile currentUser = {this.state.user} currentOrg = {this.state.organization} updateOrg = {this.editOrganizationCallback.bind(this)} />
+          <AddForm updateMarkers={this.markerCallback.bind(this)}/>
+          <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
+      </div>
+    )
+  };
 
     closeEverything () {
         document.getElementById("details").style.display = "none";

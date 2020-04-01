@@ -13,8 +13,13 @@ class Profile extends React.Component {
             this.state = {
                 user: this.props.currentUser,
                 name: this.props.currentOrg.name,
+                country: this.props.currentOrg.country,
+                city: this.props.currentOrg.city,
+                state: this.props.currentOrg.state,
+                zip: this.props.currentOrg.zip,
                 website: this.props.currentOrg.website,
-                email:this.props.currentOrg.email,
+                phone: this.props.currentOrg.phone,
+                description: this.props.currentOrg.description,
                 username: this.props.currentOrg.username
             }
         }
@@ -22,8 +27,9 @@ class Profile extends React.Component {
             this.state = {
                 name: "",
                 website: "",
+                phone: "",
+                description: "",
                 username: "",
-                email:"",
                 user: null
             }
         }
@@ -38,8 +44,13 @@ class Profile extends React.Component {
             return {
                     user: props.currentUser,
                     name: props.currentOrg.name,
+                    country: props.currentOrg.country,
+                    city: props.currentOrg.city,
+                    state: props.currentOrg.state,
+                    zip: props.currentOrg.zip,
                     website: props.currentOrg.website,
-                    email:props.currentOrg.email,
+                    phone: props.currentOrg.phone,
+                    description: props.currentOrg.description,
                     username: props.currentOrg.username
             };
         } else if (props.currentUser && !state.user){
@@ -48,8 +59,13 @@ class Profile extends React.Component {
             return {
                 user: props.currentUser,
                 name: props.currentOrg.name,
+                country: props.currentOrg.country,
+                city: props.currentOrg.city,
+                state: props.currentOrg.state,
+                zip: props.currentOrg.zip,
                 website: props.currentOrg.website,
-                email:props.currentOrg.email,
+                phone: props.currentOrg.phone,
+                description: props.currentOrg.description,
                 username: props.currentOrg.username
             };
         }
@@ -59,15 +75,32 @@ class Profile extends React.Component {
     setName(event) {
         this.setState({name: event.target.value});
     }
+    setCountry(event) {
+        this.setState({country: event.target.value});
+    }
+    setCity(event) {
+        this.setState({city: event.target.value});
+    }
+    setSt(event) {
+        this.setState({state: event.target.value});
+    }
+    setZip(event) {
+        this.setState({zip: event.target.value});
+    }
     setWebsite(event) {
         this.setState({website: event.target.value});
     }
+    setPhone(event) {
+        this.setState({phone: event.target.value});
+    }
+    setDescription(event) {
+        this.setState({description: event.target.value});
+    }
+  
     setUsername(event) {
         this.setState({username: event.target.value});
     }
-    setEmail(event) {
-        this.setState({username: event.target.value});
-    }
+
 
     async submitForm(event) {
         event.preventDefault();
@@ -87,18 +120,32 @@ class Profile extends React.Component {
                     <h1>Profile Details</h1>
 
                     <label><b>Organization Name</b></label>
-                    <input type="text" name="club_name" onChange={e =>this.setName(e)} required/>
+                    <input type="text" defaultValue= {this.state.name} onChange={e =>this.setName(e)}/>
+
+                    <label><b>Username</b></label>
+                    <input type="text" defaultValue= {this.state.username} onChange={e =>this.setUsername(e)}/>
+
+                    <label><b>Country</b></label>
+                    <input type="text" defaultValue= {this.state.country} onChange={e =>this.setCountry(e)}/>
+
+                    <label><b>City</b></label>
+                    <input type="text" defaultValue= {this.state.city} onChange={e =>this.setCity(e)}/>
+
+                    <label><b>State</b></label>
+                    <input type="text" defaultValue= {this.state.state} onChange={e =>this.setSt(e)}/>
+
+                    <label><b>Zip</b></label>
+                    <input type="text" defaultValue= {this.state.zip} onChange={e =>this.setZip(e)}/>
 
                     <label><b>Website</b></label>
-                    <input type="text" name="website" onChange={e => this.setWebsite(e)} required/>
+                    <input type="text" defaultValue= {this.state.website} onChange={e =>this.setWebsite(e)}/>
 
-                    <label><b>Email</b></label>
-                    <input type="text" name="email" style={{width:"31%"}} onChange={e => this.setEmail(e)} required/>
-                    
-                    <label><b>Username</b></label>
-                    <input type="text" style={{width:"30.3%"}} name="username" onChange={e => this.setUsername(e)} required/>
+                    <label><b>Description</b></label>
+                    <input type="text" defaultValue= {this.state.description} onChange={e =>this.setDescription(e)}/>
 
-                    <br/>
+                    <label><b>Phone</b></label>
+                    <input type="text" defaultValue= {this.state.phone} onChange={e =>this.setPhone(e)}/>
+
                     <button type="submit" className="submit">Submit</button>
                     <button type="text" className="submit" onClick={e=>this.closeProfileForm(e)}>Close</button>
                 </form>

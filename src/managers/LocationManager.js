@@ -1,5 +1,6 @@
 import {config} from '../tools/config.js';
 import axios from 'axios';
+import {userManager} from "./UserManager.js";
 
 class LocationManager {
     locations;
@@ -11,12 +12,10 @@ class LocationManager {
     async addLocation(marker) {
         var req = config.SERVER_URL + "/locations/addLocation";
         await axios.post(req, marker)
-            .then(() => {
-                console.log("Successfully added...");
-            })
             .catch(function (error) {
                 console.log(error);
             });
+        this.locations = await this.updateLocations();
         return null;
     }
 
@@ -28,23 +27,26 @@ class LocationManager {
 
     async removeLocation(marker) {
         var req = config.SERVER_URL + "/locations/removeLocation";
-        await axios.delete(req, {data: marker})
+        axios.delete(req, {data: marker})
             .then(res => {
                 console.log("Successfully removed...");
             })
             .catch(function (error) {
                 console.log(error);
             });
+        this.locations = await this.updateLocations();
         return null;
     }
 
     async getLocations() {
+        console.log("location manger: line 45");
         if (await this.locations) {
             return this.locations;
         } else {
             return [];
         }
     }
+
 
     async updateLocations(userManager, isAdmin, lat, lng) {
         var req = config.SERVER_URL + "/locations/getLocations/currCoords/" + lat + '/' + lng;
@@ -56,7 +58,6 @@ class LocationManager {
             req += "/" + currUser.email;
         }
 
-        console.log(req);
         await axios.get(req)
             .then(res => {
                 newLocations = res.data;
@@ -64,8 +65,6 @@ class LocationManager {
                 newLocations = []; // if an error occurs the no locations will appear
                 console.log(error);
             });
-
-        this.locations = newLocations;
         return newLocations;
     }
 

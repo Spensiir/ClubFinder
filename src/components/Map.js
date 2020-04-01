@@ -22,10 +22,9 @@ class SimpleMap extends React.Component {
             this.state = {
                 center: {lat: 33.7490, lng: -84.3880},
                 defaultCenter: {lat: 33.7490, lng: -84.3880},
-                zoom: 5,
+                zoom: 14,
                 markers: this.props.currMarkers,
                 selected: this.props.currSelect,
-                centerChange: false
             };
 
             if ("geolocation" in navigator) {
@@ -35,14 +34,11 @@ class SimpleMap extends React.Component {
                         this.setState({
                             center: {lat: position.coords.latitude, lng: position.coords.longitude},
                             defaultCenter: {lat: position.coords.latitude, lng: position.coords.longitude},
-                            zoom: 5,
+                            zoom: 14,
                             markers: this.props.currMarkers,
                             selected: this.props.currSelect
                         });
                     })
-            }
-            if (this.props.currSelect) {
-                this.setState({zoom: 9});
             }
         this.onChildClick = this.onChildClick.bind(this);
         this.removeMarker = this.removeMarker.bind(this);
@@ -53,32 +49,17 @@ class SimpleMap extends React.Component {
             return {
                 selected : props.currSelect,
                 center: { lat : props.currSelect.lat, lng: props.currSelect.lng },
-                markers : props.currMarkers,
-                zoom : 9
+                markers : props.currMarkers
             };
         } else if (props.currSelect !== state.selected && props.currSelect == null) {
             return {
-                selected : props.currSelect,
-                markers : props.currMarkers,
-                zoom : 5
+                selected : props.initialSelect,
+                markers : props.currMarkers
             };
-        } else if (!props.equalMarkers(props.currMarkers, state.markers)) {
+        } else if (props.currMarkers.length !== state.markers.length) {
             return {
-                selected : props.currSelect,
                 markers : props.currMarkers
             }
-        } else if (props.currSelect && state.centerChange === true) {
-            return {
-                center: { lat : props.currSelect.lat, lng: props.currSelect.lng },
-                centerChange : false
-            };
-        } else if (props.currSelect !== state.selected) {
-            return {
-                selected: props.currSelect,
-                center: {lat: props.currSelect.lat, lng: props.currSelect.lng},
-                markers: props.currMarkers,
-                zoom: 9
-            };
         }
         return null;
     }
@@ -89,17 +70,14 @@ class SimpleMap extends React.Component {
             for (var i = 0; i < this.state.markers.length; i++) {
                 if (key === markers[i].name) {
                     if (this.state.selected) {
-                        var selectedMarker = this.state.selected;
-                        selectedMarker.color = "red";
-                        this.setState({selected : selectedMarker});
+                        this.state.selected.color = "red";
                     }  
                     this.props.updateSelected(markers[i]);
-
-                    this.setState({selected: this.props.currSelect, zoom: 9});
+                    this.setState({selected: this.props.currSelect});
                 }
             }
         } else {
-            this.setState({selected: this.props.currSelect, zoom: 9});
+            this.setState({selected: this.props.currSelect});
         }
     };
 
@@ -108,7 +86,7 @@ class SimpleMap extends React.Component {
         if (this.state.selected) {
             this.state.selected.color = "red";
         }
-        this.setState({selected: this.props.currSelect, zoom: 5});
+        this.setState({selected: this.props.currSelect});
     };
         
     async removeMarker() {
@@ -192,7 +170,7 @@ class SimpleMap extends React.Component {
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: config.API_KEY}}
                     defaultZoom= {5}
-                    zoom={this.state.zoom}
+                    zoom={this.state.markers.selected}
                     onChildClick={this.onChildClick}
                     onClick = {this.onClick}
                     center = {this.state.center}
@@ -211,14 +189,6 @@ class SimpleMap extends React.Component {
                                 lng = {each.lng}
                                 color = {each.color}
                             />)
-                    }
-                    {
-                        this.state.selected &&
-                        <Marker key={this.state.selected.name}
-                           lat = {this.state.selected.lat}
-                           lng = {this.state.selected.lng}
-                           color = {this.state.selected.color}
-                        />
                     }
                 </GoogleMapReact>
             </div>

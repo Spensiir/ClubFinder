@@ -18,20 +18,15 @@ class Signin extends React.Component {
     }
     async submitSignin(event) {
         event.preventDefault();
-        var confirmed = await userManager.fireSignIn(this.state.username, this.state.password);
-
+        var confirmed = await this.props.callbackFromApp(this.state.username, this.state.password);
         if (confirmed[0]) {
-            window.currUser = this.state.username;
-            this.props.setAdmin(confirmed[2]);
-            this.props.callbackFromApp(this.state.username);
-            this.props.onClickSubmit();
-
             closeSignin();
         } else {
             alert(confirmed[1]);
         }
     }
     closeSignin(event) {
+        this.props.onClickSignOut();
         closeSignin();
     }
 
