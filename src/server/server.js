@@ -239,7 +239,7 @@ app.get('/locations/getCoords/address/:address', function (req, res) {
 });
 
 app.get('/organizations/newOrg', function (req, res) {
-    admin.auth().createUser({
+    firebase.admin.auth().createUser({
         email: req.body.email,
         password: req.body.password
     }).then(function(createdUser) {
