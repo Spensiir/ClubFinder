@@ -2,8 +2,9 @@
     display: none;
     position: fixed;
     width: 800px;
+    height: 450px;
     left: calc(50% - 400px);
-    top: 25%;
+    top: 18%;
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
@@ -13,14 +14,13 @@
 
 .profileForm h1 {
     margin-left: 3%;
-    font-size:30px;
     color:rgba(0, 74, 160, 0.8);
 }
 
 .profileForm input[type=text] {
-    width: 90%;
-    padding: 8px;
-    margin: 5px 3% 22px 3%;
+    width: 30%;
+    padding: 3px;
+    margin: 5px 3% 5px 3%;
     border: none;
     background: #f1f1f1;
     font-size: large;
@@ -42,7 +42,7 @@
 .profileForm button {
     margin: 2%;
     right:27px;
-    bottom:14px;
+    bottom:20px;
     background: linear-gradient( #45484d 0%,#000000 100%);
     color: white;
     border-radius:10px;
