@@ -27,8 +27,9 @@ class App extends React.Component {
         markers : [],
         selected : null,
         isAdmin : null,
-        user : userManager.getUser(),
-        organization : organizationManager.getOrganization(),
+        user : null,
+        organization : null,
+        organizations: [],
       };
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
@@ -42,10 +43,14 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    this.setState({
-        markers: await locationManager.updateLocations()
+    await navigator.geolocation.getCurrentPosition(async position => {
+        this.setState({currLat: position.coords.latitude, currLng: position.coords.longitude});
+        this.setState({
+            markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng),
+            organizations : await organizationManager.updateOrganizations()
+        });
     });
-  }
+}
 
   onClickSubmit = async () => {
     this.openSignin();
@@ -57,10 +62,45 @@ class App extends React.Component {
     this.closeEverything();
   };
 
+  equalMarkers(markers1, markers2) {
+    if (markers1 === null && markers2 !== null) {
+        return false;
+    }
+    if (markers1 !== null && markers2 === null) {
+        return false;
+    }
+
+    if (markers1 === null && markers2 === null) {
+        return true;
+    }
+    if (markers1.length !== markers2.length) {
+        return false;
+    }
+
+    for (let i=0; i < markers1.length; i++) {
+        if (markers1[i].name !== markers2[i].name) return false;
+        if (markers1[i].city !== markers2[i].city) return false;
+        if (markers1[i].address !== markers2[i].address) return false;
+        if (markers1[i].contact !== markers2[i].contact) return false;
+        if (markers1[i].color !== markers2[i].color) return false;
+        if (markers1[i].description !== markers2[i].description) return false;
+        if (markers1[i].email !== markers2[i].email) return false;
+        if (markers1[i].lat !== markers2[i].lat) return false;
+        if (markers1[i].lng !== markers2[i].lng) return false;
+        if (markers1[i].orgEmail !== markers2[i].orgEmail) return false;
+        if (markers1[i].phone !== markers2[i].phone) return false;
+        if (markers1[i].state !== markers2[i].state) return false;
+        if (markers1[i].weapons !== markers2[i].weapons) return false;
+        if (markers1[i].website!== markers2[i].website) return false;
+        if (markers1[i].zip !== markers2[i].zip) return false;
+    }
+    return true;
+    }
+
   onClickSignOut = async () => {
     await userManager.fireSignOut();
     this.setState({
-        markers: await locationManager.updateLocations()
+        markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng)
     });
 
     this.closeEverything();
@@ -74,54 +114,49 @@ class App extends React.Component {
           <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
         </div>});
   };
+  
+      setAdmin = (isAdminStr) => {
+          if(isAdminStr === "True") {
+              this.setState({
+                  isAdmin: true
+              });
+          } else {
+              this.setState({
+                  isAdmin: false
+              });
+          }
+      };
 
-  setAdmin = (isAdminStr) => {
-    if(isAdminStr === false) {
-      this.setState({
-        isAdmin: false
-      });
-    } else {
-      this.setState({
-        isAdmin: true
-      });
-    }
-  };
-
-  usernameCallback = async (username, password) => {
-    var confirmed = await userManager.fireSignIn(username, password);
-        if (confirmed[0]) {
-            window.currUser = username;
-            this.setAdmin(confirmed[2]);
-            this.onClickSubmit();
-        } else {
-            return confirmed;
-        }
+  usernameCallback = async (usernameData) => {
     this.setState({
-        markers: await locationManager.updateLocations(),
+        markers: await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng),
         user: userManager.getUser(),
-        organization: await organizationManager.getOrganization(),
+        organization: await organizationManager.getOrganization(userManager.getUser().uid),
+        organizations: await organizationManager.updateOrganizations()
     });
-    // console.log("*" + this.state.user.email);
-    // console.log("*" + this.state.organization.website);
 
-    this.setState({username: username}, async () => this.setState(
+    this.setState({username: usernameData}, async () => this.setState(
       { logButton:
         <div className="App-header2" id="mainHeader2">
         <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
         <button id="profileButton" style={{borderRight:"thin solid gray"}} onClick={this.openProfile}><b>Profile</b></button>
         </div>}));
-        return confirmed;
   };
 
   markerCallback = async (markerFromForm) => {
     await locationManager.addLocation(markerFromForm);
-    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+    this.setState({markers : await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
   };
 
   editMarkerCallback = async (markerFromForm) => {
     await locationManager.editLocation(this.state.selected, markerFromForm);
-    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
-  };
+    this.setState({markers : await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
+    this.selectedCallback(markerFromForm);
+};
+
+  organizationCallback = async (email) => {       
+    this.setState({markers : await locationManager.updateLocations(email, this.state.isAdmin, this.state.currLat, this.state.currLng)});     
+  }
 
   editOrganizationCallback = async (orgFromForm) => {
     await organizationManager.editOrganization(this.state.organization, orgFromForm);
@@ -137,7 +172,7 @@ class App extends React.Component {
 
   async removeMarker() {
     await locationManager.removeLocation(this.state.selected);
-    this.setState({markers : await locationManager.updateLocations(), selected: null});
+    this.setState({markers : await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: null});
   };
 
   render() {
@@ -168,12 +203,11 @@ class App extends React.Component {
           <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
             <button onClick={e => this.openRegister}>Add Organization</button>
           </div>
-          <ForgotPassword/>
-          <OrgRegistration callbackFromApp={this.usernameCallback}/>
+          <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory currMarkers={this.state.markers}/>
-          <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <Profile currentUser = {this.state.user} currentOrg = {this.state.organization} updateOrg = {this.editOrganizationCallback.bind(this)} />
+          <Directory equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <Profile currentUser={this.state.user} currentOrg={this.state.organization} updateOrg={this.editOrganizationCallback.bind(this)}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
       </div>

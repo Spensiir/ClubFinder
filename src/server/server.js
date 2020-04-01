@@ -3,6 +3,7 @@ const https = require('https')
 const request = require('request');
 const app = express()
 const port = 3001
+const axios = require("axios");
 var keys = require('./keys'); // get file with all api keys
 var firebase = require("firebase/app");
 var bodyParser = require('body-parser');
@@ -11,6 +12,7 @@ var bodyParser = require('body-parser');
 require("firebase/auth");
 require("firebase/firestore");
 require('firebase/database');
+require('firebase-admin');
 //Added by Ben
 var firebase = require('firebase');
 
@@ -44,10 +46,10 @@ app.use(function(req, res, next) {
     };
 });
 
-app.get('/locations/getLocations', function (req, res) {
+app.get('/locations/getLocations/currCoords/:lat/:lng', function(req, res) {
     var ref = firebase.database().ref('locations');
     var locations = [];
-    ref.once('value').then(function(snapshot) {
+    ref.once('value').then(async function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             locations.push({name: childSnapshot.val()["name"],
                 address: childSnapshot.val()["address"],
@@ -62,14 +64,15 @@ app.get('/locations/getLocations', function (req, res) {
                 color: childSnapshot.val()["color"],
                 orgEmail: childSnapshot.val()["orgEmail"]});
         });
-        res.send(locations);
+        res.send(await getDistances(locations, req.params.lat, req.params.lng));
     });
 });
 
-app.get('/locations/getLocations/:email', function (req, res) {
+app.get('/locations/getLocations/currCoords/:lat/:lng/:email', function (req, res) {
     var ref = firebase.database().ref('locations');
     var locations = [];
-    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(function(snapshot) {
+    console.log("here")
+    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(async function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             locations.push({name: childSnapshot.val()["name"],
                 address: childSnapshot.val()["address"],
@@ -84,7 +87,7 @@ app.get('/locations/getLocations/:email', function (req, res) {
                 color: childSnapshot.val()["color"],
                 orgEmail: childSnapshot.val()["orgEmail"]});
         });
-        res.send(locations);
+        res.send(await getDistances(locations, req.params.lat, req.params.lng));
     })
 });
 
@@ -137,12 +140,6 @@ app.get('/organizations/getOrganization/:uid', function(req, res) {
     ref.once('value').then(function(snapshot) {
         var organization = {
             name: snapshot.val()["name"],
-            address: snapshot.val()["address"],
-            country: snapshot.val()["country"],
-            city: snapshot.val()["city"],
-            state: snapshot.val()["state"],
-            zip: snapshot.val()["zip"],
-            description: snapshot.val()["description"],
             website: snapshot.val()["website"],
             email: snapshot.val()["email"],
             username: snapshot.val()["username"],
@@ -155,18 +152,14 @@ app.get('/organizations/getOrganizations', function (req, res) {
     var organizations = [];
     ref.once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-            organizations.push({
-                name: childSnapshot.val()["name"],
-                address: childSnapshot.val()["address"],
-                country: childSnapshot.val()["country"],
-                city: childSnapshot.val()["city"],
-                state: childSnapshot.val()["state"],
-                zip: childSnapshot.val()["zip"],
-                description: childSnapshot.val()["description"],
-                website: childSnapshot.val()["website"],
-                email: childSnapshot.val()["email"],
-                username: childSnapshot.val()["username"],
-            });
+            if (childSnapshot.val()["admin"] == "False") {
+                    organizations.push({
+                        name: childSnapshot.val()["name"],
+                        website: childSnapshot.val()["website"],
+                        email: childSnapshot.val()["email"],
+                        username: childSnapshot.val()["username"],
+                });
+            }
         });
         res.send(organizations);
     });

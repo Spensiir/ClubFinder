@@ -1,6 +1,7 @@
 import React from "react"
 import "../css/directory.css"
 import {editDistance} from "../tools/stringSearch"
+import locationManager from "../managers/LocationManager.js"
 
 var keyVal = 0;
 var isUser = "none";
@@ -15,19 +16,27 @@ class Directory extends React.Component {
         {
             markers: this.props.currMarkers,
             filteredMarkers: this.props.currMarkers,
+            orgs:this.props.organizations,
             allWords: "",
             selected : this.props.currSelect
         }
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.currSelect !== state.selected) {
+        if (props.currSelect !== state.selected && !props.equalMarkers(props.currMarkers, state.markers)) {
+            return {
+                selected : props.currSelect,
+                markers : props.currMarkers,
+                filteredMarkers: props.currMarkers
+            };
+        } else if (props.currSelect !== state.selected) {
             return {
                 selected : props.currSelect
             };
-        } else if (props.currMarkers.length !== state.markers.length) {
+        } else if (!props.equalMarkers(props.currMarkers, state.markers)) {
             return {
                 markers : props.currMarkers,
+                orgs: props.organizations,
                 filteredMarkers: props.currMarkers
             }
         }
@@ -40,14 +49,31 @@ class Directory extends React.Component {
             for (var i = 0; i < this.state.markers.length; i++) {
                 if (key === markers[i].name) {
                     if (this.state.selected) {
-                        this.state.selected.color = "red";
-                    }  
+                        var selectedMarker = this.state.selected;
+                        selectedMarker.color = "red";
+                        this.setState({selected : selectedMarker});
+                        console.log("selected: ", this.state.selected);
+                    }
                     this.props.updateSelected(markers[i]);
-                    this.setState({selected: this.props.currSelect});
+
+                    this.setState({selected: this.props.currSelect, zoom: 9});
                 }
             }
         } else {
-            this.setState({selected: this.props.currSelect});
+            this.setState({selected: this.props.currSelect, zoom: 9});
+        }
+    };
+
+    onOrgClick = (key) => {
+        var orgs = this.state.orgs;
+        if (key !== 0) {
+            for (var i = 0; i < this.state.orgs.length; i++) {
+                if (key === orgs[i].email) {
+                    this.props.updateMarkers(orgs[i].email);
+                }
+            }
+        } else {
+            console.log('org is 0');
         }
     };
 
@@ -79,11 +105,11 @@ class Directory extends React.Component {
                 </ul>
                 <ul id="UL2">
                 {
-                    this.state.filteredMarkers.map( (each) =>
-                        <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
-                            <h2>{each.name}</h2>
-                            <h3>{each.address}</h3>
-                        </li>
+                    this.state.orgs.map( (each) =>
+                        <li type="button" onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
+                        <h2>{each.name}</h2>
+                        <h3>{each.website}</h3>
+                    </li>
                     )
                 }
                 </ul>
@@ -149,6 +175,8 @@ function isSignedIn() {
         if (document.getElementById("topNav").style.display == "block") {
             isNotOrg = "none";
             isOrg = "inline";
+            document.getElementById("UL").style.display = "block";
+            document.getElementById("UL2").style.display = "none";
         } else {
             isNotOrg = "inline";
             isOrg = "none";
