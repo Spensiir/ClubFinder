@@ -1,7 +1,8 @@
 import React from 'react';
 
 export var countries = (
-            <select onChange={e => this.setCountry(e)} id="country" name="country" class="form-control">
+            <div>
+            <select id="country" name="country" class="form-control">
                 <option value="United States">United States</option>
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Åland Islands">Åland Islands</option>
@@ -199,6 +200,7 @@ export var countries = (
                 <option value="Solomon Islands">Solomon Islands</option>
                 <option value="Somalia">Somalia</option>
                 <option value="South Africa">South Africa</option>
+                <option value="South Georgia and The South Sandwich Islands">South Georgia and The South Sandwich Islands</option>
                 <option value="Spain">Spain</option>
                 <option value="Sri Lanka">Sri Lanka</option>
                 <option value="Sudan">Sudan</option>
@@ -239,4 +241,5 @@ export var countries = (
                 <option value="Zambia">Zambia</option>
                 <option value="Zimbabwe">Zimbabwe</option>
             </select>
+            </div>
 )
