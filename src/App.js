@@ -11,7 +11,6 @@ import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 import Profile from './components/Profile.js';
 import { organizationManager } from './managers/OrganizationManager';
-import ForgotPassword from './components/ForgotPassword';
 
 var checkMove = 0;
 
@@ -209,7 +208,6 @@ class App extends React.Component {
                 <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
                 <Directory equalMarkers={this.equalMarkers.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected} updateMarkers={this.organizationCallback.bind(this)}/>
                 <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-                <Profile currentUser = {this.state.user} currentOrg = {this.state.organization} updateOrg = {this.editOrganizationCallback.bind(this)} />
                 <AddForm updateMarkers={this.markerCallback.bind(this)}/>
                 <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
             </div>
