@@ -79,6 +79,7 @@ class Directory extends React.Component {
 
     render() {
         isSignedIn();
+        var editDisabled = false;
         return (
             <div id="Directory" className="directory">
                 <div id="nonOrgButtons" style={{display:isNotOrg}}><br/>
@@ -106,9 +107,13 @@ class Directory extends React.Component {
                 <ul style={{display:"none"}} id="UL2">
                 {
                     this.state.orgs.map( (each) =>
-                        <li type="button" onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
+                        <li type="button" style={{paddingBottom:"12px"}} onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
                         <h2>{each.name}</h2>
-                        <h3>{each.website}</h3>
+                        <a href={each.website}>{each.website}</a>
+                        <i id="removeOrg" onClick={this.removeMarker} className="fas fa-trash-alt">
+                        <span className = "tooltip">Remove This Organization</span></i>
+                        <i id="editOrg" disabled={!editDisabled} onClick={this.openEditForm} className="fas fa-pencil-alt">
+                        <span className = "tooltip">Edit This Organization</span></i>
                     </li>
                     )
                 }
