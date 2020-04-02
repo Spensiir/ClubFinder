@@ -1,4 +1,4 @@
-import {firebase} from '../tools/config.js';
+import {firebase, admin} from '../tools/config.js';
 import {config} from '../tools/config.js';
 import axios from 'axios';
 
@@ -23,7 +23,7 @@ class UserManager {
             .then(res => {
                 adminStr = res.data;
             }).catch(function (error) {
-                adminStr = "false"; // if an error occurs then no locations will appear
+                adminStr = "false"; // if an error occurs the no locations will appear
                 console.log(error);
             });
         }
@@ -41,10 +41,10 @@ class UserManager {
         var confirmed;
         var err; 
         await firebase.auth().createUserWithEmailAndPassword(organization.email, organization.password)
-        .then(async () => {
+        .then(() => {
             user = firebase.auth().currentUser.uid;
 
-            await firebase.database().ref('organizations/' + user).set(
+            firebase.database().ref('organizations/' + user).set(
                 {
                     name: organization.name, 
                     email: organization.email,
@@ -52,8 +52,12 @@ class UserManager {
                     username: organization.username,
                     admin: "False"
                 }
-                ).catch(function (error) {
-                    console.log(error);
+                )
+            .then(result => {
+            console.log(organization)
+            })
+            .catch(function (error) {
+            console.log(error);
             });
             confirmed = true;
             err = "Ok.";
@@ -69,18 +73,14 @@ class UserManager {
     }
 
     async fireAdminCreateUser(user) {
-
-        var req = '/organizations/newOrg';
-        var uid;
-        await axios.post(req, user)
-            .then(res => {
-                uid = res;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-        return uid;
+        admin.auth().createUser({
+            email: user.email,
+            password: user.password
+        }).then(function(createdUser){
+            return createdUser.uid;
+        }).catch(function(error){
+            console.log("Error creating new user", error);
+        });
     }
 
     async fireSignOut() {

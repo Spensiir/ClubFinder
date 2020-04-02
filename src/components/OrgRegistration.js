@@ -1,6 +1,6 @@
 import React from "react"
 import "../css/orgForm.css"
-import {userManager} from "../managers/UserManager";
+import {userManager} from "../managers/UserManager.js"
 
 class OrgRegistration extends React.Component {
 
@@ -40,12 +40,9 @@ class OrgRegistration extends React.Component {
             password: this.state.password
         }
         //this.props.addOrg(org);
-        await this.props.userManager.fireCreateUser(org);
-        var success = await this.props.userManager.fireSignIn(org.email, org.password);
-
+        var success = await userManager.fireCreateUser(org);
         if (success[0]) {
             this.props.callbackFromApp(org.username);
-            this.props.setAdmin("false");
             closeOrgForm();
         }
         else {

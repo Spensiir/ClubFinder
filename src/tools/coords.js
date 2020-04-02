@@ -5,7 +5,7 @@ export async function getCoords(loc) {
     var locString = loc.address + ", " + loc.city + ", " + loc.state;
     locString = locString.split(" ").join("+");
 
-    var req = config.SERVER_URL + "/locations/getCoords/address/" + locString ;
+    var req = config.SERVER_URL + "/location/getCoords/address/" + locString ;
     console.log(req);
 
     let coords;
