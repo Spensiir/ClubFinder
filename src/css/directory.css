@@ -6,6 +6,7 @@
     overflow: hidden;
     min-width:400px;
     pointer-events:none;
+    max-width:350px;
   }
 
   .directory button.btn1 {
@@ -63,10 +64,13 @@
     padding: 2.5%;
     font-size: 15px;
     border: thin solid grey;
-    width: 82.1%;
+    width: 350px;
     background: white;
     pointer-events:all;
     transition:0.5s;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;   
+    box-sizing: border-box;   
   }
 
   .directory input[type=text]:focus {
@@ -209,10 +213,10 @@
     border-left:0;
     background:rgba(0,0,0,0.1);
   }
-  ::-webkit-scrollbar-track {
+  .directory ::-webkit-scrollbar-track {
     background:whitesmoke;
   }
-  ::-webkit-scrollbar-thumb {
+  .directory ::-webkit-scrollbar-thumb {
     background:rgba(2, 106, 224, 0.8);
     border-radius:0;
   }

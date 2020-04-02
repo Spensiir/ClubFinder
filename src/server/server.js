@@ -71,7 +71,6 @@ app.get('/locations/getLocations/currCoords/:lat/:lng', function(req, res) {
 app.get('/locations/getLocations/currCoords/:lat/:lng/:email', function (req, res) {
     var ref = firebase.database().ref('locations');
     var locations = [];
-    console.log("here")
     ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(async function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             locations.push({name: childSnapshot.val()["name"],

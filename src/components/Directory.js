@@ -103,7 +103,7 @@ class Directory extends React.Component {
                     )
                 }
                 </ul>
-                <ul id="UL2">
+                <ul style={{display:"none"}} id="UL2">
                 {
                     this.state.orgs.map( (each) =>
                         <li type="button" onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
