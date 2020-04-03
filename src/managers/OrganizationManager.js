@@ -12,7 +12,9 @@ class OrganizationManager {
 
     async addOrganization(organization) {
         var req = config.SERVER_URL + "/organizations/addOrganization";
-        var uid = userManager.fireAdminCreateUser(organization);
+        //var uid = userManager.fireAdminCreateUser(organization);
+        var uid = userManager.getUser().uid;
+        //console.log("****" + uid);
         organization.id = uid;
         await axios.post(req, organization)
         .catch(function (error) {
@@ -21,6 +23,7 @@ class OrganizationManager {
         this.organizations = await this.updateOrganizations();
         return null;
     }
+
 
     async editOrganization(oldOrganization, newOrganization) {
         await this.removeOrganization(oldOrganization);
