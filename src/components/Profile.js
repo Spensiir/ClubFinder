@@ -1,7 +1,5 @@
 import React from 'react';
 import '../css/profileForm.css';
-import {userManager} from "../managers/UserManager";
-import {organizationManager} from "../managers/OrganizationManager";
 
 class Profile extends React.Component {
     constructor(props) {
@@ -31,7 +29,6 @@ class Profile extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        console.log("***" + props.currentUser);
         if (props.currentUser && state.user && props.currentUser.uid !== state.user.uid) {
             //var uid = props.currentUser.uid;
             //var organization = organizationManager.getOrganization();

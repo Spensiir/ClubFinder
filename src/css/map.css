@@ -59,7 +59,6 @@
     display:inline;
     float:right;
     margin-right:12px;
-    margin-top:0px;
     font-size:18px;
     color:rgb(190, 189, 189);
     transition:0.4s;
@@ -112,15 +111,21 @@
     margin-right:6px;
 }
 
-.locDetails h4 {
+.locDetails p {
     position:relative;
-    display:inline;
+    display:inline-flex;
     font-size:14px;
-    top:1px;
+    color:rgb(56, 56, 56);
+    width:90%;
+    margin-bottom:0px;
+    margin-top:5px;
 }
 
 .locDetails a {
     font-size:14px;
+    color:rgb(23, 127, 161);
+    margin-left:8px;
+    font-weight:300;
 }
 
 .locDetails {

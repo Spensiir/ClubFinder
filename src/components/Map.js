@@ -3,7 +3,6 @@ import "../css/map.css";
 import "../css/directory.css";
 import GoogleMapReact from 'google-map-react';
 import { config } from '../tools/config.js';
-import locationManager from "../managers/LocationManager.js"
 
 var isUser = "none";
 
@@ -159,25 +158,24 @@ class SimpleMap extends React.Component {
                             <h2>{this.state.selected.address}</h2>
                             <br/>
                             <hr></hr>
-                            <div style = {{display:contact}}><h3 className="fas fa-user"></h3>
-                            <h4>{this.state.selected.contact}</h4></div>
+                            <div style = {{display:contact}}><h3 className="fas fa-user"> </h3>
+                            <p>{this.state.selected.contact}</p></div>
 
-                            <div style = {{display:phone}}><h3 className="fas fa-phone"></h3>
-                            <h4>{this.state.selected.phone}</h4></div>
+                            <div style = {{display:phone}}><h3 className="fas fa-phone"> </h3>
+                            <p>{this.state.selected.phone}</p></div>
 
-                            <h3 className="fas fa-globe"></h3>
-                            <a href={this.state.selected.website}>{this.state.selected.website}</a>
+                            <h3 className="fas fa-globe">
+                            <a href={this.state.selected.website}>{this.state.selected.website}</a> </h3>
                             <br/>
 
-                            <h3 className="fas fa-envelope"></h3>
-                            <a href={this.state.selected.orgEmail}>{this.state.selected.orgEmail}</a>
-                            <br/>
+                            <h3 className="fas fa-envelope">
+                            <a href={this.state.selected.orgEmail}>{this.state.selected.orgEmail}</a> </h3>
 
-                            <div style = {{display:weapons}}><h3 className="fas fa-fan"></h3>
-                            <h4>{this.state.selected.weapons}</h4></div>
+                            <div style = {{display:weapons}}><h3 className="fas fa-fan"> </h3>
+                            <p>{this.state.selected.weapons}</p></div>
 
                             <div style={{display:description}}><hr></hr>
-                            <h4>{this.state.selected.description}</h4></div>
+                            <p>{this.state.selected.description}</p></div>
                 </div>
                 )
         } else {

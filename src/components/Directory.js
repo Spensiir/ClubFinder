@@ -1,7 +1,6 @@
 import React from "react"
 import "../css/directory.css"
 import {editDistance} from "../tools/stringSearch"
-import locationManager from "../managers/LocationManager.js"
 
 var keyVal = 0;
 var isUser = "none";
@@ -110,10 +109,8 @@ class Directory extends React.Component {
                         <li type="button" style={{paddingBottom:"12px"}} onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
                         <h2>{each.name}</h2>
                         <a href={each.website}>{each.website}</a>
-                        <i id="removeOrg" onClick={this.removeMarker} className="fas fa-trash-alt">
-                        <span className = "tooltip">Remove This Organization</span></i>
-                        <i id="editOrg" disabled={!editDisabled} onClick={this.openEditForm} className="fas fa-pencil-alt">
-                        <span className = "tooltip">Edit This Organization</span></i>
+                        <h5 id="removeOrg" onClick={this.removeMarker} className="fas fa-trash-alt"> </h5>
+                        <h5 id="editOrg" disabled={!editDisabled} onClick={this.openEditForm} className="fas fa-pencil-alt"> </h5>
                     </li>
                     )
                 }
@@ -172,12 +169,12 @@ function activeBtn() {
 
 function isSignedIn() {
     if (document.getElementById("topNav") != null) {
-        if (document.getElementById("topNav2").style.display == "block" || document.getElementById("topNav").style.display == "block") {
+        if (document.getElementById("topNav2").style.display === "block" || document.getElementById("topNav").style.display === "block") {
             isUser = "initial";
         } else {
             isUser = "none";
         }
-        if (document.getElementById("topNav").style.display == "block") {
+        if (document.getElementById("topNav").style.display === "block") {
             isNotOrg = "none";
             isOrg = "inline";
             document.getElementById("UL").style.display = "block";
