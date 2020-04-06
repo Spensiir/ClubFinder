@@ -124,7 +124,7 @@ class Directory extends React.Component {
                         <li type="button" style={{paddingBottom:"12px"}} onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
                         <h2>{each.name}</h2>
                         <a href={each.website}>{each.website}</a>
-                        <i id="removeOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganizationCallback(each)} className="fas fa-trash-alt">
+                        <i id="removeOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt">
                         <span className = "tooltip">Remove This Organization</span></i>
                         <i id="editOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt">
                         <span className = "tooltip">Edit This Organization</span></i>
@@ -172,9 +172,9 @@ class Directory extends React.Component {
     }
 
 
-    eraseOrganizationCallback = async (org) => {
-        await organizationManager.eraseOrganization(org);
-    }
+    eraseOrganization = async (org) => {
+        this.props.eraseOrganization(org);
+    };
 
     openProfile(organization) {
         console.log('open here');

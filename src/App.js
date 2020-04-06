@@ -41,6 +41,7 @@ class App extends React.Component {
     this.editMarkerCallback = this.editMarkerCallback.bind(this);
     this.setAdmin = this.setAdmin.bind(this);
     this.editOrganizationCallback = this.editOrganizationCallback.bind(this);
+    this.eraseOrganizationCallback = this.eraseOrganizationCallback.bind(this);
   }
 
   async componentDidMount() {
@@ -187,7 +188,7 @@ class App extends React.Component {
 
   organizationCallback = async (email) => {       
     this.setState({markers : await locationManager.updateLocations(email, this.state.isAdmin, this.state.currLat, this.state.currLng)});     
-  }
+  };
 
   editOrganizationCallback = async (orgFromForm) => {
     if (this.state.isAdmin) {
@@ -197,7 +198,15 @@ class App extends React.Component {
       await organizationManager.editOrganization(this.state.organization, orgFromForm);
       this.setState({organization : orgFromForm, organizations: await organizationManager.updateOrganizations()});
     }
-  }
+  };
+
+  eraseOrganizationCallback = async (org) => {
+    await organizationManager.eraseOrganization(org);
+    this.setState({
+      organizations: await organizationManager.updateOrganizations(),
+      markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng)
+    });
+  };
 
   selectedCallback = (markerFromMap) => {
     if (markerFromMap) {
@@ -241,7 +250,7 @@ class App extends React.Component {
           </div>
           <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory equalOrgs={this.equalOrgs.bind(this)} updateAdminSelectedOrg={this.updateAdminSelectedOrg.bind(this)} openProfile={this.openProfile.bind(this)} isAdmin={this.state.isAdmin} equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <Directory eraseOrganization={this.eraseOrganizationCallback.bind(this)} equalOrgs={this.equalOrgs.bind(this)} updateAdminSelectedOrg={this.updateAdminSelectedOrg.bind(this)} openProfile={this.openProfile.bind(this)} isAdmin={this.state.isAdmin} equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <Profile adminSelectedOrg={this.state.adminSelectedOrg} isAdmin={this.state.isAdmin} currentUser={this.state.user} currentOrg={this.state.organization} updateOrg={this.editOrganizationCallback.bind(this)}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
