@@ -1,6 +1,5 @@
 import {config} from '../tools/config.js';
 import axios from 'axios';
-import {userManager} from "./UserManager.js";
 
 class LocationManager {
     locations;
@@ -56,7 +55,6 @@ class LocationManager {
             req += "/" + email;
         }
 
-        console.log(req);
         await axios.get(req)
             .then(res => {
                 newLocations = res.data;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export var countries = (
-            <select onChange={e => this.setCountry(e)} id="country" name="country" class="form-control">
+            <select onChange={e => this.setCountry(e)} id="country" name="country" className="form-control">
                 <option value="United States">United States</option>
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Åland Islands">Åland Islands</option>

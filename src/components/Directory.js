@@ -61,7 +61,6 @@ class Directory extends React.Component {
                         var selectedMarker = this.state.selected;
                         selectedMarker.color = "red";
                         this.setState({selected : selectedMarker});
-                        console.log("selected: ", this.state.selected);
                     }
                     this.props.updateSelected(markers[i]);
 
@@ -118,16 +117,17 @@ class Directory extends React.Component {
                     )
                 }
                 </ul>
-                <ul style={{display:"none"}} id="UL2">
+                <ul style={{width:"0px", marginLeft: "-100px"}} id="UL2">
                 {
                     this.state.orgs.map( (each) =>
                         <li type="button" style={{paddingBottom:"12px"}} onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
                         <h2>{each.name}</h2>
                         <a href={each.website}>{each.website}</a>
-                        <i id="removeOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt">
-                        <span className = "tooltip">Remove This Organization</span></i>
-                        <i id="editOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt">
-                        <span className = "tooltip">Edit This Organization</span></i>
+
+                        <h5 id="removeOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt">
+                        <span className = "tooltip">Remove This Organization</span></h5>
+                        <h5 id="editOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt">
+                        <span className = "tooltip">Edit This Organization</span></h5>
                     </li>
                     )
                 }
@@ -198,16 +198,18 @@ function activeBtn() {
 
 function isSignedIn() {
     if (document.getElementById("topNav") != null) {
-        if (document.getElementById("topNav2").style.display == "block" || document.getElementById("topNav").style.display == "block") {
+        if (document.getElementById("topNav2").style.display === "block" || document.getElementById("topNav").style.display === "block") {
             isUser = "initial";
         } else {
             isUser = "none";
         }
-        if (document.getElementById("topNav").style.display == "block") {
+        if (document.getElementById("topNav").style.display === "block") {
             isNotOrg = "none";
             isOrg = "inline";
-            document.getElementById("UL").style.display = "block";
-            document.getElementById("UL2").style.display = "none";
+            document.getElementById("UL").style.width = "310px";
+            document.getElementById("UL").style.marginLeft = "0px";
+            document.getElementById("UL2").style.width = "0px";
+            document.getElementById("UL2").style.marginLeft = "-100px";
         } else {
             isNotOrg = "inline";
             isOrg = "none";
@@ -217,11 +219,15 @@ function isSignedIn() {
 
 function checkTab() {
     if (document.getElementById("clubs").className === "btn1 active") {
-        document.getElementById("UL").style.display = "block";
-        document.getElementById("UL2").style.display = "none";
+        document.getElementById("UL").style.width = "310px";
+        document.getElementById("UL").style.marginLeft = "0px";
+        document.getElementById("UL2").style.width = "0px";
+        document.getElementById("UL2").style.marginLeft = "-100px";
     } else {
-        document.getElementById("UL").style.display = "none";
-        document.getElementById("UL2").style.display = "block";
+        document.getElementById("UL").style.width = "0px";
+        document.getElementById("UL").style.marginLeft = "-100px";
+        document.getElementById("UL2").style.width = "310px";
+        document.getElementById("UL2").style.marginLeft = "0px";
     }
 }
 

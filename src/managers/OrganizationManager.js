@@ -14,6 +14,7 @@ class OrganizationManager {
 
     async addOrganization(organization) {
         var req = config.SERVER_URL + "/organizations/addOrganization";
+
         await axios.post(req, organization)
         .catch(function (error) {
             console.log(error);

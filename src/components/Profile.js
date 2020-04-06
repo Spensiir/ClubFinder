@@ -1,7 +1,5 @@
 import React from 'react';
 import '../css/profileForm.css';
-import {userManager} from "../managers/UserManager";
-import {organizationManager} from "../managers/OrganizationManager";
 
 class Profile extends React.Component {
     constructor(props) {
@@ -44,8 +42,6 @@ class Profile extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        console.log("***" + props.currentUser);
-        console.log(props.isAdmin, props.adminSelectedOrg, props.adminSelectedOrg && props.adminSelectedOrg.email !== state.email)
         if (props.isAdmin && props.adminSelectedOrg && props.adminSelectedOrg.email !== state.email) {
             console.log('ret admin stuff')
             return {
@@ -131,7 +127,7 @@ class Profile extends React.Component {
                     <input type="text" defaultValue= {this.state.username} style={{width:"30.3%"}} name="username" onChange={e => this.setUsername(e)} required/>
 
                     <button type="submit" className="submit">Submit</button>
-                    <button type="text" className="submit" onClick={e=>this.closeProfileForm(e)}>Close</button>
+                    <button type="button" className="submit" onClick={e => this.closeProfileForm()}>Close</button>
                 </form>
             </div>
         )
