@@ -1,57 +1,68 @@
 import React from 'react';
 import '../css/profileForm.css';
-import {userManager} from "../managers/UserManager";
-import {organizationManager} from "../managers/OrganizationManager";
 
 class Profile extends React.Component {
     constructor(props) {
         super(props);
         var user = this.props.currentUser;
-        if (user) {
+        if (this.props.isAdmin) {
+            console.log("here");
+            this.state = {
+                user: this.props.currentUser,
+                name: this.props.adminSelectedOrg.name,
+                website: this.props.adminSelectedOrg.website,
+                email:this.props.adminSelectedOrg.email,
+                username: this.props.adminSelectedOrg.username,
+                id: this.props.adminSelectedOrg.id
+            }
+        }
+        else if (user) {
             //var uid = user.uid;
             //var organization = organizationManager.getOrganization();
             this.state = {
                 user: this.props.currentUser,
                 name: this.props.currentOrg.name,
-                country: this.props.currentOrg.country,
-                city: this.props.currentOrg.city,
-                state: this.props.currentOrg.state,
-                zip: this.props.currentOrg.zip,
                 website: this.props.currentOrg.website,
-                phone: this.props.currentOrg.phone,
-                description: this.props.currentOrg.description,
-                username: this.props.currentOrg.username
+                email:this.props.currentOrg.email,
+                username: this.props.currentOrg.username,
+                id: this.props.currentOrg.id
             }
         }
         else {
             this.state = {
                 name: "",
                 website: "",
-                phone: "",
-                description: "",
                 username: "",
-                user: null
+                email: "",
+                user: null,
+                id: ""
             }
         }
         this.submitForm = this.submitForm.bind(this);
     }
 
     static getDerivedStateFromProps(props, state) {
-        console.log("***" + props.currentUser);
-        if (props.currentUser && state.user && props.currentUser.uid !== state.user.uid) {
+        if (props.isAdmin && props.adminSelectedOrg && props.adminSelectedOrg.email !== state.email) {
+            console.log('ret admin stuff')
+            return {
+                user: props.currentUser,
+                name: props.adminSelectedOrg.name,
+                website: props.adminSelectedOrg.website,
+                email: props.adminSelectedOrg.email,
+                username: props.adminSelectedOrg.username,
+                id: props.adminSelectedOrg.id
+            }
+        }
+        else if (props.currentUser && state.user && props.currentUser.uid !== state.user.uid) {
             //var uid = props.currentUser.uid;
             //var organization = organizationManager.getOrganization();
             return {
-                    user: props.currentUser,
-                    name: props.currentOrg.name,
-                    country: props.currentOrg.country,
-                    city: props.currentOrg.city,
-                    state: props.currentOrg.state,
-                    zip: props.currentOrg.zip,
-                    website: props.currentOrg.website,
-                    phone: props.currentOrg.phone,
-                    description: props.currentOrg.description,
-                    username: props.currentOrg.username
+                user: props.currentUser,
+                name: props.currentOrg.name,
+                website: props.currentOrg.website,
+                email:props.currentOrg.email,
+                username: props.currentOrg.username,
+                id: props.currentOrg.id
             };
         } else if (props.currentUser && !state.user){
             //var uid = props.currentUser.uid;
@@ -59,14 +70,10 @@ class Profile extends React.Component {
             return {
                 user: props.currentUser,
                 name: props.currentOrg.name,
-                country: props.currentOrg.country,
-                city: props.currentOrg.city,
-                state: props.currentOrg.state,
-                zip: props.currentOrg.zip,
                 website: props.currentOrg.website,
-                phone: props.currentOrg.phone,
-                description: props.currentOrg.description,
-                username: props.currentOrg.username
+                email:props.currentOrg.email,
+                username: props.currentOrg.username,
+                id: props.currentOrg.id
             };
         }
         return null;
@@ -78,25 +85,13 @@ class Profile extends React.Component {
     setCountry(event) {
         this.setState({country: event.target.value});
     }
-    setCity(event) {
-        this.setState({city: event.target.value});
-    }
-    setSt(event) {
-        this.setState({state: event.target.value});
-    }
-    setZip(event) {
-        this.setState({zip: event.target.value});
-    }
     setWebsite(event) {
         this.setState({website: event.target.value});
     }
-    setPhone(event) {
-        this.setState({phone: event.target.value});
-    }
-    setDescription(event) {
-        this.setState({description: event.target.value});
-    }
     setUsername(event) {
+        this.setState({username: event.target.value});
+    }
+    setEmail(event) {
         this.setState({username: event.target.value});
     }
 
@@ -106,7 +101,9 @@ class Profile extends React.Component {
             name: this.state.name,
             website: this.state.website,
             username: this.state.username,
-            email:this.state.email
+            email: this.state.email,
+            id: this.state.id,
+            admin: 'False'
         });
         this.closeProfileForm();
     }
@@ -120,32 +117,17 @@ class Profile extends React.Component {
                     <label><b>Organization Name</b></label>
                     <input type="text" defaultValue= {this.state.name} onChange={e =>this.setName(e)}/>
 
-                    <label><b>Username</b></label>
-                    <input type="text" defaultValue= {this.state.username} onChange={e =>this.setUsername(e)}/>
-
-                    <label><b>Country</b></label>
-                    <input type="text" defaultValue= {this.state.country} onChange={e =>this.setCountry(e)}/>
-
-                    <label><b>City</b></label>
-                    <input type="text" defaultValue= {this.state.city} onChange={e =>this.setCity(e)}/>
-
-                    <label><b>State</b></label>
-                    <input type="text" defaultValue= {this.state.state} onChange={e =>this.setSt(e)}/>
-
-                    <label><b>Zip</b></label>
-                    <input type="text" defaultValue= {this.state.zip} onChange={e =>this.setZip(e)}/>
-
                     <label><b>Website</b></label>
                     <input type="text" defaultValue= {this.state.website} onChange={e =>this.setWebsite(e)}/>
 
-                    <label><b>Description</b></label>
-                    <input type="text" defaultValue= {this.state.description} onChange={e =>this.setDescription(e)}/>
-
-                    <label><b>Phone</b></label>
-                    <input type="text" defaultValue= {this.state.phone} onChange={e =>this.setPhone(e)}/>
+                    <label><b>Email</b></label>
+                    <input type="text" defaultValue= {this.state.email} name="email" style={{width:"31%"}} onChange={e => this.setEmail(e)} required/>
+                    
+                    <label><b>Username</b></label>
+                    <input type="text" defaultValue= {this.state.username} style={{width:"30.3%"}} name="username" onChange={e => this.setUsername(e)} required/>
 
                     <button type="submit" className="submit">Submit</button>
-                    <button type="text" className="submit" onClick={e=>this.closeProfileForm(e)}>Close</button>
+                    <button type="button" className="submit" onClick={e => this.closeProfileForm()}>Close</button>
                 </form>
             </div>
         )

@@ -3,6 +3,7 @@ const https = require('https')
 const request = require('request');
 const app = express()
 const port = 3001
+const axios = require("axios");
 var keys = require('./keys'); // get file with all api keys
 var firebase = require("firebase/app");
 var bodyParser = require('body-parser');
@@ -11,6 +12,7 @@ var bodyParser = require('body-parser');
 require("firebase/auth");
 require("firebase/firestore");
 require('firebase/database');
+require('firebase-admin');
 //Added by Ben
 var firebase = require('firebase');
 
@@ -44,10 +46,10 @@ app.use(function(req, res, next) {
     };
 });
 
-app.get('/locations/getLocations', function (req, res) {
+app.get('/locations/getLocations/currCoords/:lat/:lng', function(req, res) {
     var ref = firebase.database().ref('locations');
     var locations = [];
-    ref.once('value').then(function(snapshot) {
+    ref.once('value').then(async function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             locations.push({name: childSnapshot.val()["name"],
                 address: childSnapshot.val()["address"],
@@ -62,14 +64,14 @@ app.get('/locations/getLocations', function (req, res) {
                 color: childSnapshot.val()["color"],
                 orgEmail: childSnapshot.val()["orgEmail"]});
         });
-        res.send(locations);
+        res.send(await getDistances(locations, req.params.lat, req.params.lng));
     });
 });
 
-app.get('/locations/getLocations/:email', function (req, res) {
+app.get('/locations/getLocations/currCoords/:lat/:lng/:email', function (req, res) {
     var ref = firebase.database().ref('locations');
     var locations = [];
-    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(function(snapshot) {
+    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(async function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             locations.push({name: childSnapshot.val()["name"],
                 address: childSnapshot.val()["address"],
@@ -84,7 +86,7 @@ app.get('/locations/getLocations/:email', function (req, res) {
                 color: childSnapshot.val()["color"],
                 orgEmail: childSnapshot.val()["orgEmail"]});
         });
-        res.send(locations);
+        res.send(await getDistances(locations, req.params.lat, req.params.lng));
     })
 });
 
@@ -93,28 +95,33 @@ app.post('/locations/addLocation', function (req, res) {
     //console.log(req.body);
     firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
     .then(result => {
-    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    //console.log(error);
     res.sendStatus(400);
     })
 })
 
 app.post('/locations/editLocation', function(req, res) {
-    //console.log(req.body);
     firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
     .then(result => {
-    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    //console.log(error);
     res.sendStatus(400);
     })
 });
 
+app.delete('/organizations/eraseLocations', function(req, res) {
+    var updates = {};
+    var ref = firebase.database().ref('locations');
+    ref.orderByChild("orgEmail").equalTo(req.body.email).once('value').then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            updates['/' + childSnapshot.key + '/'] = null;
+        });
+        ref.update(updates);
+    });
+});
 
 app.delete('/locations/removeLocation', function(req, res) {
     firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).remove()
@@ -137,12 +144,6 @@ app.get('/organizations/getOrganization/:uid', function(req, res) {
     ref.once('value').then(function(snapshot) {
         var organization = {
             name: snapshot.val()["name"],
-            address: snapshot.val()["address"],
-            country: snapshot.val()["country"],
-            city: snapshot.val()["city"],
-            state: snapshot.val()["state"],
-            zip: snapshot.val()["zip"],
-            description: snapshot.val()["description"],
             website: snapshot.val()["website"],
             email: snapshot.val()["email"],
             username: snapshot.val()["username"],
@@ -155,18 +156,15 @@ app.get('/organizations/getOrganizations', function (req, res) {
     var organizations = [];
     ref.once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-            organizations.push({
-                name: childSnapshot.val()["name"],
-                address: childSnapshot.val()["address"],
-                country: childSnapshot.val()["country"],
-                city: childSnapshot.val()["city"],
-                state: childSnapshot.val()["state"],
-                zip: childSnapshot.val()["zip"],
-                description: childSnapshot.val()["description"],
-                website: childSnapshot.val()["website"],
-                email: childSnapshot.val()["email"],
-                username: childSnapshot.val()["username"],
-            });
+            if (childSnapshot.val()["admin"] == "False") {
+                    organizations.push({
+                        name: childSnapshot.val()["name"],
+                        website: childSnapshot.val()["website"],
+                        email: childSnapshot.val()["email"],
+                        username: childSnapshot.val()["username"],
+                        id: childSnapshot.key
+                });
+            }
         });
         res.send(organizations);
     });
@@ -183,35 +181,32 @@ app.get('/organizations/checkforAdmin/:uid', function (req, res) {
     })
 })
 
+
+
 app.post('/organizations/addOrganization', function (req, res) {
-    //console.log(req.body);
-    firebase.database().ref('organization/' + req.body.id).set(req.body)
+
+    firebase.database().ref('organizations/' + req.body.id).set(req.body)
     .then(result => {
-    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    //console.log(error);
     res.sendStatus(400);
     })
 })
 
-app.post('/locations/editLocation', function(req, res) {
-    //console.log(req.body);
-    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
+app.post('/organizations/editOrganization', function(req, res) {
+    firebase.database().ref('organizations/' + req.body.id).set(req.body)
     .then(result => {
-    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    //console.log(error);
     res.sendStatus(400);
     })
 });
 
 
-app.delete('/locations/removeLocation', function(req, res) {
-    firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).remove()
+app.delete('/organizations/removeOrganization', function(req, res) {
+    firebase.database().ref('organizations/' + req.body.id).remove()
         .then(() => {
             res.sendStatus(200);
         }).catch((error) => {
@@ -243,7 +238,6 @@ app.get('/organizations/newOrg', function (req, res) {
     }).then(function(createdUser) {
         res.send(createdUser.uid);
     }).catch(function(error) {
-        console.log("Error creating new user: ", error);
         res.sendStatus(400);
     });
 });
@@ -277,10 +271,8 @@ async function getDistances(markers, lat, lng) {
 
             newMarkers = markers;
         }).catch(err => {
-            console.log(err);
             newMarkers = markers;
         });
-    //console.log(newMarkers);
     return newMarkers;
 }
 

@@ -27,8 +27,10 @@ class App extends React.Component {
         markers : [],
         selected : null,
         isAdmin : null,
-        user : userManager.getUser(),
-        organization : organizationManager.getOrganization(),
+        user : null,
+        organization : null,
+        organizations: [],
+        adminSelectedOrg : null
       };
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
@@ -39,13 +41,18 @@ class App extends React.Component {
     this.editMarkerCallback = this.editMarkerCallback.bind(this);
     this.setAdmin = this.setAdmin.bind(this);
     this.editOrganizationCallback = this.editOrganizationCallback.bind(this);
+    this.eraseOrganizationCallback = this.eraseOrganizationCallback.bind(this);
   }
 
   async componentDidMount() {
-    this.setState({
-        markers: await locationManager.updateLocations()
+    await navigator.geolocation.getCurrentPosition(async position => {
+        this.setState({currLat: position.coords.latitude, currLng: position.coords.longitude});
+        this.setState({
+            markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng),
+            organizations : await organizationManager.updateOrganizations()
+        });
     });
-  }
+}
 
   onClickSubmit = async () => {
     this.openSignin();
@@ -57,10 +64,75 @@ class App extends React.Component {
     this.closeEverything();
   };
 
+  updateAdminSelectedOrg(organization){
+    console.log(organization.email)
+    this.setState({adminSelectedOrg: organization});
+  }
+
+  equalMarkers(markers1, markers2) {
+    if (markers1 === null && markers2 !== null) {
+        return false;
+    }
+    if (markers1 !== null && markers2 === null) {
+        return false;
+    }
+
+    if (markers1 === null && markers2 === null) {
+        return true;
+    }
+    if (markers1.length !== markers2.length) {
+        return false;
+    }
+
+    for (let i=0; i < markers1.length; i++) {
+        if (markers1[i].name !== markers2[i].name) return false;
+        if (markers1[i].city !== markers2[i].city) return false;
+        if (markers1[i].address !== markers2[i].address) return false;
+        if (markers1[i].contact !== markers2[i].contact) return false;
+        if (markers1[i].color !== markers2[i].color) return false;
+        if (markers1[i].description !== markers2[i].description) return false;
+        if (markers1[i].email !== markers2[i].email) return false;
+        if (markers1[i].lat !== markers2[i].lat) return false;
+        if (markers1[i].lng !== markers2[i].lng) return false;
+        if (markers1[i].orgEmail !== markers2[i].orgEmail) return false;
+        if (markers1[i].phone !== markers2[i].phone) return false;
+        if (markers1[i].state !== markers2[i].state) return false;
+        if (markers1[i].weapons !== markers2[i].weapons) return false;
+        if (markers1[i].website!== markers2[i].website) return false;
+        if (markers1[i].zip !== markers2[i].zip) return false;
+    }
+    return true;
+    }
+
+    equalOrgs(orgs1, orgs2) {
+      if (orgs1 === null && orgs2 !== null) {
+          return false;
+      }
+      if (orgs1 !== null && orgs2 === null) {
+          return false;
+      }
+  
+      if (orgs1 === null && orgs2 === null) {
+          return true;
+      }
+      if (orgs1.length !== orgs2.length) {
+          return false;
+      }
+  
+      for (let i=0; i < orgs1.length; i++) {
+          if (orgs1[i].name !== orgs2[i].name) return false;
+          if (orgs1[i].username !== orgs2[i].username) return false;
+          if (orgs1[i].id !== orgs2[i].id) return false;
+          if (orgs1[i].email !== orgs2[i].email) return false;
+          if (orgs1[i].website !== orgs2[i].website) return false;
+      }
+      return true;
+      }
+
   onClickSignOut = async () => {
     await userManager.fireSignOut();
     this.setState({
-        markers: await locationManager.updateLocations()
+        markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng)
     });
 
     this.closeEverything();
@@ -74,59 +146,68 @@ class App extends React.Component {
           <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
         </div>});
   };
+  
+      setAdmin = (isAdminStr) => {
+          if(isAdminStr === "True") {
+              this.setState({
+                  isAdmin: true
+              });
+          } else {
+              this.setState({
+                  isAdmin: false
+              });
+          }
+      };
 
-  setAdmin = (isAdminStr) => {
-    if(isAdminStr === false) {
-      this.setState({
-        isAdmin: false
-      });
-    } else {
-      this.setState({
-        isAdmin: true
-      });
-    }
-  };
-
-  usernameCallback = async (username, password) => {
-    var confirmed = await userManager.fireSignIn(username, password);
-        if (confirmed[0]) {
-            window.currUser = username;
-            this.setAdmin(confirmed[2]);
-            this.onClickSubmit();
-        } else {
-            return confirmed;
-        }
+  usernameCallback = async (usernameData) => {
     this.setState({
-        markers: await locationManager.updateLocations(),
+        markers: await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng),
         user: userManager.getUser(),
-        organization: await organizationManager.getOrganization(),
+        organization: await organizationManager.getOrganization(userManager.getUser().uid),
+        organizations: await organizationManager.updateOrganizations()
     });
-    // console.log("*" + this.state.user.email);
-    // console.log("*" + this.state.organization.website);
 
-    this.setState({username: username}, async () => this.setState(
+    this.setState({username: usernameData}, async () => this.setState(
       { logButton:
         <div className="App-header2" id="mainHeader2">
         <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
         <button id="profileButton" style={{borderRight:"thin solid gray"}} onClick={this.openProfile}><b>Profile</b></button>
         </div>}));
-        return confirmed;
   };
 
   markerCallback = async (markerFromForm) => {
     await locationManager.addLocation(markerFromForm);
-    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+    this.setState({markers : await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
   };
 
   editMarkerCallback = async (markerFromForm) => {
     await locationManager.editLocation(this.state.selected, markerFromForm);
-    this.setState({markers : await locationManager.updateLocations(), selected: markerFromForm });
+    this.setState({markers : await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
+    this.selectedCallback(markerFromForm);
+};
+
+  organizationCallback = async (email) => {       
+    this.setState({markers : await locationManager.updateLocations(email, false, this.state.currLat, this.state.currLng)});
   };
 
   editOrganizationCallback = async (orgFromForm) => {
-    await organizationManager.editOrganization(this.state.organization, orgFromForm);
-    this.setState({organization : orgFromForm});
-  }
+    if (this.state.isAdmin) {
+      await organizationManager.editOrganization(this.state.adminSelectedOrg, orgFromForm);
+      this.setState({organizations: await organizationManager.updateOrganizations()});
+    } else {
+      await organizationManager.editOrganization(this.state.organization, orgFromForm);
+      this.setState({organization : orgFromForm, organizations: await organizationManager.updateOrganizations()});
+    }
+  };
+
+  eraseOrganizationCallback = async (org) => {
+    await organizationManager.eraseOrganization(org);
+    this.setState({
+      organizations: await organizationManager.updateOrganizations(),
+      markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng),
+      selected : null
+    });
+  };
 
   selectedCallback = (markerFromMap) => {
     if (markerFromMap) {
@@ -137,7 +218,7 @@ class App extends React.Component {
 
   async removeMarker() {
     await locationManager.removeLocation(this.state.selected);
-    this.setState({markers : await locationManager.updateLocations(), selected: null});
+    this.setState({markers : await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: null});
   };
 
   render() {
@@ -160,7 +241,7 @@ class App extends React.Component {
           <div className="App-header" id="mainHeader">
             <h1 id="title">HEMAA Club Finder</h1>
             <h2 id="welcome" style={{display : signedIn}}>Welcome, {this.state.username}</h2>
-            <button onClick={e => moveDirectory()} id="mover" className="btn2"><i className="fas fa-caret-left" id="arrow"></i></button>
+            <button onClick={e => moveDirectory()} id="mover" className="btn2"><i className="fas fa-caret-left" style={{transition:"0.5s"}} id="arrow"></i></button>
           </div>
           {this.state.logButton}
           <div className="topnav" id="topNav" style={{display : signedIn}}>
@@ -168,12 +249,11 @@ class App extends React.Component {
           <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
             <button onClick={e => this.openRegister}>Add Organization</button>
           </div>
-          <ForgotPassword/>
-          <OrgRegistration callbackFromApp={this.usernameCallback}/>
+          <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory currMarkers={this.state.markers}/>
-          <SimpleMap currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <Profile currentUser = {this.state.user} currentOrg = {this.state.organization} updateOrg = {this.editOrganizationCallback.bind(this)} />
+          <Directory eraseOrganization={this.eraseOrganizationCallback.bind(this)} equalOrgs={this.equalOrgs.bind(this)} updateAdminSelectedOrg={this.updateAdminSelectedOrg.bind(this)} openProfile={this.openProfile.bind(this)} isAdmin={this.state.isAdmin} equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <Profile adminSelectedOrg={this.state.adminSelectedOrg} isAdmin={this.state.isAdmin} currentUser={this.state.user} currentOrg={this.state.organization} updateOrg={this.editOrganizationCallback.bind(this)}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
       </div>
@@ -209,6 +289,8 @@ class App extends React.Component {
     document.getElementById("nonOrgButtons").style.display = "inline";
     document.getElementById("orgButtons").style.display = "none";
     document.getElementById("addPlus").style.display = "none";
+    document.getElementById("clubs").className = "btn1 active";
+    document.getElementById("orgs").className = "btn1";
   }
 }
 
@@ -223,17 +305,28 @@ function moveDirectory() {
     document.getElementById("clubs2").style.marginLeft = "-380px";
     document.getElementById("mover").style.marginLeft = "30px";
     document.getElementById("details").style.marginLeft = "-350px";
+    document.getElementById("arrow").style.transform = "rotate(180deg)";
     checkMove = 1;
   } else {
     document.getElementById("mainHeader").style.marginLeft = "0px";
     document.getElementById("mainHeader2").style.marginLeft = "0px";
     document.getElementById("searchInput").style.marginLeft = "0px";
-    document.getElementById("UL").style.marginLeft = "0px";
-    document.getElementById("UL2").style.marginLeft = "0px";
     document.getElementById("clubs").style.marginLeft = "0px";
     document.getElementById("clubs2").style.marginLeft = "0px";
     document.getElementById("mover").style.marginLeft = "0px";
     document.getElementById("details").style.marginLeft = "0px";
+    document.getElementById("arrow").style.transform = "rotate(0deg)";
+    if (document.getElementById("clubs").className === "btn1 active") {
+      document.getElementById("UL").style.width = "310px";
+      document.getElementById("UL").style.marginLeft = "0px";
+      document.getElementById("UL2").style.width = "0px";
+      document.getElementById("UL2").style.marginLeft = "-100px";
+  } else {
+      document.getElementById("UL").style.width = "0px";
+      document.getElementById("UL").style.marginLeft = "-100px";
+      document.getElementById("UL2").style.width = "310px";
+      document.getElementById("UL2").style.marginLeft = "0px";
+  }
     checkMove = 0;
   }
 }
