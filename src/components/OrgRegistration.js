@@ -39,8 +39,9 @@ class OrgRegistration extends React.Component {
             username: this.state.username,
             password: this.state.password
         }
-        //this.props.addOrg(org);
-        var success = await userManager.fireCreateUser(org);
+
+        await this.props.userManager.fireCreateUser(org);
+        var success = await this.props.userManager.fireSignIn(org.email, org.password);
         if (success[0]) {
             this.props.callbackFromApp(org.username);
             closeOrgForm();

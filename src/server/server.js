@@ -117,6 +117,19 @@ app.post('/locations/editLocation', function(req, res) {
     })
 });
 
+app.delete('/organizations/eraseLocations', function(req, res) {
+    console.log(req.body.email);
+    var updates = {};
+    var ref = firebase.database().ref('locations');
+    ref.orderByChild("orgEmail").equalTo(req.body.email).once('value').then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            console.log(childSnapshot.key);
+            updates['/' + childSnapshot.key + '/'] = null;
+        });
+        console.log(updates);
+        ref.update(updates);
+    });
+});
 
 app.delete('/locations/removeLocation', function(req, res) {
     firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).remove()
@@ -157,6 +170,7 @@ app.get('/organizations/getOrganizations', function (req, res) {
                         website: childSnapshot.val()["website"],
                         email: childSnapshot.val()["email"],
                         username: childSnapshot.val()["username"],
+                        id: childSnapshot.key
                 });
             }
         });

@@ -5,7 +5,18 @@ class Profile extends React.Component {
     constructor(props) {
         super(props);
         var user = this.props.currentUser;
-        if (user) {
+        if (this.props.isAdmin) {
+            console.log("here");
+            this.state = {
+                user: this.props.currentUser,
+                name: this.props.adminSelectedOrg.name,
+                website: this.props.adminSelectedOrg.website,
+                email:this.props.adminSelectedOrg.email,
+                username: this.props.adminSelectedOrg.username,
+                id: this.props.adminSelectedOrg.id
+            }
+        }
+        else if (user) {
             //var uid = user.uid;
             //var organization = organizationManager.getOrganization();
             this.state = {
@@ -13,7 +24,8 @@ class Profile extends React.Component {
                 name: this.props.currentOrg.name,
                 website: this.props.currentOrg.website,
                 email:this.props.currentOrg.email,
-                username: this.props.currentOrg.username
+                username: this.props.currentOrg.username,
+                id: this.props.currentOrg.id
             }
         }
         else {
@@ -21,15 +33,27 @@ class Profile extends React.Component {
                 name: "",
                 website: "",
                 username: "",
-                email:"",
-                user: null
+                email: "",
+                user: null,
+                id: ""
             }
         }
         this.submitForm = this.submitForm.bind(this);
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.currentUser && state.user && props.currentUser.uid !== state.user.uid) {
+        if (props.isAdmin && props.adminSelectedOrg && props.adminSelectedOrg.email !== state.email) {
+            console.log('ret admin stuff')
+            return {
+                user: props.currentUser,
+                name: props.adminSelectedOrg.name,
+                website: props.adminSelectedOrg.website,
+                email: props.adminSelectedOrg.email,
+                username: props.adminSelectedOrg.username,
+                id: props.adminSelectedOrg.id
+            }
+        }
+        else if (props.currentUser && state.user && props.currentUser.uid !== state.user.uid) {
             //var uid = props.currentUser.uid;
             //var organization = organizationManager.getOrganization();
             return {
@@ -37,7 +61,8 @@ class Profile extends React.Component {
                 name: props.currentOrg.name,
                 website: props.currentOrg.website,
                 email:props.currentOrg.email,
-                username: props.currentOrg.username
+                username: props.currentOrg.username,
+                id: props.currentOrg.id
             };
         } else if (props.currentUser && !state.user){
             //var uid = props.currentUser.uid;
@@ -47,7 +72,8 @@ class Profile extends React.Component {
                 name: props.currentOrg.name,
                 website: props.currentOrg.website,
                 email:props.currentOrg.email,
-                username: props.currentOrg.username
+                username: props.currentOrg.username,
+                id: props.currentOrg.id
             };
         }
         return null;
@@ -75,7 +101,9 @@ class Profile extends React.Component {
             name: this.state.name,
             website: this.state.website,
             username: this.state.username,
-            email:this.state.email
+            email: this.state.email,
+            id: this.state.id,
+            admin: 'False'
         });
         this.closeProfileForm();
     }
