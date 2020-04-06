@@ -2,6 +2,8 @@ import React from "react"
 import "../css/directory.css"
 import {editDistance} from "../tools/stringSearch"
 import locationManager from "../managers/LocationManager.js"
+import {organizationManager} from "../managers/OrganizationManager.js"
+import Profile from '../components/Profile.js';
 
 var keyVal = 0;
 var isUser = "none";
@@ -19,10 +21,11 @@ class Directory extends React.Component {
             orgs:this.props.organizations,
             allWords: "",
             selected : this.props.currSelect
-        }
+        };
     }
 
     static getDerivedStateFromProps(props, state) {
+        console.log(props.organizations, state.orgs);
         if (props.currSelect !== state.selected && !props.equalMarkers(props.currMarkers, state.markers)) {
             return {
                 selected : props.currSelect,
@@ -34,6 +37,12 @@ class Directory extends React.Component {
                 selected : props.currSelect
             };
         } else if (!props.equalMarkers(props.currMarkers, state.markers)) {
+            return {
+                markers : props.currMarkers,
+                orgs: props.organizations,
+                filteredMarkers: props.currMarkers
+            }
+        } else if (!props.equalOrgs(props.organizations, state.orgs)) {
             return {
                 markers : props.currMarkers,
                 orgs: props.organizations,
@@ -80,6 +89,11 @@ class Directory extends React.Component {
     render() {
         isSignedIn();
         var editDisabled = false;
+        var displayStr = "none";
+        if (this.props.isAdmin) {
+            displayStr = 'inline';
+        }
+        console.log(displayStr);
         return (
             <div id="Directory" className="directory">
                 <div id="nonOrgButtons" style={{display:isNotOrg}}><br/>
@@ -110,9 +124,9 @@ class Directory extends React.Component {
                         <li type="button" style={{paddingBottom:"12px"}} onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
                         <h2>{each.name}</h2>
                         <a href={each.website}>{each.website}</a>
-                        <i id="removeOrg" onClick={this.removeMarker} className="fas fa-trash-alt">
+                        <i id="removeOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganizationCallback(each)} className="fas fa-trash-alt">
                         <span className = "tooltip">Remove This Organization</span></i>
-                        <i id="editOrg" disabled={!editDisabled} onClick={this.openEditForm} className="fas fa-pencil-alt">
+                        <i id="editOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt">
                         <span className = "tooltip">Edit This Organization</span></i>
                     </li>
                     )
@@ -121,7 +135,7 @@ class Directory extends React.Component {
             </div>
         )
     }
-
+//how to open profile of org clicked?
     searchFunction() {
         //var input, li, a, i, txtValue;
         var input;
@@ -156,6 +170,18 @@ class Directory extends React.Component {
         document.getElementById("AddFormDiv").style.display = "block";
         document.getElementById("shadow").style.display = "block";
     }
+
+
+    eraseOrganizationCallback = async (org) => {
+        await organizationManager.eraseOrganization(org);
+    }
+
+    openProfile(organization) {
+        console.log('open here');
+        this.props.updateAdminSelectedOrg(organization);
+        this.props.openProfile();
+    }
+
 }
 
 function activeBtn() {

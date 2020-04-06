@@ -30,6 +30,7 @@ class App extends React.Component {
         user : null,
         organization : null,
         organizations: [],
+        adminSelectedOrg : null
       };
     this.usernameCallback = this.usernameCallback.bind(this);
     this.onClickSubmit = this.onClickSubmit.bind(this);
@@ -61,6 +62,11 @@ class App extends React.Component {
     this.openRegister();
     this.closeEverything();
   };
+
+  updateAdminSelectedOrg(organization){
+    console.log(organization.email)
+    this.setState({adminSelectedOrg: organization});
+  }
 
   equalMarkers(markers1, markers2) {
     if (markers1 === null && markers2 !== null) {
@@ -96,6 +102,31 @@ class App extends React.Component {
     }
     return true;
     }
+
+    equalOrgs(orgs1, orgs2) {
+      if (orgs1 === null && orgs2 !== null) {
+          return false;
+      }
+      if (orgs1 !== null && orgs2 === null) {
+          return false;
+      }
+  
+      if (orgs1 === null && orgs2 === null) {
+          return true;
+      }
+      if (orgs1.length !== orgs2.length) {
+          return false;
+      }
+  
+      for (let i=0; i < orgs1.length; i++) {
+          if (orgs1[i].name !== orgs2[i].name) return false;
+          if (orgs1[i].username !== orgs2[i].username) return false;
+          if (orgs1[i].id !== orgs2[i].id) return false;
+          if (orgs1[i].email !== orgs2[i].email) return false;
+          if (orgs1[i].website !== orgs2[i].website) return false;
+      }
+      return true;
+      }
 
   onClickSignOut = async () => {
     await userManager.fireSignOut();
@@ -159,8 +190,13 @@ class App extends React.Component {
   }
 
   editOrganizationCallback = async (orgFromForm) => {
-    await organizationManager.editOrganization(this.state.organization, orgFromForm);
-    this.setState({organization : orgFromForm});
+    if (this.state.isAdmin) {
+      await organizationManager.editOrganization(this.state.adminSelectedOrg, orgFromForm);
+      this.setState({organizations: await organizationManager.updateOrganizations()});
+    } else {
+      await organizationManager.editOrganization(this.state.organization, orgFromForm);
+      this.setState({organization : orgFromForm, organizations: await organizationManager.updateOrganizations()});
+    }
   }
 
   selectedCallback = (markerFromMap) => {
@@ -205,9 +241,9 @@ class App extends React.Component {
           </div>
           <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <Directory equalOrgs={this.equalOrgs.bind(this)} updateAdminSelectedOrg={this.updateAdminSelectedOrg.bind(this)} openProfile={this.openProfile.bind(this)} isAdmin={this.state.isAdmin} equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <Profile currentUser={this.state.user} currentOrg={this.state.organization} updateOrg={this.editOrganizationCallback.bind(this)}/>
+          <Profile adminSelectedOrg={this.state.adminSelectedOrg} isAdmin={this.state.isAdmin} currentUser={this.state.user} currentOrg={this.state.organization} updateOrg={this.editOrganizationCallback.bind(this)}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
       </div>
