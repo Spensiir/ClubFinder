@@ -99,7 +99,7 @@ class Profile extends React.Component {
                     <input type="text" defaultValue= {this.state.username} style={{width:"30.3%"}} name="username" onChange={e => this.setUsername(e)} required/>
 
                     <button type="submit" className="submit">Submit</button>
-                    <button type="text" className="submit" onClick={e=>this.closeProfileForm(e)}>Close</button>
+                    <button type="button" className="submit" onClick={e => this.closeProfileForm()}>Close</button>
                 </form>
             </div>
         )

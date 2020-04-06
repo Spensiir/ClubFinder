@@ -51,7 +51,6 @@ class Directory extends React.Component {
                         var selectedMarker = this.state.selected;
                         selectedMarker.color = "red";
                         this.setState({selected : selectedMarker});
-                        console.log("selected: ", this.state.selected);
                     }
                     this.props.updateSelected(markers[i]);
 
@@ -103,7 +102,7 @@ class Directory extends React.Component {
                     )
                 }
                 </ul>
-                <ul style={{display:"none"}} id="UL2">
+                <ul style={{width:"0px", marginLeft: "-100px"}} id="UL2">
                 {
                     this.state.orgs.map( (each) =>
                         <li type="button" style={{paddingBottom:"12px"}} onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
@@ -177,8 +176,10 @@ function isSignedIn() {
         if (document.getElementById("topNav").style.display === "block") {
             isNotOrg = "none";
             isOrg = "inline";
-            document.getElementById("UL").style.display = "block";
-            document.getElementById("UL2").style.display = "none";
+            document.getElementById("UL").style.width = "310px";
+            document.getElementById("UL").style.marginLeft = "0px";
+            document.getElementById("UL2").style.width = "0px";
+            document.getElementById("UL2").style.marginLeft = "-100px";
         } else {
             isNotOrg = "inline";
             isOrg = "none";
@@ -188,11 +189,15 @@ function isSignedIn() {
 
 function checkTab() {
     if (document.getElementById("clubs").className === "btn1 active") {
-        document.getElementById("UL").style.display = "block";
-        document.getElementById("UL2").style.display = "none";
+        document.getElementById("UL").style.width = "310px";
+        document.getElementById("UL").style.marginLeft = "0px";
+        document.getElementById("UL2").style.width = "0px";
+        document.getElementById("UL2").style.marginLeft = "-100px";
     } else {
-        document.getElementById("UL").style.display = "none";
-        document.getElementById("UL2").style.display = "block";
+        document.getElementById("UL").style.width = "0px";
+        document.getElementById("UL").style.marginLeft = "-100px";
+        document.getElementById("UL2").style.width = "310px";
+        document.getElementById("UL2").style.marginLeft = "0px";
     }
 }
 

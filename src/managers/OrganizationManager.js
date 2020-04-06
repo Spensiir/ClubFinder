@@ -24,7 +24,6 @@ class OrganizationManager {
         return null;
     }
 
-
     async editOrganization(oldOrganization, newOrganization) {
         await this.removeOrganization(oldOrganization);
         await this.addOrganization(newOrganization);

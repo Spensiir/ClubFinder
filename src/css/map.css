@@ -70,6 +70,7 @@
   }
 
   .locDetails i .tooltip {
+    position: fixed;
     opacity:0;
     width: 10px;
     background-color: black;
@@ -77,11 +78,10 @@
     text-align: center;
     padding: 5px 2px;
     border-radius: 6px;
-    position: fixed;
     z-index: 1;
     transition:0.4s;
     font-size:1px;
-    top:100px;
+    top:90px;
     font-family:'Roboto', sans-serif;
   }
 
