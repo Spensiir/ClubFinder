@@ -187,7 +187,7 @@ class App extends React.Component {
 };
 
   organizationCallback = async (email) => {       
-    this.setState({markers : await locationManager.updateLocations(email, this.state.isAdmin, this.state.currLat, this.state.currLng)});     
+    this.setState({markers : await locationManager.updateLocations(email, false, this.state.currLat, this.state.currLng)});
   };
 
   editOrganizationCallback = async (orgFromForm) => {
@@ -204,7 +204,8 @@ class App extends React.Component {
     await organizationManager.eraseOrganization(org);
     this.setState({
       organizations: await organizationManager.updateOrganizations(),
-      markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng)
+      markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng),
+      selected : null
     });
   };
 
