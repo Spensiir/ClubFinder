@@ -8,7 +8,7 @@ class EditForm extends React.Component {
         super(props);
         if (this.props.initialSelect !== null) {
             this.state = {
-                club_name: this.props.initialSelect.name,
+                name: this.props.initialSelect.name,
                 address: this.props.initialSelect.address,
                 city: this.props.initialSelect.city,
                 state: this.props.initialSelect.state,
@@ -22,7 +22,7 @@ class EditForm extends React.Component {
                 email:this.props.initialSelect.email,
             };
         } else {
-            this.state = {club_name: "",
+            this.state = {name: "",
                 address: "",
                 city : "",
                 state : "",
@@ -44,9 +44,9 @@ class EditForm extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.initialSelect !== null && state.club_name === "") {
+        if (props.initialSelect !== null && state.name === "") {
             return {
-                club_name: props.initialSelect.name,
+                name: props.initialSelect.name,
                 address: props.initialSelect.address,
                 website: props.initialSelect.website,
                 weapons: props.initialSelect.weapons,
@@ -60,9 +60,9 @@ class EditForm extends React.Component {
                 orgEmail: props.initialSelect.orgEmail,
                 newDetails : props.initialSelect
             };
-        } else if (props.initialSelect !== null && props.initialSelect.club_name !== state.club_name) {
+        } else if (props.initialSelect !== null && props.initialSelect.name !== state.name) {
             return {
-                club_name: props.initialSelect.name,
+                name: props.initialSelect.name,
                 address: props.initialSelect.address,
                 website: props.initialSelect.website,
                 weapons: props.initialSelect.weapons,
@@ -78,7 +78,7 @@ class EditForm extends React.Component {
             };
         } else if (props.initialSelect !== null && props.initialSelect.address !== state.default_address) {
             return {
-                club_name: props.initialSelect.name,
+                name: props.initialSelect.name,
                 address: props.initialSelect.address,
                 website: props.initialSelect.website,
                 weapons: props.initialSelect.weapons,
@@ -98,7 +98,7 @@ class EditForm extends React.Component {
 
     setClubName(event) {
         var newDetails = this.state.newDetails;
-        newDetails.club_name = event.target.value;
+        newDetails.name = event.target.value;
         this.setState({newDetails : newDetails});
     }
     setAddress(event) {
@@ -187,7 +187,7 @@ class EditForm extends React.Component {
                 <form id="editFormDiv" onSubmit={this.submitForm}>
                     <h1> Edit Your Club </h1>
                     <label><b>Club Name *</b></label>
-                    <input type="text" defaultValue={this.state.club_name} name="club_name" onChange={e =>this.setClubName(e)} required/>
+                    <input type="text" defaultValue={this.state.name} name="name" onChange={e =>this.setClubName(e)} required/>
 
                     <label><b>Address *</b></label>
                     <input type="text" defaultValue={this.state.address} name="address" onChange={e => this.setAddress(e)} placeholder={this.state.address} required/>

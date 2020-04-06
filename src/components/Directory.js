@@ -124,10 +124,10 @@ class Directory extends React.Component {
                         <h2>{each.name}</h2>
                         <a href={each.website}>{each.website}</a>
 
-                        <h5 id="removeOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt">
-                        <span className = "tooltip">Remove This Organization</span></h5>
-                        <h5 id="editOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt">
-                        <span className = "tooltip">Edit This Organization</span></h5>
+                        <i id="removeOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt">
+                        <span className = "tooltip">Remove This Organization</span></i>
+                        <i id="editOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt">
+                        <span className = "tooltip">Edit This Organization</span></i>
                     </li>
                     )
                 }
