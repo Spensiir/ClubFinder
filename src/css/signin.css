@@ -70,5 +70,9 @@
     to {opacity: 1;}
   }
 
+#passwordReset {
+    display: "none";
+}
+
 
 
