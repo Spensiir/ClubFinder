@@ -2,14 +2,13 @@
     position:fixed;
     text-align:center;
     top:105px;
-    left:680px;
+    left:685px;
     width:181px;
-    z-index: 3;
+    z-index: 1;
     font-family: 'Roboto', sans-serif;
     transition:0.5s;
     border:thin solid rgb(236, 236, 236);
     display:none;
-    z-index:1;
     box-shadow: 3px 3px 10px grey;
 
     background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgb(253, 253, 253) 47%,rgb(249, 249, 249) 100%); 
@@ -24,9 +23,12 @@
 }
 
 .confirmClub button {
+    position:relative;
     display: inline;
     margin-top:-5px;
     background-color:white;
+    width:50%;
+    height:35px;
     color: black;
     padding: 6px 36px;
     cursor:pointer;

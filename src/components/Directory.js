@@ -8,6 +8,7 @@ import Profile from '../components/Profile.js';
 var keyVal = 0;
 var isUser = "none";
 var isNotOrg = "inline";
+var adminFunctions = "none";
 var isOrg = "none";
 
 class Directory extends React.Component {
@@ -87,21 +88,16 @@ class Directory extends React.Component {
 
     render() {
         isSignedIn();
-        var editDisabled = false;
-        var displayStr = "none";
-        if (this.props.isAdmin) {
-            displayStr = 'inline';
-        }
-        console.log(displayStr);
+
         return (
             <div id="Directory" className="directory">
                 <div id="nonOrgButtons" style={{display:isNotOrg}}><br/>
-                <button onClick={activeBtn()} id="clubs" className="btn1 active">Clubs</button>
-                <button onClick={activeBtn()} id="orgs" className="btn1">Organizations</button>
+                <button style={{width:"40%"}} onClick={activeBtn()} id="clubs" className="btn1 active">Clubs</button>
+                <button style={{width:"60%"}} onClick={activeBtn()} id="orgs" className="btn1">Organizations</button>
                 <br/></div>
                 <div id="orgButtons" style={{display:isOrg}}><br/>
-                <button id="clubs2" className="btnGray">Clubs</button>
-                <button id="orgs2" className="btnGray">Organizations</button>
+                <button style={{width:"40%"}} id="clubs2" className="btnGray">Clubs</button>
+                <button style={{width:"60%"}} id="orgs2" className="btnGray">Organizations</button>
                 <br/></div>
                 <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search the Club List..." name="search"></input>
                 <i style={{display:isUser}} id="addPlus" onClick={e => this.openAddForm()} className="fas fa-plus">
@@ -124,10 +120,8 @@ class Directory extends React.Component {
                         <h2>{each.name}</h2>
                         <a href={each.website}>{each.website}</a>
 
-                        <i id="removeOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt">
-                        <span className = "tooltip">Remove This Organization</span></i>
-                        <i id="editOrg" style={{display:displayStr}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt">
-                        <span className = "tooltip">Edit This Organization</span></i>
+                        <h5 id="removeOrg" style={{display:adminFunctions}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt"> </h5>
+                        <h5 id="editOrg" style={{display:adminFunctions}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt"> </h5>
                     </li>
                     )
                 }
@@ -181,7 +175,6 @@ class Directory extends React.Component {
         this.props.updateAdminSelectedOrg(organization);
         this.props.openProfile();
     }
-
 }
 
 function activeBtn() {
@@ -198,19 +191,21 @@ function activeBtn() {
 
 function isSignedIn() {
     if (document.getElementById("topNav") != null) {
-        if (document.getElementById("topNav2").style.display === "block" || document.getElementById("topNav").style.display === "block") {
-            isUser = "initial";
-        } else {
-            isUser = "none";
-        }
         if (document.getElementById("topNav").style.display === "block") {
+            isUser = "initial";
+            adminFunctions = "none";
             isNotOrg = "none";
             isOrg = "inline";
             document.getElementById("UL").style.width = "310px";
             document.getElementById("UL").style.marginLeft = "0px";
             document.getElementById("UL2").style.width = "0px";
             document.getElementById("UL2").style.marginLeft = "-100px";
+        } else if (document.getElementById("topNav2").style.display === "block") {
+            isUser = "initial";
+            adminFunctions = "inline";
         } else {
+            isUser = "none";
+            adminFunctions = "none";
             isNotOrg = "inline";
             isOrg = "none";
         }

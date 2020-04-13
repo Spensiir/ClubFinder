@@ -60,16 +60,16 @@ class Signin extends React.Component {
                         <input type="password" name="password" default={this.state.password} onChange={e=>this.setPassword(e)} required/>
                         
                         <br/>
-                        <button type="button" className="submit" onClick={this.openResetPassword}>Forgot Password</button>
+                        <p onClick={this.openResetPassword}>Forgot Password?</p>
                         <button type="submit" className="submit">Submit</button>
                         <button type="text" className="submit" onClick={e=>this.closeSignin(e)}>Close</button>
                     </form>
                 </div>
-                <div className="signinForm" id = "passwordReset">
+                <div style={{height:"250px"}}className="signinForm" id = "passwordReset">
                     <form id="passwordreset" onSubmit={e=>this.submitReset(e)}>
                     <h1>Forgot Password</h1>
                     <label><b>Email</b></label>
-                    <input type="text" name="username" onChange={e=>this.setResetEmail(e)}></input>
+                    <input type="text" name="username" placeholder="Enter your account's email to reset your password" onChange={e=>this.setResetEmail(e)}></input>
 
                     <button type="submit" className="submit">Send Email</button>
                     <button type="text" className="submit" onClick={this.closeResetPassword}>Close</button>
@@ -80,10 +80,12 @@ class Signin extends React.Component {
     }
     openResetPassword() {
         document.getElementById("passwordReset").style.display = "block";
+        document.getElementById("SigninForm").style.display = "none";
     }
 
     closeResetPassword() {
         document.getElementById("passwordReset").style.display = "none";
+        document.getElementById("SigninForm").style.display = "block";
     }
 }
 function closeSignin() {

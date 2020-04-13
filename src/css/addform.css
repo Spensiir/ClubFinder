@@ -68,6 +68,10 @@
     cursor:pointer;
 }
 
+.addForm button:focus {
+    outline:none;
+}
+
 .addForm select {
     width: 30%;
     padding: 8px;

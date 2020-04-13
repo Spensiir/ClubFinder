@@ -201,7 +201,7 @@ class SimpleMap extends React.Component {
 
         return (
             // Important! Always set the container height explicitly
-            <div className='Map' style={{ height: '100vh', width: '100%'}}>
+            <div className='Map' style={{ height: '100%', width: '100%'}}>
             {details}
             {confirm}
                 <GoogleMapReact

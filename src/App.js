@@ -11,18 +11,17 @@ import locationManager from "./managers/LocationManager.js"
 import {userManager} from "./managers/UserManager";
 import Profile from './components/Profile.js';
 import { organizationManager } from './managers/OrganizationManager';
-
-var checkMove = 0;
+import { moveDirectory } from './tools/moveDirectory'
 
 class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       logButton:
-      <div className="App-header2" id="mainHeader2">
-      <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
-      <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
-      </div>,
+        <div className="App-header2" id="mainHeader2">
+        <button id="signInButton" onClick={this.openSignin}><b>Sign In</b></button>
+        <button id="registerButton" style={{borderRight:"thin solid gray"}} onClick={this.openRegister}><b>Register</b></button>
+        </div>,
       username:"user",
         markers : [],
         selected : null,
@@ -166,13 +165,20 @@ class App extends React.Component {
         organization: await organizationManager.getOrganization(userManager.getUser().uid),
         organizations: await organizationManager.updateOrganizations()
     });
-
-    this.setState({username: usernameData}, async () => this.setState(
-      { logButton:
-        <div className="App-header2" id="mainHeader2">
-        <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
-        <button id="profileButton" style={{borderRight:"thin solid gray"}} onClick={this.openProfile}><b>Profile</b></button>
-        </div>}));
+    if (!this.state.isAdmin) {
+      this.setState({username: usernameData}, async () => this.setState(
+        { logButton:
+          <div className="App-header2" id="mainHeader2">
+          <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
+          <button id="profileButton" style={{borderRight:"thin solid gray"}} onClick={this.openProfile}><b>Profile</b></button>
+          </div>}));
+    } else {
+      this.setState({username: usernameData}, async () => this.setState(
+        { logButton:
+          <div className="App-header2" id="mainHeader2">
+          <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
+          </div>}));
+    }
   };
 
   markerCallback = async (markerFromForm) => {
@@ -247,7 +253,6 @@ class App extends React.Component {
           <div className="topnav" id="topNav" style={{display : signedIn}}>
           </div>
           <div className="topnav" id="topNav2" style={{display : adminSignedIn}}>
-            <button onClick={e => this.openRegister}>Add Organization</button>
           </div>
           <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
@@ -291,43 +296,7 @@ class App extends React.Component {
     document.getElementById("addPlus").style.display = "none";
     document.getElementById("clubs").className = "btn1 active";
     document.getElementById("orgs").className = "btn1";
-  }
-}
-
-function moveDirectory() {
-  if (checkMove === 0) {
-    document.getElementById("mainHeader").style.marginLeft = "-380px";
-    document.getElementById("mainHeader2").style.marginLeft = "-380px";
-    document.getElementById("searchInput").style.marginLeft = "-380px";
-    document.getElementById("UL").style.marginLeft = "-380px";
-    document.getElementById("UL2").style.marginLeft = "-380px";
-    document.getElementById("clubs").style.marginLeft = "-380px";
-    document.getElementById("clubs2").style.marginLeft = "-380px";
-    document.getElementById("mover").style.marginLeft = "30px";
-    document.getElementById("details").style.marginLeft = "-350px";
-    document.getElementById("arrow").style.transform = "rotate(180deg)";
-    checkMove = 1;
-  } else {
-    document.getElementById("mainHeader").style.marginLeft = "0px";
-    document.getElementById("mainHeader2").style.marginLeft = "0px";
-    document.getElementById("searchInput").style.marginLeft = "0px";
-    document.getElementById("clubs").style.marginLeft = "0px";
-    document.getElementById("clubs2").style.marginLeft = "0px";
-    document.getElementById("mover").style.marginLeft = "0px";
-    document.getElementById("details").style.marginLeft = "0px";
-    document.getElementById("arrow").style.transform = "rotate(0deg)";
-    if (document.getElementById("clubs").className === "btn1 active") {
-      document.getElementById("UL").style.width = "310px";
-      document.getElementById("UL").style.marginLeft = "0px";
-      document.getElementById("UL2").style.width = "0px";
-      document.getElementById("UL2").style.marginLeft = "-100px";
-  } else {
-      document.getElementById("UL").style.width = "0px";
-      document.getElementById("UL").style.marginLeft = "-100px";
-      document.getElementById("UL2").style.width = "310px";
-      document.getElementById("UL2").style.marginLeft = "0px";
-  }
-    checkMove = 0;
+    document.getElementById("editOrg").style.fontSize="50px";
   }
 }
 

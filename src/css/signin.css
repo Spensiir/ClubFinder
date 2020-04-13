@@ -17,6 +17,19 @@
     color:rgba(0, 74, 160, 0.8);
 }
 
+.signinForm p {
+    position:absolute;
+    margin-left:22px;
+    margin-top:-18px;
+    font-size:12px;
+    color:rgba(0, 74, 160, 0.8);
+    cursor:pointer;
+}
+
+.signinForm p:hover {
+    text-decoration:underline;
+}
+
 .signinForm input[type=text] {
     width: 90%;
     padding: 15px;
@@ -59,6 +72,10 @@
     background: #ddd;
     color: black;
     cursor:pointer;
+}
+
+.signinForm button:focus {
+    outline:none;
 }
 
 .signinForm {
