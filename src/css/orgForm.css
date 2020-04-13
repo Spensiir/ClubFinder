@@ -61,6 +61,10 @@
     cursor:pointer;
 }
 
+.orgForm button:focus {
+    outline:none;
+}
+
 .orgForm {
     animation: fadeEffect 0.4s; 
   }

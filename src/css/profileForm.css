@@ -1,55 +1,48 @@
-.addForm {
+.profileForm {
     display: none;
     position: fixed;
-    width: 763px;
-    height: 560px;
-    left: calc(50% - 385px);
-    top: 18%;
+    width: 800px;
+    left: calc(50% - 400px);
+    top: 25%;
     fill: white;
     border: 3px solid #f1f1f1;
     background-color: white;
     z-index: 9;
     border-radius: 10px;
-    overflow-y:auto;
 }
 
-.addForm h1 {
+.profileForm h1 {
     margin-left: 3%;
     font-size:30px;
     color:rgba(0, 74, 160, 0.8);
 }
 
-.addForm input[type=text] {
+.profileForm input[type=text] {
     width: 90%;
     padding: 8px;
     margin: 5px 3% 22px 3%;
     border: none;
     background: #f1f1f1;
     font-size: large;
-    font-family: 'Roboto', sans-serif;
 }
 
-.addForm textarea {
-    width: 88%;
-    height:150px;
+.profileForm input[type=password] {
+    width: 90%;
     padding: 15px;
     margin: 5px 3% 22px 3%;
     border: none;
     background: #f1f1f1;
     font-size: large;
-    resize: none;
-    font-family: 'Roboto', sans-serif;
 }
 
-.addForm label {
+.profileForm label {
     margin-left: 3%;
 }
 
-.addForm button {
+.profileForm button {
     margin: 2%;
-    margin-bottom:0%;
-    right:15px;
-    bottom:20px;
+    right:27px;
+    bottom:14px;
     background: linear-gradient( #45484d 0%,#000000 100%);
     color: white;
     border-radius:10px;
@@ -62,27 +55,17 @@
     transition:0.5s;
 }
 
-.addForm button:hover {
+.profileForm button:hover {
     background: #ddd;
     color: black;
     cursor:pointer;
 }
 
-.addForm button:focus {
+.profileForm.button:focus {
     outline:none;
 }
 
-.addForm select {
-    width: 30%;
-    padding: 8px;
-    margin: 5px 3% 22px 3%;
-    border: none;
-    background: #f1f1f1;
-    font-size: large;
-    font-family: 'Roboto', sans-serif;
-}
-
-.addForm {
+.profileForm {
     animation: fadeEffect 0.4s; 
   }
   
@@ -90,6 +73,7 @@
     from {opacity: 0;}
     to {opacity: 1;}
   }
+
 
 
 

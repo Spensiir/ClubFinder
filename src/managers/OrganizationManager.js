@@ -1,6 +1,8 @@
 import {config} from '../tools/config.js';
 import axios from 'axios';
 import { userManager } from './UserManager.js';
+import locationManager from "../managers/LocationManager.js"
+import SimpleMap from "../components/Map";
 
  //TODO: finish implementing updateOrganizations()
 class OrganizationManager {
@@ -12,10 +14,6 @@ class OrganizationManager {
 
     async addOrganization(organization) {
         var req = config.SERVER_URL + "/organizations/addOrganization";
-        //var uid = userManager.fireAdminCreateUser(organization);
-        var uid = userManager.getUser().uid;
-        //console.log("****" + uid);
-        organization.id = uid;
         await axios.post(req, organization)
         .catch(function (error) {
             console.log(error);
@@ -25,7 +23,8 @@ class OrganizationManager {
     }
 
     async editOrganization(oldOrganization, newOrganization) {
-        await this.removeOrganization(oldOrganization);
+        oldOrganization.id = newOrganization.id;
+        //await this.removeOrganization(oldOrganization);
         await this.addOrganization(newOrganization);
         return null;
     }
@@ -43,8 +42,23 @@ class OrganizationManager {
         return null;
     }
 
+    async eraseOrganization(organization) {
+        console.log(organization)
+        await this.removeOrganization(organization);
+        var req = config.SERVER_URL + "/organizations/eraseLocations";
+        //removing org locations
+        axios.delete(req, {data: organization})
+            .then(res => {
+                console.log("Successfully removed locations...");
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        return null;
+    }
+
     async getOrganizations() {
-        console.log("location manger: line 45");
+        console.log("location manager: line 45");
         if (await this.organizations) {
             return this.organizations;
         } else {
@@ -52,15 +66,22 @@ class OrganizationManager {
         }
     }
 
+    async getOrganization(uid) {
+        var organization;
+        var req = config.SERVER_URL + "/organizations/getOrganization/" + uid;
+        await axios.get(req)
+            .then(res => {
+                organization = res.data;
+            })
+            .catch(function (error) {
+                organization = "";
+            });
+        return organization;
+    }
+
     async updateOrganizations() {
         var req = config.SERVER_URL + "/organizations/getOrganizations";
         let newOrganizations;
-        var currUser = userManager.getUser();
-
-        // if a user is signed in then append the user id to the request
-        if (currUser) {
-            req += "/" + currUser.email;
-        }
 
         await axios.get(req)
             .then(res => {
@@ -73,5 +94,4 @@ class OrganizationManager {
     }
 }
 
-let organizationManager = new OrganizationManager();
-export default organizationManager;
+export let organizationManager = new OrganizationManager();

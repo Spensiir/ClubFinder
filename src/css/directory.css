@@ -4,8 +4,8 @@
     z-index: 2;
     top:78px;
     overflow: hidden;
-    min-width:400px;
     pointer-events:none;
+    width:350px;
   }
 
   .directory button.btn1 {
@@ -30,8 +30,8 @@
     text-align: center;
     padding: 6px 13.3%;
     text-decoration: none;
-    font-size: 17px;
-    font-family: "Times New Roman", Times, serif;
+    font-size: 15px;
+    font-family: "Roboto", serif;
     cursor:default;
     pointer-events:all;
     border:thin solid lightgray;
@@ -61,12 +61,16 @@
     position:relative;
     display:inline;
     padding: 2.5%;
+    padding-right:8.9%;
     font-size: 15px;
     border: thin solid grey;
-    width: 82.1%;
+    width: 100%;
     background: white;
     pointer-events:all;
     transition:0.5s;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;   
+    box-sizing: border-box;   
   }
 
   .directory input[type=text]:focus {
@@ -74,13 +78,14 @@
   }
 
   .directory i {
-    position:relative;
-    right:7%;
-    top:4px;
+    position:absolute;
+    float:right;
+    right:1.9%;
+    top:66%;
     font-size:24px;
     color:gray;
     pointer-events:all;
-    transition:0.4s;
+    transition:0.5s;
     cursor:pointer;
   }
 
@@ -109,7 +114,6 @@
       width:120px;
       font-size:14px;
   }
-
 
   /* Style the submit button */
   .directory button.btn2 {
@@ -175,14 +179,14 @@
     color:rgba(0, 74, 160, 0.8);
     margin-top:7px;
     margin-left:5px;
-    margin-right:5px;
+    margin-right:35px;
+    margin-bottom:-6px;
     font-size:16px;
     font-family: 'Roboto', sans-serif;
     font-weight:400;
   }
 
   .directory ul li h3 {
-    margin-top:-8px;
     margin-left:5px;
     margin-right:5px;
     font-size:12px;
@@ -192,16 +196,54 @@
     color:gray;
   }
 
-  ::-webkit-scrollbar {
+  .directory ul li a {
+    margin-left:5px;
+    margin-right:5px;
+    font-size:12px;
+    width:92%;
+    font-family: 'Roboto', sans-serif;
+    font-weight:400;
+    color:gray;
+  }
+
+  .directory ul li h4 {
+    position:absolute;
+    display:inline;
+    right:10px;
+    top:-10px;
+    font-size:11px;
+    font-family: 'Roboto', sans-serif;
+    font-weight:400;
+    color:rgb(95, 95, 95);
+  }
+
+  .directory h5 {
+    position:relative;
+    float:right;
+    margin-right:8px;
+    margin-top:-14px;
+    right:6px;
+    font-size:18px;
+    color:rgb(158, 157, 157);
+    pointer-events:all;
+    transition:0.4s;
+    cursor:pointer;
+  }
+
+  .directory h5:hover {
+    color:darkblue;
+  }
+
+  .directory ::-webkit-scrollbar {
     width:6px;
     height:3px;
     border-left:0;
     background:rgba(0,0,0,0.1);
   }
-  ::-webkit-scrollbar-track {
+  .directory ::-webkit-scrollbar-track {
     background:whitesmoke;
   }
-  ::-webkit-scrollbar-thumb {
+  .directory ::-webkit-scrollbar-thumb {
     background:rgba(2, 106, 224, 0.8);
     border-radius:0;
   }

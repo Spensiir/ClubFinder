@@ -3,6 +3,7 @@ const https = require('https')
 const request = require('request');
 const app = express()
 const port = 3001
+const axios = require("axios");
 var keys = require('./keys'); // get file with all api keys
 var firebase = require("firebase/app");
 var bodyParser = require('body-parser');
@@ -11,6 +12,7 @@ var bodyParser = require('body-parser');
 require("firebase/auth");
 require("firebase/firestore");
 require('firebase/database');
+require('firebase-admin');
 //Added by Ben
 var firebase = require('firebase');
 
@@ -44,10 +46,10 @@ app.use(function(req, res, next) {
     };
 });
 
-app.get('/locations/getLocations', function (req, res) {
+app.get('/locations/getLocations/currCoords/:lat/:lng', function(req, res) {
     var ref = firebase.database().ref('locations');
     var locations = [];
-    ref.once('value').then(function(snapshot) {
+    ref.once('value').then(async function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             locations.push({name: childSnapshot.val()["name"],
                 address: childSnapshot.val()["address"],
@@ -62,14 +64,14 @@ app.get('/locations/getLocations', function (req, res) {
                 color: childSnapshot.val()["color"],
                 orgEmail: childSnapshot.val()["orgEmail"]});
         });
-        res.send(locations);
+        res.send(await getDistances(locations, req.params.lat, req.params.lng));
     });
 });
 
-app.get('/locations/getLocations/:email', function (req, res) {
+app.get('/locations/getLocations/currCoords/:lat/:lng/:email', function (req, res) {
     var ref = firebase.database().ref('locations');
     var locations = [];
-    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(function(snapshot) {
+    ref.orderByChild("orgEmail").equalTo(req.params.email).once('value').then(async function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             locations.push({name: childSnapshot.val()["name"],
                 address: childSnapshot.val()["address"],
@@ -84,7 +86,7 @@ app.get('/locations/getLocations/:email', function (req, res) {
                 color: childSnapshot.val()["color"],
                 orgEmail: childSnapshot.val()["orgEmail"]});
         });
-        res.send(locations);
+        res.send(await getDistances(locations, req.params.lat, req.params.lng));
     })
 });
 
@@ -93,28 +95,33 @@ app.post('/locations/addLocation', function (req, res) {
     //console.log(req.body);
     firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
     .then(result => {
-    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    //console.log(error);
     res.sendStatus(400);
     })
 })
 
 app.post('/locations/editLocation', function(req, res) {
-    //console.log(req.body);
     firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).set(req.body)
     .then(result => {
-    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    //console.log(error);
     res.sendStatus(400);
     })
 });
 
+app.delete('/organizations/eraseLocations', function(req, res) {
+    var updates = {};
+    var ref = firebase.database().ref('locations');
+    ref.orderByChild("orgEmail").equalTo(req.body.email).once('value').then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            updates['/' + childSnapshot.key + '/'] = null;
+        });
+        ref.update(updates);
+    });
+});
 
 app.delete('/locations/removeLocation', function(req, res) {
     firebase.database().ref('locations/' + req.body.lat.toString().replace(".", '_') + "," + req.body.lng.toString().replace(".", '_')).remove()
@@ -127,23 +134,37 @@ app.delete('/locations/removeLocation', function(req, res) {
 });
 
 /////////////////////////////////////////////////////////
+app.get('/organizations/getOrganization/:uid', function(req, res) {
+    var ref;
+    try {
+        ref = firebase.database().ref('organizations/'+req.params.uid);
+    } catch(TypeError) {
+        console.log("User has not been set yet");
+    }
+    ref.once('value').then(function(snapshot) {
+        var organization = {
+            name: snapshot.val()["name"],
+            website: snapshot.val()["website"],
+            email: snapshot.val()["email"],
+            username: snapshot.val()["username"],
+        }
+        res.send(organization);
+    });
+})
 app.get('/organizations/getOrganizations', function (req, res) {
     var ref = firebase.database().ref('organizations');
     var organizations = [];
     ref.once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-            organizations.push({
-                name: childSnapshot.val()["name"],
-                address: childSnapshot.val()["address"],
-                country: childSnapshot.val()["country"],
-                city: childSnapshot.val()["city"],
-                state: childSnapshot.val()["state"],
-                zip: childSnapshot.val()["zip"],
-                description: childSnapshot.val()["description"],
-                website: childSnapshot.val()["website"],
-                email: childSnapshot.val()["email"],
-                username: childSnapshot.val()["username"],
-            });
+            if (childSnapshot.val()["admin"] == "False") {
+                    organizations.push({
+                        name: childSnapshot.val()["name"],
+                        website: childSnapshot.val()["website"],
+                        email: childSnapshot.val()["email"],
+                        username: childSnapshot.val()["username"],
+                        id: childSnapshot.key
+                });
+            }
         });
         res.send(organizations);
     });
@@ -160,28 +181,24 @@ app.get('/organizations/checkforAdmin/:uid', function (req, res) {
     })
 })
 
+
+
 app.post('/organizations/addOrganization', function (req, res) {
-    //console.log(req.body);
     firebase.database().ref('organizations/' + req.body.id).set(req.body)
     .then(result => {
-    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    //console.log(error);
     res.sendStatus(400);
     })
 })
 
 app.post('/organizations/editOrganization', function(req, res) {
-    //console.log(req.body);
     firebase.database().ref('organizations/' + req.body.id).set(req.body)
     .then(result => {
-    //console.log(req.body)
     res.sendStatus(200);
     })
     .catch(function (error) {
-    //console.log(error);
     res.sendStatus(400);
     })
 });
@@ -210,6 +227,52 @@ app.get('/location/getCoords/address/:address', function (req, res) {
         location = results.geometry.location;
         res.send(location);
     });
-})
+
+});
+
+app.get('/organizations/newOrg', function (req, res) {
+    firebase.admin.auth().createUser({
+        email: req.body.email,
+        password: req.body.password
+    }).then(function(createdUser) {
+        res.send(createdUser.uid);
+    }).catch(function(error) {
+        res.sendStatus(400);
+    });
+});
+
+async function getDistances(markers, lat, lng) {
+    var newMarkers;
+    var origins = lat + "," + lng + "&";
+    var destinations = "destinations=";
+
+    markers.forEach(marker => {
+        destinations += marker.lat + "%2C" + marker.lng + "%7C";
+    });
+    destinations = destinations.substr(0, destinations.length - 3);
+
+    await axios.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + origins + destinations + "&key=" + keys.GEOCODE_API_KEY)
+        .then(res => {
+            var results = res.data;
+            for (var i=0; i < markers.length; i++) {
+                if (results.rows[0].elements[i].status == 'OK') {
+                    markers[i].distance = results.rows[0].elements[i].distance.text;
+                } else {
+                    markers[i].distance = "N/A"
+                }
+            }
+
+            markers.sort(function (a, b) {
+                if (a.distance == "N/A") { return 10000;}
+                if (b.distance == "N/A") {return -10000;}
+                return parseFloat(a.distance.replace(',', '')) - parseFloat(b.distance.replace(',', ''));
+            });
+
+            newMarkers = markers;
+        }).catch(err => {
+            newMarkers = markers;
+        });
+    return newMarkers;
+}
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

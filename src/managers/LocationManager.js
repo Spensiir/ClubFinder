@@ -1,6 +1,5 @@
 import {config} from '../tools/config.js';
 import axios from 'axios';
-import {userManager} from "./UserManager.js";
 
 class LocationManager {
     locations;
@@ -47,15 +46,32 @@ class LocationManager {
         }
     }
 
-    async updateLocations() {
-        var req = config.SERVER_URL + "/locations/getLocations";
+    async updateLocations(email, isAdmin, lat, lng) {
+        var req = config.SERVER_URL + "/locations/getLocations/currCoords/" + lat + '/' + lng;
         let newLocations;
-        var currUser = userManager.getUser();
 
         // if a user is signed in then append the user id to the request
-        if (currUser) {
-            req += "/" + currUser.email;
+        if (email && !isAdmin) {
+            req += "/" + email;
         }
+
+        await axios.get(req)
+            .then(res => {
+                newLocations = res.data;
+            }).catch(function (error) {
+                newLocations = []; // if an error occurs the no locations will appear
+                console.log(error);
+            });
+
+        this.locations = newLocations;
+        return newLocations;
+    }
+
+    async getClickedLocations(email) {
+        var req = config.SERVER_URL + "/locations/getLocations";
+        let newLocations;
+
+        req += "/" + email;
 
         await axios.get(req)
             .then(res => {

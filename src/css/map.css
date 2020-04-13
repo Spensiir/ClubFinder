@@ -4,8 +4,6 @@
     margin-left: auto;
     margin-right: auto;
 
-    width: 100%;
-    height:100%;
     top:0%;
     pointer-events:all;
     
@@ -16,18 +14,18 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     background-color: #000;
-    border: 2px solid #fff;
+    border: 1px solid #fff;
     border-radius: 100%;
     user-select: none;
     transform: translate(-50%, -50%);
 }
 
 .marker:hover {
-    width:18px;
-    height:18px;
+    width:16px;
+    height:16px;
     border-color: darkred;
     z-index:1;
     transition:0.2s;
@@ -59,7 +57,6 @@
     display:inline;
     float:right;
     margin-right:12px;
-    margin-top:5px;
     font-size:18px;
     color:rgb(190, 189, 189);
     transition:0.4s;
@@ -71,6 +68,7 @@
   }
 
   .locDetails i .tooltip {
+    position: fixed;
     opacity:0;
     width: 10px;
     background-color: black;
@@ -78,11 +76,10 @@
     text-align: center;
     padding: 5px 2px;
     border-radius: 6px;
-    position: fixed;
     z-index: 1;
     transition:0.4s;
     font-size:1px;
-    top:100px;
+    top:90px;
     font-family:'Roboto', sans-serif;
   }
 
@@ -112,15 +109,21 @@
     margin-right:6px;
 }
 
-.locDetails h4 {
+.locDetails p {
     position:relative;
-    display:inline;
+    display:inline-flex;
     font-size:14px;
-    top:1px;
+    color:rgb(56, 56, 56);
+    width:90%;
+    margin-bottom:0px;
+    margin-top:5px;
 }
 
 .locDetails a {
     font-size:14px;
+    color:rgb(23, 127, 161);
+    margin-left:8px;
+    font-weight:300;
 }
 
 .locDetails {
