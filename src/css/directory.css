@@ -4,9 +4,8 @@
     z-index: 2;
     top:78px;
     overflow: hidden;
-    min-width:400px;
     pointer-events:none;
-    max-width:350px;
+    width:350px;
   }
 
   .directory button.btn1 {
@@ -31,8 +30,8 @@
     text-align: center;
     padding: 6px 13.3%;
     text-decoration: none;
-    font-size: 17px;
-    font-family: "Times New Roman", Times, serif;
+    font-size: 15px;
+    font-family: "Roboto", serif;
     cursor:default;
     pointer-events:all;
     border:thin solid lightgray;
@@ -65,7 +64,7 @@
     padding-right:8.9%;
     font-size: 15px;
     border: thin solid grey;
-    width: 350px;
+    width: 100%;
     background: white;
     pointer-events:all;
     transition:0.5s;
@@ -79,13 +78,14 @@
   }
 
   .directory i {
-    position:relative;
-    right:7%;
-    top:4px;
+    position:absolute;
+    float:right;
+    right:1.9%;
+    top:66%;
     font-size:24px;
     color:gray;
     pointer-events:all;
-    transition:0.4s;
+    transition:0.5s;
     cursor:pointer;
   }
 
@@ -114,7 +114,6 @@
       width:120px;
       font-size:14px;
   }
-
 
   /* Style the submit button */
   .directory button.btn2 {
@@ -220,10 +219,10 @@
 
   .directory h5 {
     position:relative;
-    display:inline;
     float:right;
-    margin-right:10px;
+    margin-right:8px;
     margin-top:-14px;
+    right:6px;
     font-size:18px;
     color:rgb(158, 157, 157);
     pointer-events:all;

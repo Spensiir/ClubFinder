@@ -1,10 +1,14 @@
 import React from "react"
 import "../css/directory.css"
 import {editDistance} from "../tools/stringSearch"
+import locationManager from "../managers/LocationManager.js"
+import {organizationManager} from "../managers/OrganizationManager.js"
+import Profile from '../components/Profile.js';
 
 var keyVal = 0;
 var isUser = "none";
 var isNotOrg = "inline";
+var adminFunctions = "none";
 var isOrg = "none";
 
 class Directory extends React.Component {
@@ -18,10 +22,11 @@ class Directory extends React.Component {
             orgs:this.props.organizations,
             allWords: "",
             selected : this.props.currSelect
-        }
+        };
     }
 
     static getDerivedStateFromProps(props, state) {
+        console.log(props.organizations, state.orgs);
         if (props.currSelect !== state.selected && !props.equalMarkers(props.currMarkers, state.markers)) {
             return {
                 selected : props.currSelect,
@@ -33,6 +38,12 @@ class Directory extends React.Component {
                 selected : props.currSelect
             };
         } else if (!props.equalMarkers(props.currMarkers, state.markers)) {
+            return {
+                markers : props.currMarkers,
+                orgs: props.organizations,
+                filteredMarkers: props.currMarkers
+            }
+        } else if (!props.equalOrgs(props.organizations, state.orgs)) {
             return {
                 markers : props.currMarkers,
                 orgs: props.organizations,
@@ -51,7 +62,6 @@ class Directory extends React.Component {
                         var selectedMarker = this.state.selected;
                         selectedMarker.color = "red";
                         this.setState({selected : selectedMarker});
-                        console.log("selected: ", this.state.selected);
                     }
                     this.props.updateSelected(markers[i]);
 
@@ -78,16 +88,16 @@ class Directory extends React.Component {
 
     render() {
         isSignedIn();
-        var editDisabled = false;
+
         return (
             <div id="Directory" className="directory">
                 <div id="nonOrgButtons" style={{display:isNotOrg}}><br/>
-                <button onClick={activeBtn()} id="clubs" className="btn1 active">Clubs</button>
-                <button onClick={activeBtn()} id="orgs" className="btn1">Organizations</button>
+                <button style={{width:"40%"}} onClick={activeBtn()} id="clubs" className="btn1 active">Clubs</button>
+                <button style={{width:"60%"}} onClick={activeBtn()} id="orgs" className="btn1">Organizations</button>
                 <br/></div>
                 <div id="orgButtons" style={{display:isOrg}}><br/>
-                <button id="clubs2" className="btnGray">Clubs</button>
-                <button id="orgs2" className="btnGray">Organizations</button>
+                <button style={{width:"40%"}} id="clubs2" className="btnGray">Clubs</button>
+                <button style={{width:"60%"}} id="orgs2" className="btnGray">Organizations</button>
                 <br/></div>
                 <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search the Club List..." name="search"></input>
                 <i style={{display:isUser}} id="addPlus" onClick={e => this.openAddForm()} className="fas fa-plus">
@@ -103,14 +113,15 @@ class Directory extends React.Component {
                     )
                 }
                 </ul>
-                <ul style={{display:"none"}} id="UL2">
+                <ul style={{width:"0px", marginLeft: "-100px"}} id="UL2">
                 {
                     this.state.orgs.map( (each) =>
                         <li type="button" style={{paddingBottom:"12px"}} onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
                         <h2>{each.name}</h2>
                         <a href={each.website}>{each.website}</a>
-                        <h5 id="removeOrg" onClick={this.removeMarker} className="fas fa-trash-alt"> </h5>
-                        <h5 id="editOrg" disabled={!editDisabled} onClick={this.openEditForm} className="fas fa-pencil-alt"> </h5>
+
+                        <h5 id="removeOrg" style={{display:adminFunctions}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt"> </h5>
+                        <h5 id="editOrg" style={{display:adminFunctions}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt"> </h5>
                     </li>
                     )
                 }
@@ -118,7 +129,7 @@ class Directory extends React.Component {
             </div>
         )
     }
-
+//how to open profile of org clicked?
     searchFunction() {
         //var input, li, a, i, txtValue;
         var input;
@@ -153,6 +164,17 @@ class Directory extends React.Component {
         document.getElementById("AddFormDiv").style.display = "block";
         document.getElementById("shadow").style.display = "block";
     }
+
+
+    eraseOrganization = async (org) => {
+        this.props.eraseOrganization(org);
+    };
+
+    openProfile(organization) {
+        console.log('open here');
+        this.props.updateAdminSelectedOrg(organization);
+        this.props.openProfile();
+    }
 }
 
 function activeBtn() {
@@ -169,17 +191,21 @@ function activeBtn() {
 
 function isSignedIn() {
     if (document.getElementById("topNav") != null) {
-        if (document.getElementById("topNav2").style.display === "block" || document.getElementById("topNav").style.display === "block") {
-            isUser = "initial";
-        } else {
-            isUser = "none";
-        }
         if (document.getElementById("topNav").style.display === "block") {
+            isUser = "initial";
+            adminFunctions = "none";
             isNotOrg = "none";
             isOrg = "inline";
-            document.getElementById("UL").style.display = "block";
-            document.getElementById("UL2").style.display = "none";
+            document.getElementById("UL").style.width = "310px";
+            document.getElementById("UL").style.marginLeft = "0px";
+            document.getElementById("UL2").style.width = "0px";
+            document.getElementById("UL2").style.marginLeft = "-100px";
+        } else if (document.getElementById("topNav2").style.display === "block") {
+            isUser = "initial";
+            adminFunctions = "inline";
         } else {
+            isUser = "none";
+            adminFunctions = "none";
             isNotOrg = "inline";
             isOrg = "none";
         }
@@ -188,11 +214,15 @@ function isSignedIn() {
 
 function checkTab() {
     if (document.getElementById("clubs").className === "btn1 active") {
-        document.getElementById("UL").style.display = "block";
-        document.getElementById("UL2").style.display = "none";
+        document.getElementById("UL").style.width = "310px";
+        document.getElementById("UL").style.marginLeft = "0px";
+        document.getElementById("UL2").style.width = "0px";
+        document.getElementById("UL2").style.marginLeft = "-100px";
     } else {
-        document.getElementById("UL").style.display = "none";
-        document.getElementById("UL2").style.display = "block";
+        document.getElementById("UL").style.width = "0px";
+        document.getElementById("UL").style.marginLeft = "-100px";
+        document.getElementById("UL2").style.width = "310px";
+        document.getElementById("UL2").style.marginLeft = "0px";
     }
 }
 
