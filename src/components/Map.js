@@ -113,6 +113,7 @@ class SimpleMap extends React.Component {
         this.props.removeMarker();
     };
 
+
     render() {
         var details, weapons, contact, phone, description;
         var editDisabled = false;
@@ -186,6 +187,13 @@ class SimpleMap extends React.Component {
             // Important! Always set the container height explicitly
             <div className='Map' style={{ height: '100vh', width: '100%'}}>
             {details}
+            {
+                <div className="wrapper" id="resetLocations" style={{display: "none"}}>
+                    <button className = "seeAllMarkers" onClick = {e => this.props.resetLocations()}>
+                    Click to see all locations
+                    </button>
+                </div>
+            }
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: config.API_KEY}}
                     defaultZoom= {5}
@@ -218,7 +226,9 @@ class SimpleMap extends React.Component {
                         />
                     }
                 </GoogleMapReact>
+                
             </div>
+            
         );
     }
 

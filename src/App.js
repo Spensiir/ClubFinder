@@ -155,7 +155,8 @@ class App extends React.Component {
 };
 
   organizationCallback = async (email) => {       
-    this.setState({markers : await locationManager.updateLocations(email, this.state.isAdmin, this.state.currLat, this.state.currLng)});     
+    this.setState({markers : await locationManager.updateLocations(email, this.state.isAdmin, this.state.currLat, this.state.currLng)});    
+    this.toggleResetLocations(); 
   }
 
   editOrganizationCallback = async (orgFromForm) => {
@@ -163,6 +164,12 @@ class App extends React.Component {
     this.setState({organization : orgFromForm});
   }
 
+  resetLocations = async() => {
+    this.setState({
+      markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng)
+    });
+    this.toggleResetLocations();
+  }
   selectedCallback = (markerFromMap) => {
     if (markerFromMap) {
       markerFromMap.color = "yellow";
@@ -206,7 +213,7 @@ class App extends React.Component {
           <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
           <Directory equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <SimpleMap equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <SimpleMap resetLocations = {this.resetLocations.bind(this)} equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <Profile currentUser={this.state.user} currentOrg={this.state.organization} updateOrg={this.editOrganizationCallback.bind(this)}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
@@ -246,7 +253,18 @@ class App extends React.Component {
     document.getElementById("clubs").className = "btn1 active";
     document.getElementById("orgs").className = "btn1";
   }
+
+  toggleResetLocations() {
+    if (document.getElementById("resetLocations").style.display == "block") {
+        document.getElementById("resetLocations").style.display = "none";
+    }
+    else if (document.getElementById("resetLocations").style.display == "none") {
+        document.getElementById("resetLocations").style.display = "block";
+    }
+  }
 }
+
+
 
 function moveDirectory() {
   if (checkMove === 0) {
