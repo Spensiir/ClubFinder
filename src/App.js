@@ -315,33 +315,4 @@ class App extends React.Component {
   }
 }
 
-
-
-function moveDirectory() {
-  if (checkMove === 0) {
-    document.getElementById("mainHeader").style.marginLeft = "-380px";
-    document.getElementById("mainHeader2").style.marginLeft = "-380px";
-    document.getElementById("searchInput").style.marginLeft = "-380px";
-    document.getElementById("UL").style.marginLeft = "-380px";
-    document.getElementById("UL2").style.marginLeft = "-380px";
-    document.getElementById("clubs").style.marginLeft = "-380px";
-    document.getElementById("clubs2").style.marginLeft = "-380px";
-    document.getElementById("mover").style.marginLeft = "30px";
-    document.getElementById("details").style.marginLeft = "-350px";
-    checkMove = 1;
-  } else {
-    document.getElementById("mainHeader").style.marginLeft = "0px";
-    document.getElementById("mainHeader2").style.marginLeft = "0px";
-    document.getElementById("searchInput").style.marginLeft = "0px";
-    document.getElementById("UL").style.marginLeft = "0px";
-    document.getElementById("UL2").style.marginLeft = "0px";
-    document.getElementById("clubs").style.marginLeft = "0px";
-    document.getElementById("clubs2").style.marginLeft = "0px";
-    document.getElementById("mover").style.marginLeft = "0px";
-    document.getElementById("details").style.marginLeft = "0px";
-    checkMove = 0;
-    document.getElementById("editOrg").style.fontSize="50px";
-  }
-}
-
 export default App;
