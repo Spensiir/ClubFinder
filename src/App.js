@@ -131,7 +131,8 @@ class App extends React.Component {
   onClickSignOut = async () => {
     await userManager.fireSignOut();
     this.setState({
-        markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng)
+        markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng),
+        isAdmin : false
     });
 
     this.closeEverything();
@@ -263,7 +264,7 @@ class App extends React.Component {
           </div>
           <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory eraseOrganization={this.eraseOrganizationCallback.bind(this)} equalOrgs={this.equalOrgs.bind(this)} updateAdminSelectedOrg={this.updateAdminSelectedOrg.bind(this)} openProfile={this.openProfile.bind(this)} isAdmin={this.state.isAdmin} equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <Directory isAdmin={this.state.isAdmin} eraseOrganization={this.eraseOrganizationCallback.bind(this)} equalOrgs={this.equalOrgs.bind(this)} updateAdminSelectedOrg={this.updateAdminSelectedOrg.bind(this)} openProfile={this.openProfile.bind(this)} isAdmin={this.state.isAdmin} equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <SimpleMap resetLocations = {this.resetLocations.bind(this)} equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <Profile adminSelectedOrg={this.state.adminSelectedOrg} isAdmin={this.state.isAdmin} currentUser={this.state.user} currentOrg={this.state.organization} updateOrg={this.editOrganizationCallback.bind(this)}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
