@@ -31,6 +31,9 @@ After cloning the github repository, run the following commands:
 cd /club-finder
 npm install
 ```
+##### Obtaining API Keys
+API keys are needed for Google Firebase, Google Maps API, and Google Geocoding API 
+(see https://cloud.google.com/docs/authentication/api-keys).
 
 ### Running Application
 To start the application on the server, enter the following commands:
