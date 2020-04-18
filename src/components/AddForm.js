@@ -12,7 +12,7 @@ class AddForm extends React.Component {
             city : "", 
             state : "", 
             zip: "", 
-            country: "", 
+            country: "United States",
             website: "", 
             contact: "", 
             phone:"", 
@@ -133,7 +133,12 @@ class AddForm extends React.Component {
                     <input type="text" name="address" onChange={e => this.setAddress(e)} required/>
 
                     <label><b>Country</b></label>
-                    {countries}
+                    <select onChange={e => this.setCountry(e)} id="country" name="country" className="form-control">
+                      <option value="United States">United States</option>
+                      {countries.map((each) =>
+                          <option value={each}>{each}</option>
+                      )};
+                    </select>
                     
                     <label><b>State / Province</b></label>
                     <input type="text" style={{width:"23.7%"}} className="state" name="state" onChange={e => this.setSt(e)}/>
