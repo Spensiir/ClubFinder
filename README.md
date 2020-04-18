@@ -43,7 +43,7 @@ npm start
 ```
 *** The code above starts the client-side of the application ****
 
-In order to run the server-side, you must first create a file titles config.js
+In order to run the server-side, you must first create a file titled 'config.js'
 in the /club-finder/src/tools directory. In the file, you should paste the 
 following code and enter all API keys and additional configurations for your 
 application.
