@@ -90,7 +90,22 @@ nodemon server.js
 The users of your application can now access the web application at the 
 domain name you registered your server under.
 
-## Release Notes
+## Release Notes Version 1.0
+
+##### New Features
+* Users can now see clubs closest to their location using a sorted list
+* Users can click on clubs to view club details and contact information
+* Users with accounts can now reset their passwords
+* Users can search clubs by entering club names or addresses in search bar
+
+##### Bug Fixes
+* Fixed address formatting when adding new clubs
+* Fixed country selection so users can add their country to addresses
+* Removed admins from being displayed in the list of organizations
+
+##### Known Bugs
+* Cases exist where the wrong club is edited when users edit clubs
+* Map can be moved out of bounds
 
 
 
