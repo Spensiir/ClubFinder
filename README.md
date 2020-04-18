@@ -1,6 +1,6 @@
-##Install Guide HEMAA Club Finder 1.0
+## Install Guide HEMAA Club Finder 1.0
 
-###Pre-requisites
+### Pre-requisites
 ##### Setting up a server
 In order to run the application on a website, you must first have a server to run the application. 
 Cloud server can be purchased from Amazon Web Services (https://aws.amazon.com/ec2/?hp=tile&so-exp=below) 
@@ -17,13 +17,13 @@ software from the following website: https://nodejs.org/en/ .
 To install Nodemon on your server, you can follow the instructions at the following 
 website: https://www.npmjs.com/package/nodemon .
 
-###Download 
+### Download 
 On your server's command line, enter the following:
 ```shell 
 git clone https://github.com/Spensiir/ClubFinder.git
 ```
 
-###Dependencies
+### Dependencies
 ##### Installing dependencies
 After cloning the github repository, run the following commands:
 
@@ -32,7 +32,7 @@ cd /club-finder
 npm install
 ```
 
-###Running Application
+### Running Application
 To start the application on the server, enter the following commands:
 ```shell 
 cd [PATH OF club-finder DIRECTORY]/club-finder
