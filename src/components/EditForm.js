@@ -46,7 +46,6 @@ class EditForm extends React.Component {
     static getDerivedStateFromProps(props, state) {
 
         if (props.initialSelect !== null && state.name === "") {
-          console.log(3);
             return {
                 name: props.initialSelect.name,
                 address: props.initialSelect.address,
@@ -64,7 +63,6 @@ class EditForm extends React.Component {
                 oldMarker : copyMarker(props.initialSelect)
             };
         } else if (props.initialSelect !== null && props.initialSelect.name !== state.name) {
-          console.log(3);
             return {
                 name: props.initialSelect.name,
                 address: props.initialSelect.address,
@@ -82,7 +80,6 @@ class EditForm extends React.Component {
                 oldMarker : copyMarker(props.initialSelect)
             };
         } else if (props.initialSelect !== null && props.initialSelect.address !== state.address) {
-          console.log(3);
             return {
                 name: props.initialSelect.name,
                 address: props.initialSelect.address,
@@ -106,7 +103,6 @@ class EditForm extends React.Component {
     setClubName(event) {
         var tempDetails = this.state.newDetails;
         tempDetails.name = event.target.value;
-        console.log(tempDetails);
         this.setState({newDetails : copyMarker(tempDetails)});
     }
     setAddress(event) {
@@ -190,7 +186,6 @@ class EditForm extends React.Component {
     }
 
     render () {
-        console.log(this.state.newDetails);
         return (
             <div className="addForm" id="EditFormDiv">
                 <form id="editFormDiv" onSubmit={this.submitForm}>
