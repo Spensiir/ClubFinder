@@ -194,7 +194,7 @@ class App extends React.Component {
 
   organizationCallback = async (email) => {       
     this.setState({markers : await locationManager.updateLocations(email, this.state.isAdmin, this.state.currLat, this.state.currLng)});    
-    this.toggleResetLocations(); 
+    this.showResetLocations(); 
   }
 
   editOrganizationCallback = async (orgFromForm) => {
@@ -220,7 +220,7 @@ class App extends React.Component {
     this.setState({
       markers: await locationManager.updateLocations(null, this.state.isAdmin, this.state.currLat, this.state.currLng)
     });
-    this.toggleResetLocations();
+    this.hideResetLocations();
   }
   selectedCallback = (markerFromMap) => {
     if (markerFromMap) {
@@ -305,13 +305,14 @@ class App extends React.Component {
     document.getElementById("orgs").className = "btn1";
   }
 
-  toggleResetLocations() {
-    if (document.getElementById("resetLocations").style.display == "block") {
-        document.getElementById("resetLocations").style.display = "none";
-    }
-    else if (document.getElementById("resetLocations").style.display == "none") {
+  showResetLocations() {
+    if (document.getElementById("resetLocations").style.display == "none") {
         document.getElementById("resetLocations").style.display = "block";
     }
+  }
+
+  hideResetLocations() {
+        document.getElementById("resetLocations").style.display = "none";
   }
 }
 
