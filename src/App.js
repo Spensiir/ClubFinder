@@ -187,8 +187,9 @@ class App extends React.Component {
     this.setState({markers : await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
   };
 
-  editMarkerCallback = async (markerFromForm) => {
-    await locationManager.editLocation(this.state.selected, markerFromForm);
+  editMarkerCallback = async (oldMarker, markerFromForm) => {
+    console.log(oldMarker, " and ", markerFromForm);
+    await locationManager.editLocation(oldMarker, markerFromForm);
     this.setState({markers : await locationManager.updateLocations(userManager.getUser().email, this.state.isAdmin, this.state.currLat, this.state.currLng), selected: markerFromForm });
     this.selectedCallback(markerFromForm);
 };
