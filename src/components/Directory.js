@@ -8,7 +8,7 @@ import Profile from '../components/Profile.js';
 var keyVal = 0;
 var isUser = "none";
 var isNotOrg = "inline";
-var adminFunctions = "none";
+//var adminFunctions = "none";
 var isOrg = "none";
 
 class Directory extends React.Component {
@@ -21,13 +21,20 @@ class Directory extends React.Component {
             filteredMarkers: this.props.currMarkers,
             orgs:this.props.organizations,
             allWords: "",
-            selected : this.props.currSelect
+            selected : this.props.currSelect,
+            isAdmin : this.props.isAdmin
         };
     }
 
     static getDerivedStateFromProps(props, state) {
-        console.log(props.organizations, state.orgs);
-        if (props.currSelect !== state.selected && !props.equalMarkers(props.currMarkers, state.markers)) {
+        if (props.isAdmin !== state.isAdmin) {
+              return {
+                selected : props.currSelect,
+                markers : props.currMarkers,
+                filteredMarkers: props.currMarkers,
+                isAdmin : props.isAdmin
+              };
+        } else if (props.currSelect !== state.selected && !props.equalMarkers(props.currMarkers, state.markers)) {
             return {
                 selected : props.currSelect,
                 markers : props.currMarkers,
@@ -88,6 +95,13 @@ class Directory extends React.Component {
 
     render() {
         isSignedIn();
+
+        var adminFunctions;
+        if (this.state.isAdmin) {
+            adminFunctions = "inline";
+        } else {
+            adminFunctions = "none";
+        }
 
         return (
             <div id="Directory" className="directory">
@@ -193,7 +207,7 @@ function isSignedIn() {
     if (document.getElementById("topNav") != null) {
         if (document.getElementById("topNav").style.display === "block") {
             isUser = "initial";
-            adminFunctions = "none";
+            //adminFunctions = "none";
             isNotOrg = "none";
             isOrg = "inline";
             document.getElementById("UL").style.width = "310px";
@@ -202,10 +216,10 @@ function isSignedIn() {
             document.getElementById("UL2").style.marginLeft = "-100px";
         } else if (document.getElementById("topNav2").style.display === "block") {
             isUser = "initial";
-            adminFunctions = "inline";
+            //adminFunctions = "inline";
         } else {
             isUser = "none";
-            adminFunctions = "none";
+            //adminFunctions = "none";
             isNotOrg = "inline";
             isOrg = "none";
         }

@@ -12,7 +12,7 @@ class AddForm extends React.Component {
             city : "", 
             state : "", 
             zip: "", 
-            country: "", 
+            country: "United States",
             website: "", 
             contact: "", 
             phone:"", 
@@ -73,13 +73,12 @@ class AddForm extends React.Component {
             coords = res;
         });
 
+        var formattedAddress = this.formatAddress();
+
         if (coords.lat !== null && coords.lng !== null) {
             this.props.updateMarkers({name: this.state.club_name,
-                address: this.state.address + ", " 
-                + this.state.city + ", " 
-                + this.state.state + " " 
-                + this.state.zip + " "
-                + this.state.country,
+                address: formattedAddress,
+                street: this.state.address,
                 state: this.state.state,
                 city: this.state.city,
                 zip: this.state.zip,
@@ -100,6 +99,28 @@ class AddForm extends React.Component {
         closeAddForm();
     }
 
+    formatAddress() {
+      var address = "";
+      if (this.state.address.length > 0) {
+        address += this.state.address + ", ";
+      }
+      if (this.state.city.length > 0) {
+        address += this.state.city + ", ";
+      }
+      if (this.state.state.length > 0) {
+        address += this.state.state + ", ";
+      }
+      if (this.state.zip.length > 0) {
+        address += this.state.zip + ", ";
+      }
+      if (this.state.country.length > 0) {
+        address += this.state.country + ", "
+      }
+
+      address = address.substring(0, address.length - 2);
+      return address;
+    }
+
     render () {
         return (
             <div className="addForm" id="AddFormDiv">
@@ -112,7 +133,12 @@ class AddForm extends React.Component {
                     <input type="text" name="address" onChange={e => this.setAddress(e)} required/>
 
                     <label><b>Country</b></label>
-                    {countries}
+                    <select onChange={e => this.setCountry(e)} id="country" name="country" className="form-control">
+                      <option value="United States">United States</option>
+                      {countries.map((each) =>
+                          <option value={each}>{each}</option>
+                      )};
+                    </select>
                     
                     <label><b>State / Province</b></label>
                     <input type="text" style={{width:"23.7%"}} className="state" name="state" onChange={e => this.setSt(e)}/>

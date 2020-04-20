@@ -37,13 +37,14 @@ class EditForm extends React.Component {
             };
         }
 
-        var newDetails = this.state;
-        this.state.newDetails = newDetails;
+        this.state.newDetails =copyMarker(this.props.initialSelect);
+        this.state.oldMarker =copyMarker(this.props.initialSelect);
 
         this.submitForm = this.submitForm.bind(this);
     }
 
     static getDerivedStateFromProps(props, state) {
+
         if (props.initialSelect !== null && state.name === "") {
             return {
                 name: props.initialSelect.name,
@@ -58,7 +59,8 @@ class EditForm extends React.Component {
                 lng: props.initialSelect.lng,
                 color: props.initialSelect.color,
                 orgEmail: props.initialSelect.orgEmail,
-                newDetails : props.initialSelect
+                newDetails : copyMarker(props.initialSelect),
+                oldMarker : copyMarker(props.initialSelect)
             };
         } else if (props.initialSelect !== null && props.initialSelect.name !== state.name) {
             return {
@@ -74,9 +76,10 @@ class EditForm extends React.Component {
                 lng: props.initialSelect.lng,
                 color: props.initialSelect.color,
                 orgEmail: props.initialSelect.orgEmail,
-                newDetails : props.initialSelect
+                newDetails : copyMarker(props.initialSelect),
+                oldMarker : copyMarker(props.initialSelect)
             };
-        } else if (props.initialSelect !== null && props.initialSelect.address !== state.default_address) {
+        } else if (props.initialSelect !== null && props.initialSelect.address !== state.address) {
             return {
                 name: props.initialSelect.name,
                 address: props.initialSelect.address,
@@ -90,16 +93,17 @@ class EditForm extends React.Component {
                 lng: props.initialSelect.lng,
                 color: props.initialSelect.color,
                 orgEmail: props.initialSelect.orgEmail,
-                newDetails : props.initialSelect
+                newDetails : copyMarker(props.initialSelect),
+                oldMarker : copyMarker(props.initialSelect)
             };
         }
         return null;
     }
 
     setClubName(event) {
-        var newDetails = this.state.newDetails;
-        newDetails.name = event.target.value;
-        this.setState({newDetails : newDetails});
+        var tempDetails = this.state.newDetails;
+        tempDetails.name = event.target.value;
+        this.setState({newDetails : copyMarker(tempDetails)});
     }
     setAddress(event) {
         var newDetails = this.state.newDetails;
@@ -173,7 +177,7 @@ class EditForm extends React.Component {
             newDetails.color = "red";
             newDetails.orgEmail = userManager.getUser().email;
 
-            this.props.updateMarkers(newDetails);
+            this.props.updateMarkers(this.state.oldMarker, newDetails);
         } else {
             console.log("Bad location...");
         }
@@ -233,6 +237,40 @@ class EditForm extends React.Component {
         window.formOpen = false;
     }
     
+}
+function copyMarker(marker) {
+  if (marker !== null) {
+    var copiedMarker = {
+      name: "",
+      address: "",
+      website: "",
+      weapons: "",
+      contact: "",
+      phone: "",
+      description: "",
+      email: "",
+      lat: "",
+      lng: "",
+      color: "",
+      orgEmail: ""
+    };
+
+    copiedMarker.name = marker.name;
+    copiedMarker.address = marker.address;
+    copiedMarker.website = marker.website;
+    copiedMarker.weapons = marker.weapons;
+    copiedMarker.contact = marker.contact;
+    copiedMarker.phone = marker.phone;
+    copiedMarker.description = marker.description;
+    copiedMarker.email = marker.email;
+    copiedMarker.lat = marker.lat;
+    copiedMarker.lng = marker.lng;
+    copiedMarker.color = marker.color;
+    copiedMarker.orgEmail = marker.orgEmail;
+
+    return copiedMarker;
+  }
+  return null;
 }
 
 export default EditForm;
