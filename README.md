@@ -105,9 +105,9 @@ domain name you registered your server under.
 * Fixed address formatting when adding new clubs
 * Fixed country selection so users can add their country to addresses
 * Removed admins from being displayed in the list of organizations
+* Fixed editing a club so it edits the proper club
 
 ##### Known Bugs
-* Cases exist where the wrong club is edited when users edit clubs
 * Map can be moved out of bounds
 
 
