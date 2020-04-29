@@ -11,9 +11,11 @@ export function moveDirectory() {
       document.getElementById("UL2").style.marginLeft = "-380px";
       document.getElementById("clubs").style.marginLeft = "-380px";
       document.getElementById("clubs2").style.marginLeft = "-380px";
+      document.getElementById("confirmOrgRemove").style.left = "240px";
       document.getElementById("mover").style.marginLeft = "30px";
       document.getElementById("details").style.marginLeft = "-350px";
       document.getElementById("arrow").style.transform = "rotate(180deg)";
+      document.getElementById("resetLocations").style.marginLeft = "40px";
       checkMove = 1;
     } else {
       document.getElementById("mainHeader").style.marginLeft = "0px";
@@ -23,9 +25,11 @@ export function moveDirectory() {
       document.getElementById("confirm").style.left = "685px";
       document.getElementById("clubs").style.marginLeft = "0px";
       document.getElementById("clubs2").style.marginLeft = "0px";
+      document.getElementById("confirmOrgRemove").style.left = "560px";
       document.getElementById("mover").style.marginLeft = "0px";
       document.getElementById("details").style.marginLeft = "0px";
       document.getElementById("arrow").style.transform = "rotate(0deg)";
+      document.getElementById("resetLocations").style.marginLeft = "390px";
       if (document.getElementById("clubs").className === "btn1 active" || document.getElementById("orgButtons").style.display === "inline") {
         document.getElementById("UL").style.width = "310px";
         document.getElementById("UL").style.marginLeft = "0px";

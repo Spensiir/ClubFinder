@@ -1,8 +1,5 @@
 import {config} from '../tools/config.js';
 import axios from 'axios';
-import { userManager } from './UserManager.js';
-import locationManager from "../managers/LocationManager.js"
-import SimpleMap from "../components/Map";
 
  //TODO: finish implementing updateOrganizations()
 class OrganizationManager {

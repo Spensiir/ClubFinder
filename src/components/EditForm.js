@@ -2,6 +2,7 @@ import React from 'react';
 import '../css/addform.css';
 import { getCoords } from '../tools/coords.js';
 import {userManager} from "../managers/UserManager";
+import { countries } from '../tools/locationForms';
 
 class EditForm extends React.Component {
     constructor(props) {
@@ -110,6 +111,11 @@ class EditForm extends React.Component {
         newDetails.address = event.target.value;
         this.setState({newDetails : newDetails});
     }
+    setCountry(event) {
+        var newDetails = this.state.newDetails;
+        newDetails.country = event.target.value;
+        this.setState({newDetails : newDetails});
+    }
     setCity(event) {
         var newDetails = this.state.newDetails;
         newDetails.city = event.target.value;
@@ -161,7 +167,8 @@ class EditForm extends React.Component {
         var loc = {address: this.state.address,
             city : this.state.city,
             state : this.state.state,
-            zip : this.state.zip
+            zip : this.state.zip,
+            country: this.state.country
         };
 
         let coords;
@@ -190,26 +197,34 @@ class EditForm extends React.Component {
             <div className="addForm" id="EditFormDiv">
                 <form id="editFormDiv" onSubmit={this.submitForm}>
                     <h1> Edit Your Club </h1>
-                    <label><b>Club Name *</b></label>
+                    <label><b>Club Name</b></label>
                     <input type="text" defaultValue={this.state.name} name="name" onChange={e =>this.setClubName(e)} required/>
 
-                    <label><b>Address *</b></label>
-                    <input type="text" defaultValue={this.state.address} name="address" onChange={e => this.setAddress(e)} placeholder={this.state.address} required/>
+                    <label><b>Address</b></label>
+                    <input type="text" defaultValue={this.state.address} name="address" onChange={e => this.setAddress(e)} required/>
 
+                    <label><b>Country</b></label>
+                    <select onChange={e => this.setCountry(e)} id="country" name="country" className="form-control">
+                      <option value="United States">United States</option>
+                      {countries.map((each) =>
+                          <option value={each}>{each}</option>
+                      )};
+                    </select>
+
+                    <label><b>State / Province</b></label>
+                    <input type="text" defaultValue={this.state.state} style={{width:"23.7%"}} className="state" name="state" onChange={e => this.setSt(e)}/>
+                    <br/>
                     <label><b>City</b></label>
-                    <input type="text" defaultValue={this.state.city} style={{width:"36.7%"}} className="city" name="city" onChange={e => this.setCity(e)}/>
-
-                    <label><b>State</b></label>
-                    <input type="text" defaultValue={this.state.state} style={{width:"4%"}} className="state" name="state" onChange={e => this.setSt(e)}/>
+                    <input type="text" defaultValue={this.state.city} style={{width:"48.2%"}} className="city" name="city" onChange={e => this.setCity(e)}/>
 
                     <label><b>Zip</b></label>
-                    <input type="text" defaultValue={this.state.zip} style={{width:"11.8%"}} className="zip" name="zip" onChange={e => this.setZip(e)}/>
+                    <input type="text" defaultValue={this.state.zip} style={{width:"20.2%"}} className="zip" name="zip" onChange={e => this.setZip(e)}/>
                     <br/>
-                    <label><b>Website *</b></label>
-                    <input type="text" defaultValue={this.state.website} style={{width:"31%"}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
+                    <label><b>Website</b></label>
+                    <input type="text" defaultValue={this.state.website} style={{width:"32.5%"}} className="website" name="website" onChange={e => this.setWebsite(e)} required/>
 
-                    <label><b>Email *</b></label>
-                    <input type="text" defaultValue={this.state.email} style={{width:"28.3%"}} className="email" name="email" onChange={e => this.setEmail(e)} required/>
+                    <label><b>Email</b></label>
+                    <input type="text" defaultValue={this.state.email} style={{width:"29.8%"}} className="email" name="email" onChange={e => this.setEmail(e)} required/>
                     <br/>
                     <label><b>Contact Name</b></label>
                     <input type="text" defaultValue={this.state.contact} style={{width:"26.4%"}} className="contact" name="contact" onChange={e => this.setContact(e)}/>
@@ -217,7 +232,7 @@ class EditForm extends React.Component {
                     <label><b>Phone #</b></label>
                     <input type="text" defaultValue={this.state.phone} style={{width:"27%"}} className="phone" name="phone" onChange={e => this.setPhone(e)}/>
                     <br/>
-                    <label><b>Weapons</b></label>
+                    <label><b>Weapons / Studies</b></label>
                     <input type="text" defaultValue={this.state.weapons} className="website" name="website" onChange={e => this.setWeapons(e)}/>
                     <br/>
                     <label><b>Club Description</b></label>
@@ -231,8 +246,10 @@ class EditForm extends React.Component {
 
     closeEditForm() {
         document.getElementById("EditFormDiv").scrollTop = (0,0);
-        document.getElementById("EditFormDiv").style.display = "none";
-        document.getElementById("shadow").style.display = "none";
+        document.getElementById("EditFormDiv").style.height = "0";
+        document.getElementById("EditFormDiv").style.opacity = "0";
+        document.getElementById("shadow").style.opacity = "0";
+        document.getElementById("shadow").style.height = "0";
         document.getElementById("editFormDiv").reset();
         window.formOpen = false;
     }

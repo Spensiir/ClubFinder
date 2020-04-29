@@ -64,7 +64,8 @@ class AddForm extends React.Component {
         var loc = {address: this.state.address,
             city : this.state.city,
             state : this.state.state,
-            zip : this.state.zip
+            zip : this.state.zip,
+            country: this.state.country
         };
 
         let coords;
@@ -78,6 +79,7 @@ class AddForm extends React.Component {
         if (coords.lat !== null && coords.lng !== null) {
             this.props.updateMarkers({name: this.state.club_name,
                 address: formattedAddress,
+                country: this.state.country,
                 street: this.state.address,
                 state: this.state.state,
                 city: this.state.city,
@@ -177,8 +179,10 @@ class AddForm extends React.Component {
 
 function closeAddForm() {
     document.getElementById("AddFormDiv").scrollTop = (0,0);
-    document.getElementById("AddFormDiv").style.display = "none";
-    document.getElementById("shadow").style.display = "none";
+    document.getElementById("AddFormDiv").style.height = "0";
+    document.getElementById("AddFormDiv").style.opacity = "0";
+    document.getElementById("shadow").style.opacity = "0";
+    document.getElementById("shadow").style.height = "0";
     document.getElementById("addFormDiv").reset();
     window.formOpen = false;
 }

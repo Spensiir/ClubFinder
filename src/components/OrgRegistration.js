@@ -97,7 +97,8 @@ class OrgRegistration extends React.Component {
 
 function closeOrgForm() {
     document.getElementById("OrgForm").style.display = "none";
-    document.getElementById("shadow").style.display = "none";
+    document.getElementById("shadow").style.opacity = "0";
+    document.getElementById("shadow").style.height = "0";
     document.getElementById("orgFormDiv").reset();
     window.formOpen = false;
 }

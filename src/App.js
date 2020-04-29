@@ -54,6 +54,7 @@ class App extends React.Component {
 }
 
   onClickSubmit = async () => {
+    this.hideResetLocations();
     this.openSignin();
     this.closeEverything();
   };
@@ -101,32 +102,32 @@ class App extends React.Component {
         if (markers1[i].zip !== markers2[i].zip) return false;
     }
     return true;
-    }
+  }
 
-    equalOrgs(orgs1, orgs2) {
-      if (orgs1 === null && orgs2 !== null) {
-          return false;
-      }
-      if (orgs1 !== null && orgs2 === null) {
-          return false;
-      }
+  equalOrgs(orgs1, orgs2) {
+    if (orgs1 === null && orgs2 !== null) {
+        return false;
+    }
+    if (orgs1 !== null && orgs2 === null) {
+        return false;
+    }
   
-      if (orgs1 === null && orgs2 === null) {
-          return true;
-      }
-      if (orgs1.length !== orgs2.length) {
-          return false;
-      }
+    if (orgs1 === null && orgs2 === null) {
+        return true;
+    }
+    if (orgs1.length !== orgs2.length) {
+        return false;
+    }
   
-      for (let i=0; i < orgs1.length; i++) {
-          if (orgs1[i].name !== orgs2[i].name) return false;
-          if (orgs1[i].username !== orgs2[i].username) return false;
-          if (orgs1[i].id !== orgs2[i].id) return false;
-          if (orgs1[i].email !== orgs2[i].email) return false;
-          if (orgs1[i].website !== orgs2[i].website) return false;
-      }
-      return true;
-      }
+    for (let i=0; i < orgs1.length; i++) {
+        if (orgs1[i].name !== orgs2[i].name) return false;
+        if (orgs1[i].username !== orgs2[i].username) return false;
+        if (orgs1[i].id !== orgs2[i].id) return false;
+        if (orgs1[i].email !== orgs2[i].email) return false;
+        if (orgs1[i].website !== orgs2[i].website) return false;
+    }
+    return true;
+  }
 
   onClickSignOut = async () => {
     await userManager.fireSignOut();
@@ -137,6 +138,7 @@ class App extends React.Component {
 
     this.closeEverything();
     this.signOutClosing();
+    this.hideResetLocations();
     this.setState(
       {
         username: "user",
@@ -147,17 +149,17 @@ class App extends React.Component {
         </div>});
   };
   
-      setAdmin = (isAdminStr) => {
-          if(isAdminStr === "True") {
-              this.setState({
-                  isAdmin: true
-              });
-          } else {
-              this.setState({
-                  isAdmin: false
-              });
-          }
-      };
+  setAdmin = (isAdminStr) => {
+      if(isAdminStr === "True") {
+          this.setState({
+              isAdmin: true
+          });
+      } else {
+          this.setState({
+              isAdmin: false
+          });
+      }
+  };
 
   usernameCallback = async (usernameData) => {
     this.setState({
@@ -180,6 +182,7 @@ class App extends React.Component {
           <button id="signoutButton" className="signout" onClick={this.onClickSignOut}><b>Sign Out</b></button>
           </div>}));
     }
+    document.getElementById("addPlus").style.fontSize = "24px";
   };
 
   markerCallback = async (markerFromForm) => {
@@ -223,6 +226,7 @@ class App extends React.Component {
     });
     this.hideResetLocations();
   }
+  
   selectedCallback = (markerFromMap) => {
     if (markerFromMap) {
       markerFromMap.color = "yellow";
@@ -264,8 +268,11 @@ class App extends React.Component {
           </div>
           <OrgRegistration userManager={userManager} setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback}/>
           <Signin setAdmin={this.setAdmin.bind(this)} callbackFromApp={this.usernameCallback} onClickSubmit={this.onClickSubmit} onClickSignOut = {this.onClickSignOut}/>
-          <Directory isAdmin={this.state.isAdmin} eraseOrganization={this.eraseOrganizationCallback.bind(this)} equalOrgs={this.equalOrgs.bind(this)} updateAdminSelectedOrg={this.updateAdminSelectedOrg.bind(this)} openProfile={this.openProfile.bind(this)} isAdmin={this.state.isAdmin} equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
-          <SimpleMap resetLocations = {this.resetLocations.bind(this)} equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <Directory isAdmin={this.state.isAdmin} eraseOrganization={this.eraseOrganizationCallback.bind(this)} equalOrgs={this.equalOrgs.bind(this)} updateAdminSelectedOrg={this.updateAdminSelectedOrg.bind(this)} 
+                     openProfile={this.openProfile.bind(this)} equalMarkers={this.equalMarkers.bind(this)} updateMarkers={this.organizationCallback.bind(this)} organizations={this.state.organizations} currMarkers={this.state.markers} 
+                     updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
+          <SimpleMap resetLocations = {this.resetLocations.bind(this)} equalMarkers={this.equalMarkers.bind(this)} removeMarker={this.removeMarker.bind(this)} currMarkers={this.state.markers} 
+                     updateSelected={this.selectedCallback.bind(this)} currSelect={this.state.selected}/>
           <Profile adminSelectedOrg={this.state.adminSelectedOrg} isAdmin={this.state.isAdmin} currentUser={this.state.user} currentOrg={this.state.organization} updateOrg={this.editOrganizationCallback.bind(this)}/>
           <AddForm updateMarkers={this.markerCallback.bind(this)}/>
           <EditForm updateMarkers={this.editMarkerCallback.bind(this)} initialSelect={this.state.selected} />
@@ -274,46 +281,57 @@ class App extends React.Component {
   };
 
   closeEverything () {
-    document.getElementById("details").style.display = "none";
+    if (document.getElementById("details") !== null) {
+      document.getElementById("details").style.left = "0px";
+      document.getElementById("details").style.opacity = "0";
+    }
     this.setState({selected: null});
   }
-
+  
   openSignin() {
     document.getElementById("SigninForm").style.display = "block";
-    document.getElementById("shadow").style.display = "block";
+    document.getElementById("shadow").style.opacity = "0.4";
+    document.getElementById("shadow").style.height = "100%";
   }
 
   openRegister() {
     document.getElementById("OrgForm").style.display = "block";
-    document.getElementById("shadow").style.display = "block";
+    document.getElementById("shadow").style.opacity = "0.4";
+    document.getElementById("shadow").style.height = "100%";
   }
 
   openProfile() {
     document.getElementById("ProfileForm").style.display = "block";
-    document.getElementById("shadow").style.display = "block";
+    document.getElementById("shadow").style.opacity = "0.4";
+    document.getElementById("shadow").style.height = "100%";
 }
 
   openAdminRegistration() {
     document.getElementById("AdminForm").style.display = "block";
-    document.getElementById("shadow").style.display = "block";
+    document.getElementById("shadow").style.opacity = "0.4";
+    document.getElementById("shadow").style.height = "100%";
 }
 
   signOutClosing() {
     document.getElementById("nonOrgButtons").style.display = "inline";
     document.getElementById("orgButtons").style.display = "none";
-    document.getElementById("addPlus").style.display = "none";
+    document.getElementById("addPlus").style.fontSize = "0px";
     document.getElementById("clubs").className = "btn1 active";
     document.getElementById("orgs").className = "btn1";
+    document.getElementById("UL").style.width = "310px";
+    document.getElementById("UL").style.marginLeft = "0px";
+    document.getElementById("UL2").style.width = "0px";
+    document.getElementById("UL2").style.marginLeft = "-100px"; 
   }
 
   showResetLocations() {
-    if (document.getElementById("resetLocations").style.display == "none") {
-        document.getElementById("resetLocations").style.display = "block";
-    }
+    document.getElementById("resetLocations").style.pointerEvents = "all";
+    document.getElementById("resetLocations").style.transform = "rotateY(0deg)";
   }
 
   hideResetLocations() {
-        document.getElementById("resetLocations").style.display = "none";
+    document.getElementById("resetLocations").style.pointerEvents = "none";
+    document.getElementById("resetLocations").style.transform = "rotateY(90deg)";
   }
 }
 

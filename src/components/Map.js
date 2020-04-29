@@ -6,6 +6,7 @@ import GoogleMapReact from 'google-map-react';
 import { config } from '../tools/config.js';
 
 var isUser = "none";
+var details, confirm;
 
 const Marker = (props) => {
     const { color } = props;
@@ -111,19 +112,21 @@ class SimpleMap extends React.Component {
     };
 
     displayConfirm() {
-        document.getElementById("confirm").style.display = "block";
+        document.getElementById("confirm").style.marginLeft = "0";
+        document.getElementById("confirm").style.opacity = "1";
     }
-        
+
     async removeMarker() {
         this.props.removeMarker();
     };
 
     keepMarker() {
-        document.getElementById("confirm").style.display = "none";
+        document.getElementById("confirm").style.marginLeft = "-200px";
+        document.getElementById("confirm").style.opacity = "0";
     }
 
     render() {
-        var details, confirm, weapons, contact, phone, description;
+        var weapons, contact, phone, description;
         var editDisabled = false;
         this.isSignedIn();
 
@@ -133,85 +136,94 @@ class SimpleMap extends React.Component {
 
         if (this.state.selected !== undefined && this.state.selected !== null) {
 
-        if (this.state.selected.weapons === "" || this.state.selected.weapons == null) {
-            weapons = "none";
+            if (this.state.selected.weapons === "" || this.state.selected.weapons == null) {
+                weapons = "none";
+            } else {
+                weapons = "block";
+            }
+
+            if (this.state.selected.contact === "" || this.state.selected.contact == null) {
+                contact = "none";
+            } else {
+                contact = "block";
+            }
+
+            if (this.state.selected.phone === "" || this.state.selected.phone == null) {
+                phone = "none";
+            } else {
+                phone = "block";
+            }
+
+            if (this.state.selected.description === "" || this.state.selected.description == null) {
+                description = "none";
+            } else {
+                description = "block";
+            }
+
+            details = (
+                <div style={{overflow:"hidden", textOverflow:"ellipsis", width:"300px"}}>
+                    <i style={{display:isUser}} onClick={this.displayConfirm} className="fas fa-trash-alt">
+                        <span className = "tooltip">Remove This Club</span></i>
+                    <i style={{display:isUser}} disabled={!editDisabled} onClick={this.openEditForm} className="fas fa-pencil-alt">
+                        <span className = "tooltip">Edit This Club</span></i>
+                    <h1>{this.state.selected.name}</h1>
+                    <br/>
+                    <h2>{this.state.selected.address}</h2>
+                    <br/>
+                    <hr></hr>
+                    <div style = {{display:contact}}><h3 className="fas fa-user"> </h3>
+                    <p>{this.state.selected.contact}</p></div>
+
+                    <div style = {{display:phone}}><h3 className="fas fa-phone"> </h3>
+                    <p>{this.state.selected.phone}</p></div>
+
+                    <h3 className="fas fa-globe">
+                    <a href={this.state.selected.website} target="_blank" rel="noopener noreferrer">{this.state.selected.website}</a> </h3>
+                    <br/>
+
+                    <h3 className="fas fa-envelope">
+                    <a href={"mailto:" + this.state.selected.orgEmail} target="_blank" rel="noopener noreferrer">{this.state.selected.orgEmail}</a> </h3>
+
+                    <div style = {{display:weapons}}><h3 className="fas fa-fan"> </h3>
+                    <p>{this.state.selected.weapons}</p></div>
+
+                    <div style={{display:description}}><hr></hr>
+                    <p>{this.state.selected.description}</p></div>
+                </div>
+            )
+
+            confirm = (
+                <div>
+                    <p>Are you sure you want to remove <b>{this.state.selected.name}</b>?</p>
+                    <button onClick={this.removeMarker} id="removeClub"><i className = "fas fa-check"></i></button>
+                    <button onClick={this.keepMarker} id="keepClub"><i className = "fas fa-times"></i></button>
+                </div>
+            )
+
+            if (document.getElementById("details") !== null) {
+                document.getElementById("details").style.left = "360px";
+                document.getElementById("details").style.opacity = "1";
+            }
+
         } else {
-            weapons = "block";
-        }
-
-        if (this.state.selected.contact === "" || this.state.selected.contact == null) {
-            contact = "none";
-        } else {
-            contact = "block";
-        }
-
-        if (this.state.selected.phone === "" || this.state.selected.phone == null) {
-            phone = "none";
-        } else {
-            phone = "block";
-        }
-
-        if (this.state.selected.description === "" || this.state.selected.description == null) {
-            description = "none";
-        } else {
-            description = "block";
-        }
-
-        details = (<div className="locDetails" id="details" style={{display: "block"}}>
-            <i style={{display:isUser}} onClick={this.displayConfirm} className="fas fa-trash-alt">
-                <span className = "tooltip">Remove This Club</span></i>
-            <i style={{display:isUser}} disabled={!editDisabled} onClick={this.openEditForm} className="fas fa-pencil-alt">
-                <span className = "tooltip">Edit This Club</span></i>
-            <h1>{this.state.selected.name}</h1>
-            <br/>
-            <h2>{this.state.selected.address}</h2>
-            <br/>
-            <hr></hr>
-            <div style = {{display:contact}}><h3 className="fas fa-user"> </h3>
-            <p>{this.state.selected.contact}</p></div>
-
-            <div style = {{display:phone}}><h3 className="fas fa-phone"> </h3>
-            <p>{this.state.selected.phone}</p></div>
-
-            <h3 className="fas fa-globe">
-            <a href={this.state.selected.website}>{this.state.selected.website}</a> </h3>
-            <br/>
-
-            <h3 className="fas fa-envelope">
-            <a href={this.state.selected.orgEmail}>{this.state.selected.orgEmail}</a> </h3>
-
-            <div style = {{display:weapons}}><h3 className="fas fa-fan"> </h3>
-            <p>{this.state.selected.weapons}</p></div>
-
-            <div style={{display:description}}><hr></hr>
-            <p>{this.state.selected.description}</p></div>
-        </div>
-        )
-
-        confirm = (<div className = "confirmClub" id="confirm">
-        <p>Are you sure you want to remove this club?</p>
-        <button onClick={this.removeMarker} id="removeClub"><i className = "fas fa-check"></i></button>
-        <button onClick={this.keepMarker} id="keepClub"><i className = "fas fa-times"></i></button>
-        </div>)
-
-        } else {
-            details = <div className="locDetails" id="details" style={{display: "none"}}/>
-            confirm = <div className = "confirmClub" id="confirm" style={{display: "none"}}/>
+            if (document.getElementById("details") !== null) {
+                document.getElementById("details").style.left = "0px";
+                document.getElementById("details").style.opacity = "0";
+            }
+            if (document.getElementById("confirm") !== null) {
+                document.getElementById("confirm").style.marginLeft = "-400px";
+                document.getElementById("confirm").style.opacity = "0";
+            }
         }
 
         return (
             // Important! Always set the container height explicitly
             <div className='Map' style={{ height: '100%', width: '100%'}}>
-            {details}
-            {
-                // div below is the button that lets users see all locations after filtering based on an org
-                <div className="wrapper" id="resetLocations" style={{display: "none"}}>
-                    <button className = "seeAllMarkers" onClick = {e => this.props.resetLocations()}>
-                    Click to see all locations
-                    </button>
-                </div>
-            }
-            {confirm}
+
+            <div className="locDetails" id="details">{details}</div>
+            <div className = "confirmClub" id="confirm">{confirm}</div>
+            <button  id="resetLocations" className="seeAllMarkers" onClick={e => this.props.resetLocations()}>Click To See All Clubs</button>
+            
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: config.API_KEY}}
                     defaultZoom= {5}
@@ -251,8 +263,10 @@ class SimpleMap extends React.Component {
     }
 
     openEditForm() {
-        document.getElementById("EditFormDiv").style.display = "block";
-        document.getElementById("shadow").style.display = "block";
+        document.getElementById("EditFormDiv").style.height = "560px";
+        document.getElementById("EditFormDiv").style.opacity = "1";
+        document.getElementById("shadow").style.opacity = "0.4";
+        document.getElementById("shadow").style.height = "100%";
     }
     
     isSignedIn() {

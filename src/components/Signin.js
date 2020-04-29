@@ -78,6 +78,7 @@ class Signin extends React.Component {
             </div>
         );
     }
+    
     openResetPassword() {
         document.getElementById("passwordReset").style.display = "block";
         document.getElementById("SigninForm").style.display = "none";
@@ -91,7 +92,8 @@ class Signin extends React.Component {
 function closeSignin() {
 
     document.getElementById("SigninForm").style.display = "none";
-    document.getElementById("shadow").style.display = "none";
+    document.getElementById("shadow").style.opacity = "0";
+    document.getElementById("shadow").style.height = "0";
     document.getElementById("signinform").reset();
     window.formOpen = false;
 }

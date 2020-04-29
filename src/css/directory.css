@@ -82,7 +82,7 @@
     float:right;
     right:1.9%;
     top:66%;
-    font-size:24px;
+    font-size:0px;
     color:gray;
     pointer-events:all;
     transition:0.5s;
@@ -147,7 +147,7 @@
     position:fixed;
     margin-top:0px;
     width:310px;
-    max-height:80%;
+    max-height:75%;
     overflow:hidden;
     overflow-y: auto;
     pointer-events:all;
@@ -173,6 +173,10 @@
 
   .directory ul li:hover {
     background: linear-gradient(rgb(253, 253, 253) 0%,rgb(243, 253, 255) 47%,rgb(237, 249, 253) 100%);
+  }
+
+  .directory ul li:focus {
+    background: linear-gradient(rgb(253, 253, 253) 0%,rgb(223, 223, 223) 47%,rgb(197, 197, 197) 100%);
   }
 
   .directory ul li h2 {

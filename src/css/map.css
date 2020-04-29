@@ -33,22 +33,20 @@
 
 .locDetails {
     position:fixed;
-    padding-left:8px;
-    padding-bottom:14px;
-    padding-right:8px;
-    padding-top: 14px;
+    padding: 12px 8px;
     text-align:left;
     top:105px;
-    left:360px;
+    left:0px;
+    max-height:32%;
     width:300px;
     z-index: 3;
-    overflow:hidden;
     text-overflow:ellipsis;
     box-shadow: 3px 3px 10px grey;
     white-space:pre-line;
     font-family: 'Roboto', sans-serif;
+    overflow:hidden;
+    overflow-y:auto;
     transition:0.5s;
-
     background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgb(251, 251, 251) 47%,rgb(246, 246, 246) 100%); 
 }
 
@@ -79,7 +77,8 @@
     z-index: 1;
     transition:0.4s;
     font-size:1px;
-    top:90px;
+    top:140px;
+    margin-left:-122px;
     font-family:'Roboto', sans-serif;
   }
 
@@ -126,25 +125,56 @@
     font-weight:300;
 }
 
-.locDetails {
-    animation: fadeEffect 0.4s; 
-  }
-  
-  @keyframes fadeEffect {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-
-.wrapper {
-    text-align: center;
+.locDetails::-webkit-scrollbar {
+  width:6px;
+  height:3px;
+  border-left:0;
+  background:rgba(0,0,0,0.1);
+}
+.locDetails::-webkit-scrollbar-track {
+  background:whitesmoke;
+}
+.locDetails::-webkit-scrollbar-thumb {
+  background:rgba(2, 106, 224, 0.8);
+  border-radius:0;
 }
 
 .seeAllMarkers {
+    position: fixed;
+    top: 65px;
+    margin-left:390px;
+    padding:5px 50px;
     z-index: 5;
-    position: absolute;
-    bottom: 5%;
-    font-size:14px;
-    color:rgb(23, 127, 161);
+    font-size:16px;
+    background:white;
+    color:rgba(2, 106, 224, 0.8);
+    border:1px solid lightgray;
+    border-radius:5px;
+    cursor:pointer;
+    transition:0.5s;
+    transform:rotateY(90deg);
   }
 
+  .seeAllMarkers:hover {
+    background:whitesmoke;
+  }
 
+  .seeAllMarkers:focus {
+    outline:none;
+  }
+
+  .seeAllMarkers:active {
+    background:lightgray;
+    transition:none;
+  }
+
+  @keyframes slide {
+      from {
+        left: 0px;
+        opacity: 0;
+      }
+      to {
+        left: 360px;
+        opacity:1;
+      }
+  }

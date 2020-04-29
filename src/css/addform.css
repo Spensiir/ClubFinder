@@ -1,16 +1,16 @@
 .addForm {
-    display: none;
     position: fixed;
     width: 763px;
-    height: 560px;
+    height: 0px;
     left: calc(50% - 385px);
     top: 18%;
     fill: white;
-    border: 3px solid #f1f1f1;
     background-color: white;
     z-index: 9;
     border-radius: 10px;
     overflow-y:auto;
+    transition:0.5s;
+    opacity:0;
 }
 
 .addForm h1 {

@@ -1,15 +1,13 @@
 import React from "react"
 import "../css/directory.css"
 import {editDistance} from "../tools/stringSearch"
-import locationManager from "../managers/LocationManager.js"
-import {organizationManager} from "../managers/OrganizationManager.js"
-import Profile from '../components/Profile.js';
+import "../css/confirmationBox.css"
 
 var keyVal = 0;
 var isUser = "none";
 var isNotOrg = "inline";
-//var adminFunctions = "none";
 var isOrg = "none";
+var selectedOrg = "";
 
 class Directory extends React.Component {
 
@@ -22,7 +20,7 @@ class Directory extends React.Component {
             orgs:this.props.organizations,
             allWords: "",
             selected : this.props.currSelect,
-            isAdmin : this.props.isAdmin
+            isAdmin : this.props.isAdmin,
         };
     }
 
@@ -60,7 +58,7 @@ class Directory extends React.Component {
         return null;
     }
 
-    onChildClick = (key) => {
+    onChildClick = (listElement, key) => {
         var markers = this.state.markers;
         if (key !== 0) {
             for (var i = 0; i < this.state.markers.length; i++) {
@@ -116,10 +114,11 @@ class Directory extends React.Component {
                 <input onChange={e => this.searchFunction()} id="searchInput" type="text" placeholder="Search the Club List..." name="search"></input>
                 <i style={{display:isUser}} id="addPlus" onClick={e => this.openAddForm()} className="fas fa-plus">
                 <span className="tooltip">Add A New Club</span></i>
+
                 <ul id="UL">
                 {
                     this.state.filteredMarkers.map( (each) =>
-                        <li type="button" onClick={e => this.onChildClick(each.name)} key={keyVal++} id="listItem">
+                        <li type="button" key={keyVal++} onClick={e => this.onChildClick(each, each.name)} id="listItem">
                             <h2>{each.name}</h2>
                             <h3>{each.address}</h3>
                             <h4>{each.distance}</h4>
@@ -127,31 +126,37 @@ class Directory extends React.Component {
                     )
                 }
                 </ul>
+
                 <ul style={{width:"0px", marginLeft: "-100px"}} id="UL2">
                 {
                     this.state.orgs.map( (each) =>
-                        <li type="button" style={{paddingBottom:"12px"}} onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
-                        <h2>{each.name}</h2>
-                        <a href={each.website}>{each.website}</a>
+                        <li type="radio" checked style={{paddingBottom:"12px"}} onClick={e => this.onOrgClick(each.email)} key={keyVal++} id="listItem">
+                            <h2>{each.name}</h2>
+                            <a href={each.website} target="_blank" rel="noopener noreferrer">{each.website}</a>
 
-                        <h5 id="removeOrg" style={{display:adminFunctions}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt"> </h5>
-                        <h5 id="editOrg" style={{display:adminFunctions}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt"> </h5>
-                    </li>
+                            <h5 id="removeOrg" style={{display:adminFunctions}} disabled={!this.props.isAdmin} onClick={e => this.eraseOrganization(each)} className="fas fa-trash-alt"> </h5>
+                            <h5 id="editOrg" style={{display:adminFunctions}} disabled={!this.props.isAdmin} onClick={e => this.openProfile(each)} className="fas fa-pencil-alt"> </h5>
+                        </li>
                     )
                 }
                 </ul>
+
+                <div className = "confirmOrg" id="confirmOrgRemove">
+                    <p style={{marginBottom:"0"}}>Are you sure you want to remove <b>{selectedOrg.name}</b> and all of its locations?</p>
+                    <p style={{color:"gray"}}>Note: This action cannot be undone</p>
+                    <button onClick={this.confirmErase} id="confirmRemove"><i className = "fas fa-check"></i></button>
+                    <button onClick={this.keepOrg} id="keepOrg"><i className = "fas fa-times"></i></button>
+                </div>
+
             </div>
         )
     }
-//how to open profile of org clicked?
+
     searchFunction() {
-        //var input, li, a, i, txtValue;
-        var input;
-        input = document.getElementById("searchInput").value;
-        //li = document.getElementsByTagName("li");
-        // Loop through all list items, and hide those who don't match the search query
+        var input = document.getElementById("searchInput").value;
         var markers = this.state.markers;
 
+        // Loop through all list items, and hide those who don't match the search query
         for (var i = 0; i < markers.length; i++) {
             var name = markers[i].name;
             var address = markers[i].address;
@@ -175,14 +180,31 @@ class Directory extends React.Component {
     }
 
     openAddForm() {
-        document.getElementById("AddFormDiv").style.display = "block";
-        document.getElementById("shadow").style.display = "block";
+        document.getElementById("AddFormDiv").style.height = "560px";
+        document.getElementById("AddFormDiv").style.opacity = "1";
+        document.getElementById("shadow").style.opacity = "0.4";
+        document.getElementById("shadow").style.height = "100%";
     }
 
-
     eraseOrganization = async (org) => {
-        this.props.eraseOrganization(org);
+        selectedOrg = org;
+        this.setState({selected : null});
+        document.getElementById("confirmOrgRemove").style.opacity = "1";
+        document.getElementById("confirmOrgRemove").style.marginLeft = "-200px";
     };
+
+    confirmErase = async () => {
+        this.props.eraseOrganization(selectedOrg);
+        document.getElementById("confirmOrgRemove").style.opacity = "0";
+        document.getElementById("confirmOrgRemove").style.marginLeft = "-500px";
+        document.getElementById("resetLocations").style.pointerEvents = "none";
+        document.getElementById("resetLocations").style.transform = "rotateY(90deg)";
+    }
+
+    keepOrg() {
+        document.getElementById("confirmOrgRemove").style.opacity = "0";
+        document.getElementById("confirmOrgRemove").style.marginLeft = "-500px";
+    }
 
     openProfile(organization) {
         console.log('open here');
@@ -207,19 +229,18 @@ function isSignedIn() {
     if (document.getElementById("topNav") != null) {
         if (document.getElementById("topNav").style.display === "block") {
             isUser = "initial";
-            //adminFunctions = "none";
             isNotOrg = "none";
             isOrg = "inline";
-            document.getElementById("UL").style.width = "310px";
-            document.getElementById("UL").style.marginLeft = "0px";
-            document.getElementById("UL2").style.width = "0px";
-            document.getElementById("UL2").style.marginLeft = "-100px";
+            if (document.getElementById("clubs").style.marginLeft === "0px" || document.getElementById("UL2").style.marginLeft === "0px") {
+                document.getElementById("UL").style.width = "310px";
+                document.getElementById("UL").style.marginLeft = "0px";
+                document.getElementById("UL2").style.width = "0px";
+                document.getElementById("UL2").style.marginLeft = "-100px";
+            }
         } else if (document.getElementById("topNav2").style.display === "block") {
             isUser = "initial";
-            //adminFunctions = "inline";
         } else {
             isUser = "none";
-            //adminFunctions = "none";
             isNotOrg = "inline";
             isOrg = "none";
         }
