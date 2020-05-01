@@ -31,6 +31,10 @@ After cloning the github repository, run the following commands:
 cd /club-finder
 npm install
 ```
+##### Installing Firebase Dependency
+```shell
+npm install --save firebase
+```
 ##### Obtaining API Keys
 API keys are needed for Google Firebase, Google Maps API, and Google Geocoding API 
 (see https://cloud.google.com/docs/authentication/api-keys).
